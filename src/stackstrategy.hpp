@@ -172,6 +172,55 @@ namespace rpn_engine
          */
         void Square();
 
+        /**
+         * @brief Push pi
+         * @details
+         * Pi() doesn't save the last X.
+         */
+        void Pi();
+
+        /********************************** TRANSCENDENTAL OPERATION *****************************/
+
+        /**
+         * @brief Exponential of X.
+         * 
+         */
+        void Exp();
+
+        /**
+         * @brief Natural Logarithm of X
+         * 
+         */
+        void Log();
+
+        /**
+         * @brief 10 based logarithm of X
+         * 
+         */
+        void Log10();
+        void Power10();
+        void Power();
+        void Sin();
+        void Cos();
+        void Tan();
+        void Asin();
+        void Acos();
+        void Atan();
+
+        /********************************** COMPLEX OPERATION *****************************/
+        void Complex();
+        void DeComplex();
+        void Conjugate();
+        void ToPolar();
+        void ToCartesian();
+
+        /********************************** BITWISE OPERATION *****************************/
+        void BitOr();
+        void BitAnd();
+        void BitExor();
+        void BitNot();
+        void LogicalShift();
+
     private:
         const unsigned int stack_size_;
         /**
@@ -395,4 +444,49 @@ void rpn_engine::StackStrategy<Element>::Square()
     Element x = Pop();
     // do the operation
     Push(x * x);
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Pi()
+{
+    // Pi() doesn't save the Last x
+
+    // do the operation
+    Push(M_PI);
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Exp()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::exp(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Log()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::log(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Log10()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::log10(x));
 }
