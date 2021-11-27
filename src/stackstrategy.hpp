@@ -256,13 +256,6 @@ namespace rpn_engine
          */
         void Atan();
 
-        /********************************** COMPLEX OPERATION *****************************/
-        void Complex();
-        void DeComplex();
-        void Conjugate();
-        void ToPolar();
-        void ToCartesian();
-
         /********************************** BITWISE OPERATION *****************************/
         void BitOr();
         void BitAnd();

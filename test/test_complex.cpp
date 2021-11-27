@@ -1,12 +1,12 @@
 // Test cases for the basic math operation of the rpn_engine::StackStrategy class
 
 #include "gtest/gtest.h"
-#include "stackstrategy.hpp"
+#include "complexstackstrategy.hpp"
 #include <stdexcept>
 #include <math.h>
 #include <complex>
 
-typedef rpn_engine::StackStrategy<std::complex<double>> DoubleComplexStack;
+typedef rpn_engine::ComplexStackStrategy<std::complex<double>> DoubleComplexStack;
 
 TEST(DoubleComplexTest, Add)
 {
@@ -131,4 +131,58 @@ TEST(DoubleComplexTest, Sin)
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);                    // check real part of top.
     EXPECT_DOUBLE_EQ(x.imag(), 1.175201193643801456); // check imaginaly part of top.
+}
+
+TEST(DoubleComplexTest, Complex)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Complex();
+
+    auto x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 3); // check real part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginaly part of top.
+
+    s->LastX();
+    x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 0); // Last x is not saved.
+}
+
+TEST(DoubleComplexTest, DeComplex)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(std::complex<double>(3, 4)); // 3+4i
+    s->DeComplex();
+
+    auto x = s->Get(0);
+    auto y = s->Get(1);
+    EXPECT_DOUBLE_EQ(x.real(), 4); // check imaginaly part.
+    EXPECT_DOUBLE_EQ(y.real(), 3); // check real part .
+
+    s->LastX();
+    x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 0); // Last x is not saved
+}
+
+TEST(DoubleComplexTest, Conjugate)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(std::complex<double>(3, 4)); // 3+4i
+    s->Conjugate();
+
+    auto x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 3);  // check real part.
+    EXPECT_DOUBLE_EQ(x.imag(), -4); // check imaginaly part.
+
+    s->LastX();
+    x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 3); // check real part.
+    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginaly part.
 }
