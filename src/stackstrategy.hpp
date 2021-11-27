@@ -117,10 +117,10 @@ namespace rpn_engine
         void SaveToLastX();
 
         /**
-         * @brief Get the value of LastX.
+         * @brief push LastX.
          * 
          */
-        Element GetLastX();
+        void LastX();
 
         /********************************** MATHMATICAL OPERATION *****************************/
 
@@ -291,10 +291,10 @@ void rpn_engine::StackStrategy<Element>::SaveToLastX()
 }
 
 template <class Element>
-Element rpn_engine::StackStrategy<Element>::GetLastX()
+void rpn_engine::StackStrategy<Element>::LastX()
 {
     // The value of lastX.
-    return last_x_;
+    Push(last_x_);
 }
 
 template <class Element>

@@ -22,7 +22,11 @@ TEST(BasicMathTest, Add)
     EXPECT_EQ(s->Get(2), 3);  // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6);  // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 11); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);  // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 }
 
 TEST(BasicMathTest, Sub)
@@ -41,7 +45,8 @@ TEST(BasicMathTest, Sub)
     EXPECT_EQ(s->Get(2), 3);  // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Mul)
@@ -60,7 +65,8 @@ TEST(BasicMathTest, Mul)
     EXPECT_EQ(s->Get(2), 3);  // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Div)
@@ -79,7 +85,8 @@ TEST(BasicMathTest, Div)
     EXPECT_EQ(s->Get(2), 3); // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Neg)
@@ -98,7 +105,8 @@ TEST(BasicMathTest, Neg)
     EXPECT_EQ(s->Get(2), 4);  // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Inv)
@@ -117,7 +125,8 @@ TEST(BasicMathTest, Inv)
     EXPECT_EQ(s->Get(2), 4); // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Sqrt)
@@ -136,7 +145,8 @@ TEST(BasicMathTest, Sqrt)
     EXPECT_EQ(s->Get(2), 4); // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
 
 TEST(BasicMathTest, Square)
@@ -155,5 +165,6 @@ TEST(BasicMathTest, Square)
     EXPECT_EQ(s->Get(2), 4);  // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check wether the stack 4th.
 
-    EXPECT_EQ(s->GetLastX(), 6); // check the last X
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6); // check wether the stack top.
 }
