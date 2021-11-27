@@ -198,7 +198,17 @@ namespace rpn_engine
          * 
          */
         void Log10();
+
+        /**
+         * @brief X'th power of 10
+         * 
+         */
         void Power10();
+
+        /**
+         * @brief Y^X
+         * 
+         */
         void Power();
         void Sin();
         void Cos();
@@ -489,4 +499,29 @@ void rpn_engine::StackStrategy<Element>::Log10()
     Element x = Pop();
     // do the operation
     Push(::log10(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Power10()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::pow(10, x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Power()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    Element y = Pop();
+    // do the operation
+    Push(::pow(y, x));
 }
