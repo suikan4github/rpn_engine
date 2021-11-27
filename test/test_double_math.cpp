@@ -248,3 +248,141 @@ TEST(DoubleMathTest, Power)
 
     EXPECT_DOUBLE_EQ(s->Get(0), 55.90169943749474241); // check wether the stack top.
 }
+
+TEST(DoubleMathTest, Sin)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(6.0);
+    s->Sin();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), -0.27941549819892587); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                           // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                           // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                           // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6.0);                       // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::sin((double)6.0)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+}
+
+TEST(DoubleMathTest, Cos)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(6.0);
+    s->Cos();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), 0.96017028665036602054); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                             // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                             // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                             // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6.0);                       // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::cos((double)6.0)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+}
+
+TEST(DoubleMathTest, Tan)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(6.0);
+    s->Tan();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), -0.2910061913847491570); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                             // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                             // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                             // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 6.0);                       // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::tan((double)6.0)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+}
+
+TEST(DoubleMathTest, Asin)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(0.5);
+    s->Asin();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), 0.52359877559829887); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                          // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                          // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                          // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0.5);                         // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::asin((double)0.50)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                           // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                           // check wether the stack 4th.
+}
+
+TEST(DoubleMathTest, Acos)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(0.5);
+    s->Acos();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), 1.0471975511965977); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                         // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                         // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                         // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0.5);                        // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::acos((double)0.5)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                          // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                          // check wether the stack 4th.
+}
+
+TEST(DoubleMathTest, Atan)
+{
+    DoubleStack *s;
+    s = new DoubleStack(4);
+
+    s->Push(3.0);
+    s->Push(4);
+    s->Push(5.0);
+    s->Push(0.5);
+    s->Atan();
+
+    EXPECT_DOUBLE_EQ(s->Get(0), 0.4636476090008061162); // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 5);                            // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);                            // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);                            // check wether the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0.5);                         // check wether the stack top.
+    EXPECT_DOUBLE_EQ(s->Get(1), ::atan((double)0.50)); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(2), 5);                           // check wether the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4);                           // check wether the stack 4th.
+}

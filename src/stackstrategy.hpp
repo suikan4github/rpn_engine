@@ -210,11 +210,41 @@ namespace rpn_engine
          * 
          */
         void Power();
+
+        /**
+         * @brief Sine(x). 
+         * 
+         */
         void Sin();
+
+        /**
+         * @brief CoSine(x)
+         * 
+         */
         void Cos();
+
+        /**
+         * @brief Tangent(x)
+         * 
+         */
         void Tan();
+
+        /**
+         * @brief arcsin(x)
+         * 
+         */
         void Asin();
+
+        /**
+         * @brief Acos(x)
+         * 
+         */
         void Acos();
+
+        /**
+         * @brief Atan(x)
+         * 
+         */
         void Atan();
 
         /********************************** COMPLEX OPERATION *****************************/
@@ -524,4 +554,76 @@ void rpn_engine::StackStrategy<Element>::Power()
     Element y = Pop();
     // do the operation
     Push(::pow(y, x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Sin()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::sin(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Cos()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::cos(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Tan()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::tan(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Asin()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::asin(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Acos()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::acos(x));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Atan()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    // do the operation
+    Push(::atan(x));
 }
