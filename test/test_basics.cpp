@@ -1,13 +1,15 @@
+// Test cases for the basic stack operation of the rpn_engine::StackStrategy class
+
 #include "gtest/gtest.h"
 #include "stackstrategy.hpp"
 #include <stdexcept>
 
 typedef rpn_engine::StackStrategy<int> IntStack;
-IntStack *s;
 
 // Testing the restriction of the stack size .
-TEST(RPNTest, StackSizeLimit)
+TEST(BasicStackTest, StackSizeLimit)
 {
+    IntStack *s;
     ASSERT_DEATH(
         {
             s = new IntStack(0); // must not be non zero
@@ -16,8 +18,9 @@ TEST(RPNTest, StackSizeLimit)
 }
 
 // Testing the restriction of the stack size and get() member function.
-TEST(RPNTest, GetPositionExceedStackLimit)
+TEST(BasicStackTest, GetPositionExceedStackLimit)
 {
+    IntStack *s;
     ASSERT_DEATH(
         {
             s = new IntStack(4);
@@ -26,8 +29,9 @@ TEST(RPNTest, GetPositionExceedStackLimit)
         "Assertion `stack_size_ > postion' failed");
 }
 
-TEST(RPNTest, StackInitialValueCheck)
+TEST(BasicStackTest, StackInitialValueCheck)
 {
+    IntStack *s;
     s = new IntStack(4);
     EXPECT_EQ(s->Get(0), 0); // check wether the stack is initialize
     EXPECT_EQ(s->Get(1), 0); // check wether the stack is initialize
@@ -35,8 +39,9 @@ TEST(RPNTest, StackInitialValueCheck)
     EXPECT_EQ(s->Get(3), 0); // check wether the stack is initialize
 }
 
-TEST(RPNTest, GetAndPush)
+TEST(BasicStackTest, GetAndPush)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     EXPECT_EQ(s->Get(0), 1); // Check pushed value
@@ -57,8 +62,10 @@ TEST(RPNTest, GetAndPush)
     EXPECT_EQ(s->Get(3), 2); // Check pushed value
 }
 
-TEST(RPNTest, GetAndPush1)
+// Test for very small stack
+TEST(BasicStackTest, GetAndPush2)
 {
+    IntStack *s;
     s = new IntStack(2);
     s->Push(1);
     EXPECT_EQ(s->Get(0), 1); // Check pushed value
@@ -68,8 +75,9 @@ TEST(RPNTest, GetAndPush1)
     EXPECT_EQ(s->Get(1), 1); // Check pushed value
 }
 
-TEST(RPNTest, Pop)
+TEST(BasicStackTest, Pop)
 {
+    IntStack *s;
     s = new IntStack(4);
     EXPECT_EQ(s->Pop(), 0); // check wether the stack is initialize
     s->Push(1);
@@ -83,8 +91,10 @@ TEST(RPNTest, Pop)
     EXPECT_EQ(s->Get(3), 1); // check wether the stack top is poped up.
 }
 
-TEST(RPNTest, Pop2)
+// Test for very small stack
+TEST(BasicStackTest, Pop2)
 {
+    IntStack *s;
     s = new IntStack(2);
     EXPECT_EQ(s->Pop(), 0); // check wether the stack is initialize
     s->Push(1);
@@ -96,8 +106,9 @@ TEST(RPNTest, Pop2)
     EXPECT_EQ(s->Get(0), 3); // check wether the stack top is lost and poped up.
 }
 
-TEST(RPNTest, Dup)
+TEST(BasicStackTest, Dup)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     s->Push(2);
@@ -110,8 +121,9 @@ TEST(RPNTest, Dup)
     EXPECT_EQ(s->Get(3), 2); // check wether the stack 4th.
 }
 
-TEST(RPNTest, Swap)
+TEST(BasicStackTest, Swap)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     s->Push(2);
@@ -124,8 +136,9 @@ TEST(RPNTest, Swap)
     EXPECT_EQ(s->Get(3), 1); // check wether the stack 4th.
 }
 
-TEST(RPNTest, RotatePop)
+TEST(BasicStackTest, RotatePop)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     s->Push(2);
@@ -138,8 +151,9 @@ TEST(RPNTest, RotatePop)
     EXPECT_EQ(s->Get(3), 4); // check wether the stack 4th.
 }
 
-TEST(RPNTest, RotatePush)
+TEST(BasicStackTest, RotatePush)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     s->Push(2);
@@ -152,8 +166,9 @@ TEST(RPNTest, RotatePush)
     EXPECT_EQ(s->Get(3), 2); // check wether the stack 4th.
 }
 
-TEST(RPNTest, SetTop)
+TEST(BasicStackTest, SetTop)
 {
+    IntStack *s;
     s = new IntStack(4);
     s->Push(1);
     s->Push(2);

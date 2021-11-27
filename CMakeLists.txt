@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(test_engine)
+project(rpn_test)
 
 # Enable the testing features.
 enable_testing()

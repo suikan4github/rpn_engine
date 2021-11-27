@@ -1,14 +1,14 @@
 
 # Add the executable for the testcase which is using googletest
-add_executable(test_engine test_engine.cpp)
-target_link_libraries(test_engine GTest::GTest GTest::Main ) 
+add_executable(rpn_test test_all.cpp test_basics.cpp)
+target_link_libraries(rpn_test GTest::GTest GTest::Main ) 
 
 # Add the include directory for test project.
-target_include_directories(test_engine
+target_include_directories(rpn_test
     PUBLIC ${PROJECT_SOURCE_DIR}/src
 )
 
 
 
 # Add the test case use the gtest feature.
-gtest_discover_tests(test_engine)
+gtest_discover_tests(rpn_test)
