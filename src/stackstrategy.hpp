@@ -10,6 +10,7 @@
  */
 #include <cassert>
 #include <math.h>
+#include <complex>
 
 /**
  * @brief Engine implementation of RPN stack machine.
@@ -25,6 +26,14 @@ namespace rpn_engine
      * @details
      * A generic stack for the RPN machine. This stack works based of the specialized machine. 
      * Give a type parameter to customize it.
+     * 
+     * The monadic operation pops one operand, calculate and push one operand.
+     * The diadic operation pops two operands, calculate and push one operand.
+     * Both monadic and diadic operation sames stack top (x) to last x register
+     * before the oepration. The last x register can be push to stack by LastX() member
+     * function. 
+     * 
+     * All functions supports complex template type. 
      */
     template <class Element>
     class StackStrategy
@@ -471,7 +480,7 @@ void rpn_engine::StackStrategy<Element>::Sqrt()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(sqrt(x));
+    Push(std::sqrt(x));
 }
 
 template <class Element>
@@ -504,7 +513,7 @@ void rpn_engine::StackStrategy<Element>::Exp()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::exp(x));
+    Push(std::exp(x));
 }
 
 template <class Element>
@@ -516,7 +525,7 @@ void rpn_engine::StackStrategy<Element>::Log()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::log(x));
+    Push(std::log(x));
 }
 
 template <class Element>
@@ -528,7 +537,7 @@ void rpn_engine::StackStrategy<Element>::Log10()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::log10(x));
+    Push(std::log10(x));
 }
 
 template <class Element>
@@ -540,7 +549,7 @@ void rpn_engine::StackStrategy<Element>::Power10()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::pow(10, x));
+    Push(std::pow(10, x));
 }
 
 template <class Element>
@@ -553,7 +562,7 @@ void rpn_engine::StackStrategy<Element>::Power()
     Element x = Pop();
     Element y = Pop();
     // do the operation
-    Push(::pow(y, x));
+    Push(std::pow(y, x));
 }
 
 template <class Element>
@@ -565,7 +574,7 @@ void rpn_engine::StackStrategy<Element>::Sin()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::sin(x));
+    Push(std::sin(x));
 }
 
 template <class Element>
@@ -577,7 +586,7 @@ void rpn_engine::StackStrategy<Element>::Cos()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::cos(x));
+    Push(std::cos(x));
 }
 
 template <class Element>
@@ -589,7 +598,7 @@ void rpn_engine::StackStrategy<Element>::Tan()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::tan(x));
+    Push(std::tan(x));
 }
 
 template <class Element>
@@ -601,7 +610,7 @@ void rpn_engine::StackStrategy<Element>::Asin()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::asin(x));
+    Push(std::asin(x));
 }
 
 template <class Element>
@@ -613,7 +622,7 @@ void rpn_engine::StackStrategy<Element>::Acos()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::acos(x));
+    Push(std::acos(x));
 }
 
 template <class Element>
@@ -625,5 +634,5 @@ void rpn_engine::StackStrategy<Element>::Atan()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(::atan(x));
+    Push(std::atan(x));
 }
