@@ -33,10 +33,11 @@ TEST(BasicStackTest, StackInitialValueCheck)
 {
     IntStack *s;
     s = new IntStack(4);
-    EXPECT_EQ(s->Get(0), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(1), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(2), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(3), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Get(0), 0);     // check wether the stack is initialize
+    EXPECT_EQ(s->Get(1), 0);     // check wether the stack is initialize
+    EXPECT_EQ(s->Get(2), 0);     // check wether the stack is initialize
+    EXPECT_EQ(s->Get(3), 0);     // check wether the stack is initialize
+    EXPECT_EQ(s->GetLastX(), 0); // check the value of last X
 }
 
 TEST(BasicStackTest, GetAndPush)
@@ -179,4 +180,23 @@ TEST(BasicStackTest, SetTop)
     EXPECT_EQ(s->Get(1), 3);   // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 2);   // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 1);   // check wether the stack 4th.
+}
+
+TEST(BasicStackTest, LastX)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(1);
+    s->Push(2);
+    s->Push(3);
+    s->Push(4);
+
+    EXPECT_EQ(s->GetLastX(), 0); // check the value of last x is zero.
+    EXPECT_EQ(s->Get(0), 4);     // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 3);     // check wether the stack 2nd.
+    s->SaveToLastX();
+    EXPECT_EQ(s->GetLastX(), 4); // check the value of last x.
+    EXPECT_EQ(s->Get(0), 4);     // check wether the stack top.
+    EXPECT_EQ(s->Get(1), 3);     // check wether the stack 2nd.
 }
