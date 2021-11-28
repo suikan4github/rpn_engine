@@ -11,6 +11,7 @@
 #include <cassert>
 #include <math.h>
 #include <complex>
+#include <type_traits>
 
 #ifndef FRIEND_TEST
 // FRIEND_TEST is provided by google test. If not provided, just igonore it.
@@ -260,6 +261,156 @@ namespace rpn_engine
          * 
          */
         void Atan();
+
+        /********************************** COMPLEX OPERATION *****************************/
+
+        /**
+         * @fn void Complex()
+         * @brief Make complex : Pop X, Y and then Y + Xi and Push it.
+         * @details
+         * If the stack is implemented with sclar element, this funciton does notihing
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by std::complex<> type.
+        void Complex()
+        {
+            // Pop parameters
+            auto x = this->Pop();
+            auto y = this->Pop();
+
+            y.imag(x.real());
+
+            // y + ix
+            this->Push(y);
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by scarlar type.
+        void Complex()
+        {
+            // In the case of scalar, do nothing
+        }
+
+        /**
+         * @fn void DeComplex()
+         * @brief Pop X and then, push X.re, push X.im;
+         * @details
+         * If the stack is implemented with sclar element, this funciton does notihing
+         * 
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by std::complex<> type.
+        void DeComplex()
+        {
+            // Pop parameters
+            auto x = this->Pop();
+
+            // push real, push imag
+            this->Push(Element(x.real()));
+            this->Push(Element(x.imag()));
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by scarlar type.
+        void DeComplex()
+        {
+            // In the case of scalar, do nothing
+        }
+
+        /**
+         * 
+         * @fn void Conjugate()
+         * @brief Pop X and then, push conj(X)
+         * @details
+         * The last X register is affected.
+         * 
+         * If the stack is implemented with sclar element, this funciton does notihing
+         * 
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by std::complex<> type.
+        void Conjugate()
+        {
+            // save X before operation
+            this->SaveToLastX();
+
+            // Pop parameters
+            auto x = this->Pop();
+
+            // push real, push imag
+            this->Push(std::conj(x));
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by scarlar type.
+        void Conjugate()
+        {
+            // In the case of scalar, do nothing
+        }
+
+        /**
+         * @fn void ToPolar()
+         * @brief Pop X as cartesian complex and convert it to polar notation. and then Push it.
+         * @details
+         * The result is : 
+         * @li re : Absolute value of the complex value. 
+         * @li im : Argumentation of the complex value. 
+         * If the stack is implemented with sclar element, this funciton does notihing
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by std::complex<> type.
+        void ToPolar()
+        {
+            // Pop parameters
+            auto x = this->Pop();
+
+            // push in polar notation
+            this->Push(Element(std::abs(x), std::arg(x)));
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by scarlar type.
+        void ToPolar()
+        {
+            // In the case of scalar, do nothing
+        }
+
+        /**
+         * @fn void ToCartesian()
+         * @brief Pop X as polar complex and convert it to the cartesian complex. And then push it. 
+         * @details 
+         * The parameter is : 
+         * @li re : Absolute value of the complex value. 
+         * @li im : Argumentation of the complex value. 
+         * If the stack is implemented with sclar element, this funciton does notihing
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by std::complex<> type.
+        void ToCartesian()
+        {
+            // Pop parameters
+            auto x = this->Pop();
+
+            // push in cartesian nortation : abs * exp( i * arg )
+            this->Push(x.real() * std::exp(Element(0, 1) * x.imag()));
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation for  the template is specialized by scarlar type.
+        void ToCartesian()
+        {
+            // In the case of scalar, do nothing
+        }
 
         /********************************** BITWISE OPERATION *****************************/
 

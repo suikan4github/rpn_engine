@@ -1,12 +1,12 @@
 // Test cases for the basic math operation of the rpn_engine::StackStrategy class
 
 #include "gtest/gtest.h"
-#include "complexstackstrategy.hpp"
+#include "stackstrategy.hpp"
 #include <stdexcept>
 #include <math.h>
 #include <complex>
 
-typedef rpn_engine::ComplexStackStrategy<std::complex<double>> DoubleComplexStack;
+typedef rpn_engine::StackStrategy<std::complex<double>> DoubleComplexStack;
 
 TEST(DoubleComplexTest, Add)
 {
