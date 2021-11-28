@@ -53,7 +53,7 @@ namespace rpn_engine
          * In the cae of stack_size == 0, assertion failed. 
          */
         StackStrategy(unsigned int stack_size);
-        virtual ~StackStrategy();
+        ~StackStrategy();
         /********************************** BASIC OPERATION *****************************/
         /**
          * @brief Get the value of stack at specified position
@@ -421,21 +421,99 @@ namespace rpn_engine
          * 
          * Last X register is affected.
          */
+        void BitAdd();
 
-#if 0
-        virtual void BitAdd();
-        virtual void BitSubtract();
-        virtual void BitMultiply();
-        virtual void BitDivide();
-        virtual void BitNagate();
+        /**
+         * @brief Pop X,Y and then Y-X  as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitSubtract();
 
-        virtual void BitOr();
-        virtual void BitExor();
-        virtual void BitAnd();
-        virtual void LogicalShiftRight();
-        virtual void LogicalShiftLeft();
-        virtual void BitNot();
-#endif
+        /**
+         * @brief Pop X,Y and then multiply them as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitMultiply();
+
+        /**
+         * @brief Pop X,Y and then Y/X  as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitDivide();
+
+        /**
+         * @brief Pop X and then -X as 32bit integer. Then push it.  
+         * @details
+         * X is truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitNagate();
+
+        /**
+         * @brief Pop X,Y and then Y bitwise OR X  as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitOr();
+
+        /**
+         * @brief Pop X,Y and then Y bitwise XOR X  as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitExor();
+
+        /**
+         * @brief Pop X,Y and then Y bitwise AND X  as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void BitAnd();
+
+        /**
+         * @brief Pop X,Y and then Y >> X  as 32bit UNSIGNED integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit unsigned integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void LogicalShiftRight();
+
+        /**
+         * @brief Pop X,Y and then Y << X  as 32bit UNSIGNED integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit unsigned integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+        void LogicalShiftLeft();
+
+        /**
+         * @brief Pop X and then bitwise NOT of X as 32bit integer. Then push it.  
+         * @details
+         * X is truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+
+        void BitNot();
+
     private:
         FRIEND_TEST(BasicBitwiseTest, To32bitValue);
         FRIEND_TEST(BasicBitwiseTest, ToElementValue);
@@ -449,6 +527,7 @@ namespace rpn_engine
         Element last_x_;
 
         /**
+         * @fn int32_t To32bitValue(Element x)
          * @brief Convert parameter to int32_t
          * 
          * @param x Value to convert.
@@ -460,7 +539,28 @@ namespace rpn_engine
          * Note that in case the given X exceed the range of the 64bit signed integer, 
          * The result is unpredictable. 
          */
-        int32_t To32bitValue(Element x);
+
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation when the template is specialized by std::complex<> type.
+        int32_t To32bitValue(Element x)
+        {
+            // The double value is truncated to 64bit integer. Then,
+            // 32bit LSB is extracted.
+            int64_t intermediate_value = x.real();
+            return intermediate_value;
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation when the template is specialized by scarlar type.
+        int32_t To32bitValue(Element x)
+        {
+            // The double value is truncated to 64bit integer. Then,
+            // 32bit LSB is extracted.
+            int64_t intermediate_value = x;
+            return intermediate_value;
+        }
 
         /**
          * @brief Convert parameter to Element
@@ -828,22 +928,11 @@ void rpn_engine::StackStrategy<Element>::Atan()
 }
 
 template <class Element>
-int32_t rpn_engine::StackStrategy<Element>::To32bitValue(Element x)
-
-{
-    // The double value is truncated to 64bit integer. Then,
-    // 32bit LSB is extracted.
-    int64_t intermediate_value = x;
-    return intermediate_value;
-}
-
-template <class Element>
 Element rpn_engine::StackStrategy<Element>::ToElementValue(int32_t x)
 {
     return static_cast<Element>(x);
 }
 
-#if 0
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitAdd()
 {
@@ -851,10 +940,158 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
     SaveToLastX();
 
     // Get parameters
-    Element x = Pop();
-    Element y = Pop();
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
     // do the operation
-    uint32_t r = To32bitValue(x) + To32bitValue(y);
+    uint32_t r = x + y;
     Push(ToElementValue(r));
 }
-#endif
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitSubtract()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y - x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitMultiply()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y * x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitDivide()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y / x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitNagate()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = -x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitOr()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y | x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitExor()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y ^ x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitAnd()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+    auto y = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = y & x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
+    uint32_t y = static_cast<uint32_t>(To32bitValue(Pop()));
+
+    // do the operation
+    uint32_t r = y >> x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
+    uint32_t y = static_cast<uint32_t>(To32bitValue(Pop()));
+
+    // do the operation
+    uint32_t r = y << x;
+    Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitNot()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    auto x = To32bitValue(Pop());
+
+    // do the operation
+    uint32_t r = ~x;
+    Push(ToElementValue(r));
+}
