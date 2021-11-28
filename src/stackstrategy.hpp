@@ -12,6 +12,11 @@
 #include <math.h>
 #include <complex>
 
+#ifndef FRIEND_TEST
+// FRIEND_TEST is provided by google test. If not provided, just igonore it.
+#define FRIEND_TEST(x, y)
+#endif
+
 /**
  * @brief Engine implementation of RPN stack machine.
  * 
@@ -256,7 +261,16 @@ namespace rpn_engine
          */
         void Atan();
 
-/********************************** BITWISE OPERATION *****************************/
+        /********************************** BITWISE OPERATION *****************************/
+
+        /**
+         * @brief Pop X,Y and then Add them as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+
 #if 0
         virtual void BitAdd();
         virtual void BitSubtract();
@@ -272,6 +286,8 @@ namespace rpn_engine
         virtual void BitNot();
 #endif
     private:
+        FRIEND_TEST(BasicBitwiseTest, To32bitValue);
+        FRIEND_TEST(BasicBitwiseTest, ToElementValue);
         const unsigned int stack_size_;
         /**
          * @brief The enetity of stack.
@@ -280,6 +296,28 @@ namespace rpn_engine
          */
         Element *const stack_;
         Element last_x_;
+
+        /**
+         * @brief Convert parameter to int32_t
+         * 
+         * @param x Value to convert.
+         * @return int32_t Converted value.
+         * @details
+         * Truncate given value to signed 64bit integer. Then, extract lower 32bit value.
+         * The truncation is round to zero 
+         * 
+         * Note that in case the given X exceed the range of the 64bit signed integer, 
+         * The result is unpredictable. 
+         */
+        int32_t To32bitValue(Element x);
+
+        /**
+         * @brief Convert parameter to Element
+         * 
+         * @param x 
+         * @return Element 
+         */
+        Element ToElementValue(int32_t x);
     };
 } // rpn_engine
 
@@ -637,3 +675,35 @@ void rpn_engine::StackStrategy<Element>::Atan()
     // do the operation
     Push(std::atan(x));
 }
+
+template <class Element>
+int32_t rpn_engine::StackStrategy<Element>::To32bitValue(Element x)
+
+{
+    // The double value is truncated to 64bit integer. Then,
+    // 32bit LSB is extracted.
+    int64_t intermediate_value = x;
+    return intermediate_value;
+}
+
+template <class Element>
+Element rpn_engine::StackStrategy<Element>::ToElementValue(int32_t x)
+{
+    return static_cast<Element>(x);
+}
+
+#if 0
+template <class Element>
+void rpn_engine::StackStrategy<Element>::BitAdd()
+{
+    // Save LastX before mathumatical operation
+    SaveToLastX();
+
+    // Get parameters
+    Element x = Pop();
+    Element y = Pop();
+    // do the operation
+    uint32_t r = To32bitValue(x) + To32bitValue(y);
+    Push(ToElementValue(r));
+}
+#endif

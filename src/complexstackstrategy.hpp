@@ -64,6 +64,32 @@ namespace rpn_engine
          * @li im : Argumentation of the complex value. 
          */
         void ToCartesian();
+
+        /********************************** BITWISE OPERATION *****************************/
+
+        /**
+         * @brief Pop X,Y and then Add them as 32bit integer. Then push it.  
+         * @details
+         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * 
+         * Last X register is affected.
+         */
+
+#if 0
+        virtual void BitAdd(){};
+        virtual void BitSubtract();
+        virtual void BitMultiply();
+        virtual void BitDivide();
+        virtual void BitNagate();
+
+        virtual void BitOr();
+        virtual void BitExor();
+        virtual void BitAnd();
+        virtual void LogicalShiftRight();
+        virtual void LogicalShiftLeft();
+        virtual void BitNot();
+#endif
+    private:
     };
 } // rpn_engine
 
