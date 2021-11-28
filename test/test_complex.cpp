@@ -186,3 +186,30 @@ TEST(DoubleComplexTest, Conjugate)
     EXPECT_DOUBLE_EQ(x.real(), 3); // check real part.
     EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginaly part.
 }
+
+TEST(DoubleComplexTest, ToPorlar)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(std::complex<double>(1, 1)); // 1+i
+    s->ToPolar();
+
+    auto x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), sqrt((double)2.0)); // Abs of 1+i is 1.41421356...
+    EXPECT_DOUBLE_EQ(x.imag(), M_PI_4);            // Angular of 1+i is pi/4
+}
+
+TEST(DoubleComplexTest, ToCartesian)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(std::complex<double>(sqrt((double)2.0), M_PI_4)); // 1.414 + i(3.1415/4)
+    s->ToCartesian();
+
+    // must be converted to 1+i;
+    auto x = s->Get(0);
+    EXPECT_DOUBLE_EQ(x.real(), 1.0); //
+    EXPECT_DOUBLE_EQ(x.imag(), 1.0); //
+}

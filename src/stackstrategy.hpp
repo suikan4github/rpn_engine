@@ -120,13 +120,13 @@ namespace rpn_engine
         void RotatePush();
 
         /**
-         * @brief Copy the stack top to the LaxtX variable.
+         * @brief Copy the stack top to the Laxt X variable.
          * 
          */
         void SaveToLastX();
 
         /**
-         * @brief push LastX.
+         * @brief push Last X.
          * 
          */
         void LastX();
@@ -134,49 +134,49 @@ namespace rpn_engine
         /********************************** MATHMATICAL OPERATION *****************************/
 
         /**
-         * @brief Pop X and Y and push Y+X
+         * @brief Pop X, Y and then push Y+X
          * 
          */
         void Add();
 
         /**
-         * @brief Pop X and Y and push Y-X
+         * @brief Pop X, Y and then push Y-X
          * 
          */
         void Subtract();
 
         /**
-         * @brief Pop X and Y and push Y*X
+         * @brief Pop X, Y and then push Y*X
          * 
          */
         void Multiply();
 
         /**
-         * @brief Pop X and Y and push Y/X
+         * @brief Pop X, Y and then push Y/X
          * 
          */
         void Divide();
 
         /**
-         * @brief Pop X and  push -X
+         * @brief Pop X and then push -X
          * 
          */
         void Nagate();
 
         /**
-         * @brief Pop X and push 1/X
+         * @brief Pop X and then push 1/X
          * 
          */
         void Inverse();
 
         /**
-         * @brief Pop X and push sqare root of X
+         * @brief Pop X and then push sqare root of X
          * 
          */
         void Sqrt();
 
         /**
-         * @brief Pop X and push X * X
+         * @brief Pop X and then push X * X
          * 
          */
         void Square();
@@ -191,78 +191,86 @@ namespace rpn_engine
         /********************************** TRANSCENDENTAL OPERATION *****************************/
 
         /**
-         * @brief Exponential of X.
+         * @brief Pop X and then push Exponential of X.
          * 
          */
         void Exp();
 
         /**
-         * @brief Natural Logarithm of X
+         * @brief Pop X and then push Natural Logarithm of X
          * 
          */
         void Log();
 
         /**
-         * @brief 10 based logarithm of X
+         * @brief Pop X and then push 10 based logarithm of X
          * 
          */
         void Log10();
 
         /**
-         * @brief X'th power of 10
+         * @brief Pop X and then push X'th power of 10
          * 
          */
         void Power10();
 
         /**
-         * @brief Y^X
+         * @brief Pop X, Y and then push Y^X
          * 
          */
         void Power();
 
         /**
-         * @brief Sine(x). 
+         * @brief Pop X and then push Sine(x). 
          * 
          */
         void Sin();
 
         /**
-         * @brief CoSine(x)
+         * @brief Pop X and then push CoSine(x)
          * 
          */
         void Cos();
 
         /**
-         * @brief Tangent(x)
+         * @brief Pop X and then push Tangent(x)
          * 
          */
         void Tan();
 
         /**
-         * @brief arcsin(x)
+         * @brief Pop X and then push arcsin(x)
          * 
          */
         void Asin();
 
         /**
-         * @brief Acos(x)
+         * @brief Pop X and then push Acos(x)
          * 
          */
         void Acos();
 
         /**
-         * @brief Atan(x)
+         * @brief Pop X and then push Atan(x)
          * 
          */
         void Atan();
 
-        /********************************** BITWISE OPERATION *****************************/
-        void BitOr();
-        void BitAnd();
-        void BitExor();
-        void BitNot();
-        void LogicalShift();
+/********************************** BITWISE OPERATION *****************************/
+#if 0
+        virtual void BitAdd();
+        virtual void BitSubtract();
+        virtual void BitMultiply();
+        virtual void BitDivide();
+        virtual void BitNagate();
 
+        virtual void BitOr();
+        virtual void BitExor();
+        virtual void BitAnd();
+        virtual void LogicalShiftRight();
+        virtual void LogicalShiftLeft();
+        virtual void BitNot();
+#endif
     private:
         const unsigned int stack_size_;
         /**
