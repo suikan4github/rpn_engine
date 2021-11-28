@@ -20,6 +20,7 @@ TEST(ComplexBitwiseTest, BitAdd)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 5); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitSubtract)
@@ -34,6 +35,7 @@ TEST(ComplexBitwiseTest, BitSubtract)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitMultiply)
@@ -48,6 +50,7 @@ TEST(ComplexBitwiseTest, BitMultiply)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 6); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitDivide)
@@ -62,6 +65,7 @@ TEST(ComplexBitwiseTest, BitDivide)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitNagate)
@@ -76,6 +80,7 @@ TEST(ComplexBitwiseTest, BitNagate)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), -2); // real part must be integer
     EXPECT_EQ(c.imag(), 0);  // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitOr)
@@ -90,6 +95,7 @@ TEST(ComplexBitwiseTest, BitOr)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 7); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitExor)
@@ -104,6 +110,7 @@ TEST(ComplexBitwiseTest, BitExor)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 5); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitAnd)
@@ -118,6 +125,7 @@ TEST(ComplexBitwiseTest, BitAnd)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 2); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, LogicalShiftRight)
@@ -132,6 +140,7 @@ TEST(ComplexBitwiseTest, LogicalShiftRight)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 3); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, LogicalShiftLeft)
@@ -146,6 +155,7 @@ TEST(ComplexBitwiseTest, LogicalShiftLeft)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 48); // real part must be integer
     EXPECT_EQ(c.imag(), 0);  // imaginary part must be 0
+    delete s;
 }
 
 TEST(ComplexBitwiseTest, BitNot)
@@ -160,4 +170,5 @@ TEST(ComplexBitwiseTest, BitNot)
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), (int32_t)0xFFFFFFFD); // real part must be integer
     EXPECT_EQ(c.imag(), 0);                   // imaginary part must be 0
+    delete s;
 }

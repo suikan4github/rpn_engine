@@ -28,6 +28,7 @@ TEST(DoubleMathTest, Add)
     EXPECT_EQ(s->Get(1), 11);  // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 4);   // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);   // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Div)
@@ -51,6 +52,7 @@ TEST(DoubleMathTest, Div)
     EXPECT_DOUBLE_EQ(s->Get(1), 5.0 / (double)6.0); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 4);                        // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                        // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Inverse)
@@ -74,6 +76,7 @@ TEST(DoubleMathTest, Inverse)
     EXPECT_DOUBLE_EQ(s->Get(1), 1.0 / (double)6.0); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                        // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                        // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Sqrt)
@@ -97,6 +100,7 @@ TEST(DoubleMathTest, Sqrt)
     EXPECT_DOUBLE_EQ(s->Get(1), sqrt((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                        // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                        // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Pi)
@@ -122,6 +126,7 @@ TEST(DoubleMathTest, Pi)
     EXPECT_DOUBLE_EQ(s->Get(1), M_PI); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 6);           // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 5);           // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Exp)
@@ -145,6 +150,7 @@ TEST(DoubleMathTest, Exp)
     EXPECT_DOUBLE_EQ(s->Get(1), exp((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                       // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                       // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Log)
@@ -168,6 +174,7 @@ TEST(DoubleMathTest, Log)
     EXPECT_DOUBLE_EQ(s->Get(1), log((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                       // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                       // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Log10)
@@ -191,6 +198,7 @@ TEST(DoubleMathTest, Log10)
     EXPECT_DOUBLE_EQ(s->Get(1), log10((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Pow10)
@@ -218,6 +226,7 @@ TEST(DoubleMathTest, Pow10)
     s->Push(2.5);
     s->Power10();
     EXPECT_DOUBLE_EQ(s->Get(0), 316.22776601683793); // check wether the stack top.
+    delete s;
 }
 
 TEST(DoubleMathTest, Power)
@@ -247,6 +256,7 @@ TEST(DoubleMathTest, Power)
     s->Power();
 
     EXPECT_DOUBLE_EQ(s->Get(0), 55.90169943749474241); // check wether the stack top.
+    delete s;
 }
 
 TEST(DoubleMathTest, Sin)
@@ -270,6 +280,7 @@ TEST(DoubleMathTest, Sin)
     EXPECT_DOUBLE_EQ(s->Get(1), ::sin((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Cos)
@@ -293,6 +304,7 @@ TEST(DoubleMathTest, Cos)
     EXPECT_DOUBLE_EQ(s->Get(1), ::cos((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Tan)
@@ -316,6 +328,7 @@ TEST(DoubleMathTest, Tan)
     EXPECT_DOUBLE_EQ(s->Get(1), ::tan((double)6.0)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                         // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                         // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Asin)
@@ -339,6 +352,7 @@ TEST(DoubleMathTest, Asin)
     EXPECT_DOUBLE_EQ(s->Get(1), ::asin((double)0.50)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                           // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                           // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Acos)
@@ -362,6 +376,7 @@ TEST(DoubleMathTest, Acos)
     EXPECT_DOUBLE_EQ(s->Get(1), ::acos((double)0.5)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                          // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                          // check wether the stack 4th.
+    delete s;
 }
 
 TEST(DoubleMathTest, Atan)
@@ -385,4 +400,5 @@ TEST(DoubleMathTest, Atan)
     EXPECT_DOUBLE_EQ(s->Get(1), ::atan((double)0.50)); // check wether the stack 2nd.
     EXPECT_EQ(s->Get(2), 5);                           // check wether the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                           // check wether the stack 4th.
+    delete s;
 }

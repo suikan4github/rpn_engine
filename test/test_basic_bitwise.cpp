@@ -26,6 +26,7 @@ namespace rpn_engine
         EXPECT_EQ(s->To32bitValue(INT32_MAX + 1.0), 0x80000000); // extracted data must be overflown
         EXPECT_EQ(s->To32bitValue(INT32_MIN + 1.0), 0x80000001); // extracted data must be zero.
         EXPECT_EQ(s->To32bitValue(INT32_MIN - 1.0), 0x7fffffff); // extracted data must be INT32_MIN+1.
+        delete s;
     }
 
     TEST(BasicBitwiseTest, ToElementValue)
@@ -37,6 +38,7 @@ namespace rpn_engine
         EXPECT_EQ(s->ToElementValue(-1), -1.0);
         EXPECT_EQ(s->ToElementValue(0x7FFFFFFF), INT32_MAX);
         EXPECT_EQ(s->ToElementValue(0x80000000), INT32_MIN);
+        delete s;
     }
 
 }
@@ -58,6 +60,7 @@ TEST(BasicBitwiseTest, BitAdd)
 
     s->LastX();
     EXPECT_EQ(s->Get(0), 7.1);
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitSubtract)
@@ -79,6 +82,7 @@ TEST(BasicBitwiseTest, BitSubtract)
     // last x test
     s->LastX();
     EXPECT_EQ(s->Get(0), 7.1);
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitMultiply)
@@ -117,6 +121,7 @@ TEST(BasicBitwiseTest, BitMultiply)
     // last x test
     s->LastX();
     EXPECT_EQ(s->Get(0), 7.1);
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitDivide)
@@ -134,6 +139,7 @@ TEST(BasicBitwiseTest, BitDivide)
     // last x test
     s->LastX();
     EXPECT_EQ(s->Get(0), 3.1);
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitNagate)
@@ -150,6 +156,7 @@ TEST(BasicBitwiseTest, BitNagate)
     // last x test
     s->LastX();
     EXPECT_EQ(s->Get(0), 3.1);
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitOr)
@@ -173,6 +180,7 @@ TEST(BasicBitwiseTest, BitOr)
     s->Push(12.0); // 0x0C
     s->BitOr();
     EXPECT_EQ(s->Get(0), 13); // 0x0D
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitExor)
@@ -196,6 +204,7 @@ TEST(BasicBitwiseTest, BitExor)
     s->Push(12.0); // 0x0C
     s->BitExor();
     EXPECT_EQ(s->Get(0), 9); // 0x09
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitAnd)
@@ -219,6 +228,7 @@ TEST(BasicBitwiseTest, BitAnd)
     s->Push(12.0); // 0x0C
     s->BitAnd();
     EXPECT_EQ(s->Get(0), 4); // 0x04
+    delete s;
 }
 
 TEST(BasicBitwiseTest, LogicalShiftRight)
@@ -248,6 +258,7 @@ TEST(BasicBitwiseTest, LogicalShiftRight)
     s->Push(12.0); // 0x0C
     s->BitAnd();
     EXPECT_EQ(s->Get(0), 4); // 0x04
+    delete s;
 }
 
 TEST(BasicBitwiseTest, LogicalShiftLeft)
@@ -277,6 +288,7 @@ TEST(BasicBitwiseTest, LogicalShiftLeft)
     s->Push(12.0); // 0x0C
     s->LogicalShiftLeft();
     EXPECT_EQ(s->Get(0), 0x5000); //
+    delete s;
 }
 
 TEST(BasicBitwiseTest, BitNot)
@@ -301,4 +313,5 @@ TEST(BasicBitwiseTest, BitNot)
     s->Push(12.0); // 0x0C
     s->BitNot();
     EXPECT_EQ(s->Get(0), (int32_t)0xFFFFFFF3); //
+    delete s;
 }
