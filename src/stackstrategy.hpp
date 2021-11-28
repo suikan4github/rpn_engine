@@ -272,7 +272,7 @@ namespace rpn_engine
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by std::complex<> type.
+        // Implementation when the template is specialized by std::complex<> type.
         void Complex()
         {
             // Pop parameters
@@ -287,7 +287,7 @@ namespace rpn_engine
 
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by scarlar type.
+        // Implementation when the template is specialized by scarlar type.
         void Complex()
         {
             // In the case of scalar, do nothing
@@ -302,7 +302,7 @@ namespace rpn_engine
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by std::complex<> type.
+        // Implementation when the template is specialized by std::complex<> type.
         void DeComplex()
         {
             // Pop parameters
@@ -315,7 +315,7 @@ namespace rpn_engine
 
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by scarlar type.
+        // Implementation when the template is specialized by scarlar type.
         void DeComplex()
         {
             // In the case of scalar, do nothing
@@ -333,7 +333,7 @@ namespace rpn_engine
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by std::complex<> type.
+        // Implementation when the template is specialized by std::complex<> type.
         void Conjugate()
         {
             // save X before operation
@@ -348,7 +348,7 @@ namespace rpn_engine
 
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by scarlar type.
+        // Implementation when the template is specialized by scarlar type.
         void Conjugate()
         {
             // In the case of scalar, do nothing
@@ -365,7 +365,7 @@ namespace rpn_engine
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by std::complex<> type.
+        // Implementation when the template is specialized by std::complex<> type.
         void ToPolar()
         {
             // Pop parameters
@@ -377,7 +377,7 @@ namespace rpn_engine
 
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by scarlar type.
+        // Implementation when the template is specialized by scarlar type.
         void ToPolar()
         {
             // In the case of scalar, do nothing
@@ -394,7 +394,7 @@ namespace rpn_engine
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by std::complex<> type.
+        // Implementation when the template is specialized by std::complex<> type.
         void ToCartesian()
         {
             // Pop parameters
@@ -406,7 +406,7 @@ namespace rpn_engine
 
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation for  the template is specialized by scarlar type.
+        // Implementation when the template is specialized by scarlar type.
         void ToCartesian()
         {
             // In the case of scalar, do nothing
