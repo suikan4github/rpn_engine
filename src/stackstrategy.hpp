@@ -39,7 +39,14 @@ namespace rpn_engine
      * before the oepration. The last x register can be push to stack by LastX() member
      * function. 
      * 
-     * All functions supports complex template type. 
+     * All functions supports complex template type, if the stack is specialized by
+     * std::complex<> type. On the other hand, if the stack is specialized by the
+     * scalar type, following functions do nothing : 
+     * @li @ref Complex
+     * @li @ref DecComplex
+     * @li @ref Conjugate
+     * @li @ref ToPolar
+     * @li @ref ToCartesian
      */
     template <class Element>
     class StackStrategy

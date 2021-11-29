@@ -33,12 +33,12 @@ TEST(BasicStackTest, StackInitialValueCheck)
 {
     IntStack *s;
     s = new IntStack(4);
-    EXPECT_EQ(s->Get(0), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(1), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(2), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(3), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Get(0), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(1), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(2), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(3), 0); // check Whether the stack is initialize
     s->LastX();
-    EXPECT_EQ(s->Get(0), 0); // check wether the stack top.
+    EXPECT_EQ(s->Get(0), 0); // check the stack top
     delete s;
 }
 
@@ -48,14 +48,14 @@ TEST(BasicStackTest, GetAndPush)
     s = new IntStack(4);
     s->Push(1);
     EXPECT_EQ(s->Get(0), 1); // Check pushed value
-    EXPECT_EQ(s->Get(1), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(2), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(3), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Get(1), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(2), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(3), 0); // check Whether the stack is initialize
     s->Push(2);
     EXPECT_EQ(s->Get(0), 2); // Check pushed value
     EXPECT_EQ(s->Get(1), 1); // Check pushed value
-    EXPECT_EQ(s->Get(2), 0); // check wether the stack is initialize
-    EXPECT_EQ(s->Get(3), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Get(2), 0); // check Whether the stack is initialize
+    EXPECT_EQ(s->Get(3), 0); // check Whether the stack is initialize
     s->Push(3);
     s->Push(4);
     s->Push(5);
@@ -84,16 +84,16 @@ TEST(BasicStackTest, Pop)
 {
     IntStack *s;
     s = new IntStack(4);
-    EXPECT_EQ(s->Pop(), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Pop(), 0); // check Whether the stack is initialize
     s->Push(1);
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    EXPECT_EQ(s->Pop(), 4);  // check wether the last pushed value is able to pop.
-    EXPECT_EQ(s->Get(0), 3); // check wether the stack top is lost and poped up.
-    EXPECT_EQ(s->Get(1), 2); // check wether the stack is poped up.
-    EXPECT_EQ(s->Get(2), 1); // check wether the stack top is popped up.
-    EXPECT_EQ(s->Get(3), 1); // check wether the stack top is poped up.
+    EXPECT_EQ(s->Pop(), 4);  // check Whether the last pushed value is able to pop.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
+    EXPECT_EQ(s->Get(1), 2); // check Whether the stack is poped up.
+    EXPECT_EQ(s->Get(2), 1); // check Whether the stack top is popped up.
+    EXPECT_EQ(s->Get(3), 1); // check Whether the stack top is poped up.
     delete s;
 }
 
@@ -102,14 +102,14 @@ TEST(BasicStackTest, Pop2)
 {
     IntStack *s;
     s = new IntStack(2);
-    EXPECT_EQ(s->Pop(), 0); // check wether the stack is initialize
+    EXPECT_EQ(s->Pop(), 0); // check Whether the stack is initialize
     s->Push(1);
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    EXPECT_EQ(s->Pop(), 4);  // check wether the last pushed value is able to pop.
-    EXPECT_EQ(s->Get(0), 3); // check wether the stack top is lost and poped up.
-    EXPECT_EQ(s->Get(0), 3); // check wether the stack top is lost and poped up.
+    EXPECT_EQ(s->Pop(), 4);  // check Whether the last pushed value is able to pop.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
     delete s;
 }
 
@@ -122,10 +122,10 @@ TEST(BasicStackTest, Dup)
     s->Push(3);
     s->Push(4);
     s->Duplicate();
-    EXPECT_EQ(s->Get(0), 4); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 4); // check wether the stack 2nd.
-    EXPECT_EQ(s->Get(2), 3); // check wether the stack 3rd.
-    EXPECT_EQ(s->Get(3), 2); // check wether the stack 4th.
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 2); // check the stack 4th.
     delete s;
 }
 
@@ -138,10 +138,10 @@ TEST(BasicStackTest, Swap)
     s->Push(3);
     s->Push(4);
     s->Swap();
-    EXPECT_EQ(s->Get(0), 3); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 4); // check wether the stack 2nd.
-    EXPECT_EQ(s->Get(2), 2); // check wether the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1); // check wether the stack 4th.
+    EXPECT_EQ(s->Get(0), 3); // check the stack top
+    EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
     delete s;
 }
 
@@ -154,10 +154,10 @@ TEST(BasicStackTest, RotatePop)
     s->Push(3);
     s->Push(4);
     s->RotatePop();
-    EXPECT_EQ(s->Get(0), 3); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 2); // check wether the stack 2nd.
-    EXPECT_EQ(s->Get(2), 1); // check wether the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4); // check wether the stack 4th.
+    EXPECT_EQ(s->Get(0), 3); // check the stack top
+    EXPECT_EQ(s->Get(1), 2); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 1); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 4); // check the stack 4th.
     delete s;
 }
 
@@ -170,10 +170,10 @@ TEST(BasicStackTest, RotatePush)
     s->Push(3);
     s->Push(4);
     s->RotatePush();
-    EXPECT_EQ(s->Get(0), 1); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 4); // check wether the stack 2nd.
-    EXPECT_EQ(s->Get(2), 3); // check wether the stack 3rd.
-    EXPECT_EQ(s->Get(3), 2); // check wether the stack 4th.
+    EXPECT_EQ(s->Get(0), 1); // check the stack top
+    EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 2); // check the stack 4th.
     delete s;
 }
 
@@ -186,10 +186,10 @@ TEST(BasicStackTest, SetTop)
     s->Push(3);
     s->Push(4);
     s->SetTop(100);
-    EXPECT_EQ(s->Get(0), 100); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 3);   // check wether the stack 2nd.
-    EXPECT_EQ(s->Get(2), 2);   // check wether the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1);   // check wether the stack 4th.
+    EXPECT_EQ(s->Get(0), 100); // check the stack top
+    EXPECT_EQ(s->Get(1), 3);   // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2);   // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1);   // check the stack 4th.
     delete s;
 }
 
@@ -203,12 +203,12 @@ TEST(BasicStackTest, LastX)
     s->Push(3);
     s->Push(4);
 
-    EXPECT_EQ(s->Get(0), 4); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 3); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
 
     s->SaveToLastX();
     s->LastX();
-    EXPECT_EQ(s->Get(0), 4); // check wether the stack top.
-    EXPECT_EQ(s->Get(1), 4); // check wether the stack 2nd.
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     delete s;
 }
