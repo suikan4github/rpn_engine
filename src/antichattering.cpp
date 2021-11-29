@@ -2,7 +2,7 @@
 #include <assert.h>
 rpn_engine::AntiChattering::AntiChattering(unsigned int hl_threashold_,
                                            unsigned int lh_threashold_,
-                                           KeyPerssedCallBackFunction func,
+                                           KeyPerssedCallBackFunction *func,
                                            unsigned int raw,
                                            unsigned int col) : state_(ksLL),
                                                                count_(0),

@@ -7,7 +7,7 @@
 namespace rpn_engine
 {
 
-    void dummy(int a, int b){};
+    void dummy(unsigned a, unsigned b){};
 
     // Checking null pointer triggers assertion
     TEST(AntiChattering, ConstructorWrongPtr)
@@ -19,7 +19,7 @@ namespace rpn_engine
     TEST(AntiChattering, ConstructorWrongLHThreshold)
     {
         // lh_threashold must be greater than zero
-        ASSERT_DEATH(AntiChattering ac(1, 0, dummy, 9, 3),
+        ASSERT_DEATH(AntiChattering ac(1, 0, &dummy, 9, 3),
                      "lh_threashold_ > 0");
     }
 
@@ -28,7 +28,7 @@ namespace rpn_engine
     {
 
         // hl_threashold must be greater than zero
-        ASSERT_DEATH(AntiChattering ac(0, 1, dummy, 9, 3),
+        ASSERT_DEATH(AntiChattering ac(0, 1, &dummy, 9, 3),
                      "hl_threashold_ > 0");
     }
 

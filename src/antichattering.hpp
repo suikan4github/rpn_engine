@@ -9,8 +9,6 @@
  * 
  */
 
-#include <functional>
-
 namespace rpn_engine
 {
     enum KeyLevel
@@ -18,8 +16,7 @@ namespace rpn_engine
         kklL,
         kklH
     };
-
-    typedef std::function<void(unsigned raw, unsigned col)> KeyPerssedCallBackFunction;
+    typedef void KeyPerssedCallBackFunction(unsigned raw, unsigned col);
 
     class AntiChattering
     {
@@ -35,7 +32,7 @@ namespace rpn_engine
         AntiChattering(
             unsigned int hl_threashold_,
             unsigned int lh_threashold_,
-            KeyPerssedCallBackFunction func,
+            KeyPerssedCallBackFunction *func,
             unsigned int raw,
             unsigned int col);
         virtual ~AntiChattering();
@@ -63,6 +60,6 @@ namespace rpn_engine
         unsigned int raw_; // raw in the key matrix
         unsigned int col_; // col in the key matrix
                            // Invoked when state transit to ksHH
-        KeyPerssedCallBackFunction key_pressed_call_back_;
+        KeyPerssedCallBackFunction *key_pressed_call_back_;
     };
 }
