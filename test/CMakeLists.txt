@@ -18,5 +18,5 @@ target_include_directories(rpn_test
 
 
 
-# Add the test case use the gtest feature.
+# Search Google Test test cases and link.
 gtest_discover_tests(rpn_test)

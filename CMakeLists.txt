@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 project(rpn_test)
 
-# Enable the testing features.
+# Enable CMake 
 enable_testing()
 
-# To use the googletest
+# Find and integrate the Google Test package
 find_package(GTest REQUIRED)
 
-# Enable the GoogleTest integration.
+# Include the CMake file from Google Test
 include(GoogleTest)
 
 # Subdirectories
