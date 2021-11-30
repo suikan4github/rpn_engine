@@ -42,6 +42,7 @@ namespace rpn_engine
     // Checking Simple turn on
     TEST(AntiChattering, SimpleTansit)
     {
+        key_pressed = false;
         rpn_engine::AntiChattering ac(
             2, // H->L threashold
             5, // L->H threashold
@@ -62,4 +63,119 @@ namespace rpn_engine
         EXPECT_EQ(col, 3);
     }
 
+    // Checking short High strobe is killed
+    TEST(AntiChattering, DiscontinuedH)
+    {
+        key_pressed = false;
+        rpn_engine::AntiChattering ac(
+            2, // H->L threashold
+            5, // L->H threashold
+            &CallBackStub,
+            9,  // row
+            3); // col
+
+        // 5 discontinued H doesn't make transition to H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow);  // Chattering
+        ac.Input(rpn_engine::kklHigh); // It must be still L state.
+        EXPECT_EQ(key_pressed, false);
+    }
+
+    // Checking Long H make key pressed event only once.
+    TEST(AntiChattering, VeryLongH)
+    {
+        key_pressed = false;
+        rpn_engine::AntiChattering ac(
+            2, // H->L threashold
+            5, // L->H threashold
+            &CallBackStub,
+            9,  // row
+            3); // col
+
+        // During H, short strobe of L doesn't make transition.
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        EXPECT_EQ(key_pressed, true);
+        key_pressed = false;
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // The fifth High input doesn't make key_pressed event.
+        EXPECT_EQ(key_pressed, false);
+    }
+    // Checking short L strobe is killed
+    TEST(AntiChattering, ShortLKilled)
+    {
+        key_pressed = false;
+        rpn_engine::AntiChattering ac(
+            2, // H->L threashold
+            5, // L->H threashold
+            &CallBackStub,
+            9,  // row
+            3); // col
+
+        // During H, short strobe of L doesn't make transition.
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        EXPECT_EQ(key_pressed, true);
+        key_pressed = false;
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // The fifth High input doesn't make key_pressed event.
+        EXPECT_EQ(key_pressed, false);
+    }
+
+    // Detection of anti chattering L
+    TEST(AntiChattering, AntiChatteringL)
+    {
+        key_pressed = false;
+        rpn_engine::AntiChattering ac(
+            2, // H->L threashold
+            5, // L->H threashold
+            &CallBackStub,
+            9,  // row
+            3); // col
+
+        // During H, short strobe of L doesn't make transition.
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        EXPECT_EQ(key_pressed, true);
+        key_pressed = false;
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklLow); // Still level is H
+        ac.Input(rpn_engine::kklLow); // Now level is L
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // The fifth High input  makes key_pressed event.
+        EXPECT_EQ(key_pressed, true);
+    }
 }

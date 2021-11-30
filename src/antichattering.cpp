@@ -24,60 +24,40 @@ rpn_engine::AntiChattering::~AntiChattering()
 #include <iostream>
 void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
 {
+    // Actual implementation of internal state machine
     switch (state_)
     {
+        // In the LL state, needs continuous lh_threshold_ "H" to transit to HH state.
     case ksLL: // Bottom state
         if (key_level == kklLow)
-            ; // stay current state.
-        else  // kklHigh
+            count_ = 0; // Clear the continuous "H" count
+        else            // kklHigh
         {
-            count_++;
-            state_ = ksLH; // Go to intermediate state
-        }
-        break;
-    case ksLH: // Intermediate state
-        if (key_level == kklLow)
-        {
-            count_ = 0;
-            state_ = ksLL; // Go back to the bottom state.
-        }
-        else // kklHigh
-        {
-            count_++;
+            count_++; // count how many continuous "H" came
             if (count_ >= lh_threashold_)
             {
-                state_ = ksHH; // Go to top state
+                state_ = ksHH; // Transit to HH state
                 count_ = 0;    // clear count;
                 // Notify the key is H after anti chattering process.
                 key_pressed_call_back_(raw_, col_);
             }
         }
-
         break;
-    case ksHL: // Intermediate state
+        // In the HH state, needs continuous hl_threshold_ "L" to transit to LL state.
+    case ksHH: // Top state
         if (key_level == kklLow)
         {
-            count_++;
+            count_++; // count how many continuous "L" came
             if (count_ >= hl_threashold_)
             {
-                state_ = ksLL; // Go to bottom state
+                state_ = ksLL; // Transit to LL state
                 count_ = 0;    // clear count;
             }
         }
         else // kklHigh
         {
-            count_ = 0;
-            state_ = ksHH; // Go back to the top state.
+            count_ = 0; // Clear the continuous "L" count
         }
-        break;
-    case ksHH: // Top state
-        if (key_level == kklLow)
-        {
-            count_++;
-            state_ = ksHL; // Go to intermediate state
-        }
-        else  // kklHigh
-            ; // stay current state.
         break;
     default:
         assert(true); // program logic error

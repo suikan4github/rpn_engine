@@ -50,10 +50,15 @@ namespace rpn_engine
         virtual ~AntiChattering();
 
         /**
-         * @brief 
+         * @brief Input to the state machine
          * 
-         * @param raw 
-         * @param col 
+         * @param key_level kklHigh or kksLow
+         * @details
+         * Drives internal state machine. This member function have to be called
+         * periodically.
+         * 
+         * When the internal state machine tansits from L to H, the 
+         * call buck function registered by the constructor will be called.  
          */
         void Input(KeyLevel const key_level);
 
@@ -61,12 +66,10 @@ namespace rpn_engine
         enum State
         {
             ksLL, ///< Low state.
-            ksLH, ///< Low state but got "H" input. next continousl lh_threashold "H" will make transition to HH.
-            ksHL, ///< High state but got "L" input. next continousl hl_threashold "L" will make transition to LL.
             ksHH  ///< High state
         };
 
-        State state_;
+        State state_;        // Internal state machine
         unsigned int count_; // continuous count of same key input
 
         KeyPerssedCallBackFunction *key_pressed_call_back_;
@@ -74,7 +77,7 @@ namespace rpn_engine
         unsigned int const col_; // col in the key matrix
                                  // Invoked when state transit to ksHH
 
-        unsigned int const hl_threashold_;
-        unsigned int const lh_threashold_;
+        unsigned int const hl_threashold_; // How many continuous L is needed to transit from H to L
+        unsigned int const lh_threashold_; // How many continuous L is needed to transit from L to H
     };
 }
