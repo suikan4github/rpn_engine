@@ -419,6 +419,30 @@ namespace rpn_engine
             // In the case of scalar, do nothing
         }
 
+        /**
+         * @fn void SwapReIm()
+         * @brief Pop X, swat the re, im part and then  push it. 
+         */
+        template <class E = Element,
+                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
+        // Implementation when the template is specialized by std::complex<> type.
+        void SwapReIm()
+        {
+            // Pop parameters
+            auto x = this->Pop();
+
+            // push in cartesian nortation : abs * exp( i * arg )
+            this->Push(Element(x.imag(), x.real()));
+        }
+
+        template <class E = Element,
+                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
+        // Implementation when the template is specialized by scarlar type.
+        void SwapReIm()
+        {
+            // In the case of scalar, do nothing
+        }
+
         /********************************** BITWISE OPERATION *****************************/
 
         /**

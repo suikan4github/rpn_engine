@@ -226,3 +226,21 @@ TEST(DoubleComplexTest, ToCartesian)
     EXPECT_DOUBLE_EQ(x.imag(), 1.0); //
     delete s;
 }
+
+TEST(DoubleComplexTest, SwapReIm)
+{
+    DoubleComplexStack *s;
+    s = new DoubleComplexStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(std::complex<double>(1, 2)); // 1+2i
+    s->SwapReIm();
+
+    // must be converted to 2+i;
+    EXPECT_DOUBLE_EQ(s->Get(0).real(), 2.0); //
+    EXPECT_DOUBLE_EQ(s->Get(0).imag(), 1.0); //
+    EXPECT_DOUBLE_EQ(s->Get(1).real(), 4);   //
+    EXPECT_DOUBLE_EQ(s->Get(2).real(), 3);   //
+    delete s;
+}
