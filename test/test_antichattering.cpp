@@ -174,7 +174,8 @@ namespace rpn_engine
         ac.Input(rpn_engine::kklHigh);
         ac.Input(rpn_engine::kklHigh);
         ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::kklHigh); // Not yeat transit to H
+        EXPECT_EQ(key_pressed, false);
         ac.Input(rpn_engine::kklHigh); // The fifth High input  makes key_pressed event.
         EXPECT_EQ(key_pressed, true);
     }
