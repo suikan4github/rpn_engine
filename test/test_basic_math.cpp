@@ -176,3 +176,135 @@ TEST(BasicMathTest, Square)
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
+
+TEST(BasicMathTest, Complex)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->Complex(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
+
+TEST(BasicMathTest, DeComplex)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->DeComplex(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
+
+TEST(BasicMathTest, Conjugate)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->Conjugate(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
+
+TEST(BasicMathTest, ToPolar)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->ToPolar(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
+
+TEST(BasicMathTest, ToCartesian)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->ToCartesian(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
+
+TEST(BasicMathTest, SwapReIm)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+    s->Push(6);
+    s->SwapReIm(); // must be no operation in scalar specialization
+
+    // must be no change
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
+
+    s->LastX();
+    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    delete s;
+}
