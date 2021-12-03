@@ -35,9 +35,9 @@ namespace rpn_engine
      * 
      * The monadic operation pops one operand, calculate and push one operand.
      * The diadic operation pops two operands, calculate and push one operand.
-     * Both monadic and diadic operation sames stack top (x) to last x register
-     * before the operation. The last x register can be push to stack by LastX() member
-     * function. 
+     * Both monadic and diadic operation saves stack  to undo buffer
+     * before the operation. The undo buffer can be copy back to stack by the
+     * Undo() member function. 
      * 
      * All functions supports complex template type, if the stack is specialized by
      * std::complex<> type. On the other hand, if the stack is specialized by the
@@ -133,16 +133,16 @@ namespace rpn_engine
         void RotatePush();
 
         /**
-         * @brief Copy the stack top to the Last X variable.
+         * @brief Copy the stack to the Undo variable.
          * 
          */
-        void SaveToLastX();
+        void SaveToUndoBuffer();
 
         /**
-         * @brief push Last X.
+         * @brief Retrieve previous stack state.
          * 
          */
-        void LastX();
+        void Undo();
 
         /********************************** MATHMATICAL OPERATION *****************************/
 
@@ -197,7 +197,7 @@ namespace rpn_engine
         /**
          * @brief Push pi
          * @details
-         * Pi() doesn't save the last X.
+         * Push pi to the stack.
          */
         void Pi();
 
@@ -333,7 +333,7 @@ namespace rpn_engine
          * @fn void Conjugate()
          * @brief Pop X and then, push conj(X)
          * @details
-         * The last X register is affected.
+         * The Undo buffer is affected.
          * 
          * If the stack is implemented with scalar element, this function does nothing
          * 
@@ -344,7 +344,7 @@ namespace rpn_engine
         void Conjugate()
         {
             // save X before operation
-            this->SaveToLastX();
+            this->SaveToUndoBuffer();
 
             // Pop parameters
             auto x = this->Pop();
@@ -375,6 +375,9 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void ToPolar()
         {
+            // save X before operation
+            this->SaveToUndoBuffer();
+
             // Pop parameters
             auto x = this->Pop();
 
@@ -404,6 +407,9 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void ToCartesian()
         {
+            // save X before operation
+            this->SaveToUndoBuffer();
+
             // Pop parameters
             auto x = this->Pop();
 
@@ -428,6 +434,9 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void SwapReIm()
         {
+            // save X before operation
+            this->SaveToUndoBuffer();
+
             // Pop parameters
             auto x = this->Pop();
 
@@ -450,7 +459,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitAdd();
 
@@ -459,7 +468,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitSubtract();
 
@@ -468,7 +477,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitMultiply();
 
@@ -477,7 +486,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitDivide();
 
@@ -486,7 +495,7 @@ namespace rpn_engine
          * @details
          * X is truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitNagate();
 
@@ -495,7 +504,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitOr();
 
@@ -504,7 +513,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitExor();
 
@@ -513,7 +522,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void BitAnd();
 
@@ -522,7 +531,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit unsigned integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void LogicalShiftRight();
 
@@ -531,7 +540,7 @@ namespace rpn_engine
          * @details
          * Both X, Y are truncated to 32bit unsigned integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
         void LogicalShiftLeft();
 
@@ -540,7 +549,7 @@ namespace rpn_engine
          * @details
          * X is truncated to 32bit signed integer before operation. 
          * 
-         * Last X register is affected.
+         * Undo buffer is affected.
          */
 
         void BitNot();
@@ -555,7 +564,7 @@ namespace rpn_engine
          * The stack_[0] is the stack top. Index is allowed from 0 to stack_size_-1.
          */
         Element *const stack_;
-        Element last_x_;
+        Element *const undo_buffer_;
 
         /**
          * @fn int32_t To32bitValue(Element x)
@@ -607,7 +616,7 @@ namespace rpn_engine
 template <class Element>
 rpn_engine::StackStrategy<Element>::StackStrategy(unsigned int stack_size) : stack_size_(stack_size),
                                                                              stack_(new Element[stack_size_]),
-                                                                             last_x_(0)
+                                                                             undo_buffer_(new Element[stack_size_])
 {
     assert(stack_size_ >= 2);
     // allocate stack
@@ -616,6 +625,9 @@ rpn_engine::StackStrategy<Element>::StackStrategy(unsigned int stack_size) : sta
     // initialize stack
     for (int i = 0; i < stack_size_; i++)
         stack_[i] = 0;
+    // initialize undo buffer
+    for (int i = 0; i < stack_size_; i++)
+        undo_buffer_[i] = 0;
 }
 
 template <class Element>
@@ -623,6 +635,8 @@ rpn_engine::StackStrategy<Element>::~StackStrategy()
 {
     if (stack_ != nullptr)
         delete[] stack_;
+    if (undo_buffer_ != nullptr)
+        delete[] undo_buffer_;
 }
 
 template <class Element>
@@ -703,24 +717,26 @@ void rpn_engine::StackStrategy<Element>::SetTop(Element e)
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::SaveToLastX()
+void rpn_engine::StackStrategy<Element>::SaveToUndoBuffer()
 {
-    // Store X to the LastX.
-    last_x_ = Get(0);
+    // Store Stack state to the undo buffer.
+    for (int i = 0; i < stack_size_; i++)
+        undo_buffer_[i] = stack_[i];
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::LastX()
+void rpn_engine::StackStrategy<Element>::Undo()
 {
-    // The value of lastX.
-    Push(last_x_);
+    // Retrieve the last stack state
+    for (int i = 0; i < stack_size_; i++)
+        stack_[i] = undo_buffer_[i];
 }
 
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Add()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -732,8 +748,8 @@ void rpn_engine::StackStrategy<Element>::Add()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Subtract()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -745,8 +761,8 @@ void rpn_engine::StackStrategy<Element>::Subtract()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Multiply()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -758,8 +774,8 @@ void rpn_engine::StackStrategy<Element>::Multiply()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Divide()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -771,8 +787,8 @@ void rpn_engine::StackStrategy<Element>::Divide()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Nagate()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -783,8 +799,8 @@ void rpn_engine::StackStrategy<Element>::Nagate()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Inverse()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -795,8 +811,8 @@ void rpn_engine::StackStrategy<Element>::Inverse()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Sqrt()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -807,8 +823,8 @@ void rpn_engine::StackStrategy<Element>::Sqrt()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Square()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -819,7 +835,8 @@ void rpn_engine::StackStrategy<Element>::Square()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Pi()
 {
-    // Pi() doesn't save the Last x
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // do the operation
     Push(M_PI);
@@ -828,8 +845,8 @@ void rpn_engine::StackStrategy<Element>::Pi()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Exp()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -840,8 +857,8 @@ void rpn_engine::StackStrategy<Element>::Exp()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Log()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -852,8 +869,8 @@ void rpn_engine::StackStrategy<Element>::Log()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Log10()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -864,8 +881,8 @@ void rpn_engine::StackStrategy<Element>::Log10()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Power10()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -876,8 +893,8 @@ void rpn_engine::StackStrategy<Element>::Power10()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Power()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -889,8 +906,8 @@ void rpn_engine::StackStrategy<Element>::Power()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Sin()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -901,8 +918,8 @@ void rpn_engine::StackStrategy<Element>::Sin()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Cos()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -913,8 +930,8 @@ void rpn_engine::StackStrategy<Element>::Cos()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Tan()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -925,8 +942,8 @@ void rpn_engine::StackStrategy<Element>::Tan()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Asin()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -937,8 +954,8 @@ void rpn_engine::StackStrategy<Element>::Asin()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Acos()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -949,8 +966,8 @@ void rpn_engine::StackStrategy<Element>::Acos()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Atan()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     Element x = Pop();
@@ -967,8 +984,8 @@ Element rpn_engine::StackStrategy<Element>::ToElementValue(int32_t x)
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitAdd()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -982,8 +999,8 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitSubtract()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -997,8 +1014,8 @@ void rpn_engine::StackStrategy<Element>::BitSubtract()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitMultiply()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1012,8 +1029,8 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitDivide()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1027,8 +1044,8 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitNagate()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1041,8 +1058,8 @@ void rpn_engine::StackStrategy<Element>::BitNagate()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitOr()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1056,8 +1073,8 @@ void rpn_engine::StackStrategy<Element>::BitOr()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitExor()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1071,8 +1088,8 @@ void rpn_engine::StackStrategy<Element>::BitExor()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitAnd()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1086,8 +1103,8 @@ void rpn_engine::StackStrategy<Element>::BitAnd()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
@@ -1101,8 +1118,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
@@ -1116,8 +1133,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitNot()
 {
-    // Save LastX before mathematical operation
-    SaveToLastX();
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
 
     // Get parameters
     auto x = To32bitValue(Pop());

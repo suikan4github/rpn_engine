@@ -37,7 +37,7 @@ TEST(BasicStackTest, StackInitialValueCheck)
     EXPECT_EQ(s->Get(1), 0); // check Whether the stack is initialize
     EXPECT_EQ(s->Get(2), 0); // check Whether the stack is initialize
     EXPECT_EQ(s->Get(3), 0); // check Whether the stack is initialize
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // check the stack top
     delete s;
 }
@@ -193,7 +193,7 @@ TEST(BasicStackTest, SetTop)
     delete s;
 }
 
-TEST(BasicStackTest, LastX)
+TEST(BasicStackTest, Undo)
 {
     IntStack *s;
     s = new IntStack(4);
@@ -205,10 +205,16 @@ TEST(BasicStackTest, LastX)
 
     EXPECT_EQ(s->Get(0), 4); // check the stack top
     EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
 
-    s->SaveToLastX();
-    s->LastX();
+    s->SaveToUndoBuffer();
+    s->Pop();
+    s->Pop();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 4); // check the stack top
-    EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
     delete s;
 }

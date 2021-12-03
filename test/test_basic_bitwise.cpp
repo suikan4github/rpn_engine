@@ -58,8 +58,9 @@ TEST(BasicBitwiseTest, BitAdd)
     s->BitAdd();
     EXPECT_EQ(s->Get(0), 10);
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 7.1);
+    EXPECT_EQ(s->Get(1), 3.14);
     delete s;
 }
 
@@ -79,9 +80,10 @@ TEST(BasicBitwiseTest, BitSubtract)
     s->BitSubtract();
     EXPECT_EQ(s->Get(0), -4);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 7.1);
+    EXPECT_EQ(s->Get(1), 3.14);
     delete s;
 }
 
@@ -118,9 +120,10 @@ TEST(BasicBitwiseTest, BitMultiply)
     s->BitMultiply();
     EXPECT_EQ(s->Get(0), 21);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 7.1);
+    EXPECT_EQ(s->Get(1), 3.14);
     delete s;
 }
 
@@ -136,9 +139,10 @@ TEST(BasicBitwiseTest, BitDivide)
     EXPECT_EQ(s->Get(0), 2);
     EXPECT_EQ(s->Get(1), 4.2);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 3.1);
+    EXPECT_EQ(s->Get(1), 7.1);
     delete s;
 }
 
@@ -153,9 +157,10 @@ TEST(BasicBitwiseTest, BitNagate)
     EXPECT_EQ(s->Get(0), -3);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 3.1);
+    EXPECT_EQ(s->Get(1), 7.1);
     delete s;
 }
 
@@ -171,9 +176,10 @@ TEST(BasicBitwiseTest, BitOr)
     EXPECT_EQ(s->Get(0), 0xFFAA);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0xFF00);
+    // Undo test
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0xff00);
+    EXPECT_EQ(s->Get(1), 0x55aa);
 
     // truncation check
     s->Push(5.1);  // 0x05
@@ -195,9 +201,10 @@ TEST(BasicBitwiseTest, BitExor)
     EXPECT_EQ(s->Get(0), 0xAAAA);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0xFF00);
+    // Undo test
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0xff00);
+    EXPECT_EQ(s->Get(1), 0x55aa);
 
     // truncation check
     s->Push(5.1);  // 0x05
@@ -219,9 +226,10 @@ TEST(BasicBitwiseTest, BitAnd)
     EXPECT_EQ(s->Get(0), 0x5500);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0xFF00);
+    // Undo test
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0xff00);
+    EXPECT_EQ(s->Get(1), 0x55aa);
 
     // truncation check
     s->Push(5.1);  // 0x05
@@ -243,8 +251,8 @@ TEST(BasicBitwiseTest, LogicalShiftRight)
     EXPECT_EQ(s->Get(0), 0x3FFFFFFF);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 1);
 
     // zero padding at MSB check
@@ -253,7 +261,7 @@ TEST(BasicBitwiseTest, LogicalShiftRight)
     s->LogicalShiftRight();
     EXPECT_EQ(s->Get(0), 0x40000000);
 
-    // truncation checkds
+    // truncation check
     s->Push(5.1);  // 0x05
     s->Push(12.0); // 0x0C
     s->BitAnd();
@@ -273,8 +281,8 @@ TEST(BasicBitwiseTest, LogicalShiftLeft)
     EXPECT_EQ(s->Get(0), (int32_t)0xFFFFFFFE);
     EXPECT_EQ(s->Get(1), 7.1);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), 1);
 
     // zero padding at MSB check
@@ -283,7 +291,7 @@ TEST(BasicBitwiseTest, LogicalShiftLeft)
     s->LogicalShiftLeft();
     EXPECT_EQ(s->Get(0), (int32_t)0xFFFFFFFE);
 
-    // truncation checkds
+    // truncation check
     s->Push(5.1);  // 0x05
     s->Push(12.0); // 0x0C
     s->LogicalShiftLeft();
@@ -304,11 +312,11 @@ TEST(BasicBitwiseTest, BitNot)
     s->BitNot();
     EXPECT_EQ(s->Get(0), (int32_t)0x5555AAAA);
 
-    // last x test
-    s->LastX();
+    // Undo test
+    s->Undo();
     EXPECT_EQ(s->Get(0), (int32_t)0xAAAA5555);
 
-    // truncation checkds
+    // truncation check
     s->Push(5.1);  // 0x05
     s->Push(12.0); // 0x0C
     s->BitNot();

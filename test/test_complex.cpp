@@ -21,7 +21,7 @@ TEST(DoubleComplexTest, Add)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 11.0); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 5.0);  // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 5.0);  // check imaginary part of top.
     delete s;
 }
 
@@ -38,7 +38,7 @@ TEST(DoubleComplexTest, Mul)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 24); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 27); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 27); // check imaginary part of top.
     delete s;
 }
 
@@ -53,7 +53,7 @@ TEST(DoubleComplexTest, Sqrt)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 1); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 1); // check imaginary part of top.
     delete s;
 }
 
@@ -73,7 +73,7 @@ TEST(DoubleComplexTest, Exp)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), ::cos(M_PI / 4)); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), ::sin(M_PI / 4)); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), ::sin(M_PI / 4)); // check imaginary part of top.
     delete s;
 }
 
@@ -89,7 +89,7 @@ TEST(DoubleComplexTest, Log)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);      // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), M_PI_2); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), M_PI_2); // check imaginary part of top.
     delete s;
 }
 
@@ -105,7 +105,7 @@ TEST(DoubleComplexTest, Power10)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), -0.6682015101903129); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 0.7439803369574931);  // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 0.7439803369574931);  // check imaginary part of top.
     delete s;
 }
 
@@ -121,7 +121,7 @@ TEST(DoubleComplexTest, Power)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0.4132921161015943); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 0.9105984992126147); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 0.9105984992126147); // check imaginary part of top.
     delete s;
 }
 
@@ -137,7 +137,7 @@ TEST(DoubleComplexTest, Sin)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);                    // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 1.175201193643801456); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 1.175201193643801456); // check imaginary part of top.
     delete s;
 }
 
@@ -152,11 +152,11 @@ TEST(DoubleComplexTest, Complex)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 3); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginaly part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginary part of top.
 
-    s->LastX();
+    s->Undo();
     x = s->Get(0);
-    EXPECT_DOUBLE_EQ(x.real(), 0); // Last x is not saved.
+    EXPECT_DOUBLE_EQ(x.real(), 0); // Undo buffered  is not saved.
     delete s;
 }
 
@@ -170,12 +170,12 @@ TEST(DoubleComplexTest, DeComplex)
 
     auto x = s->Get(0);
     auto y = s->Get(1);
-    EXPECT_DOUBLE_EQ(x.real(), 4); // check imaginaly part.
+    EXPECT_DOUBLE_EQ(x.real(), 4); // check imaginary part.
     EXPECT_DOUBLE_EQ(y.real(), 3); // check real part .
 
-    s->LastX();
+    s->Undo();
     x = s->Get(0);
-    EXPECT_DOUBLE_EQ(x.real(), 0); // Last x is not saved
+    EXPECT_DOUBLE_EQ(x.real(), 0); // Undo buffered  is not saved
     delete s;
 }
 
@@ -189,12 +189,12 @@ TEST(DoubleComplexTest, Conjugate)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 3);  // check real part.
-    EXPECT_DOUBLE_EQ(x.imag(), -4); // check imaginaly part.
+    EXPECT_DOUBLE_EQ(x.imag(), -4); // check imaginary part.
 
-    s->LastX();
+    s->Undo();
     x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 3); // check real part.
-    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginaly part.
+    EXPECT_DOUBLE_EQ(x.imag(), 4); // check imaginary part.
     delete s;
 }
 

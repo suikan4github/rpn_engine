@@ -23,11 +23,11 @@ TEST(DoubleMathTest, Add)
     EXPECT_EQ(s->Get(2), 3);           // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);           // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0); // check the stack top.
-    EXPECT_EQ(s->Get(1), 11);  // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 4);   // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 3);   // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -47,11 +47,11 @@ TEST(DoubleMathTest, Div)
     EXPECT_EQ(s->Get(2), 3);                           // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                           // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                      // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), 5.0 / (double)6.0); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 4);                        // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 3);                        // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -71,11 +71,11 @@ TEST(DoubleMathTest, Inverse)
     EXPECT_EQ(s->Get(2), 4);                             // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                             // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                      // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), 1.0 / (double)6.0); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                        // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                        // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -95,11 +95,11 @@ TEST(DoubleMathTest, Sqrt)
     EXPECT_EQ(s->Get(2), 4);                            // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                            // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                      // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), sqrt((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                        // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                        // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -121,11 +121,11 @@ TEST(DoubleMathTest, Pi)
     EXPECT_EQ(s->Get(2), 5);                             // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 4);                             // check the stack 4th.
 
-    s->LastX();                        // Pi() doesn't save last X
-    EXPECT_EQ(s->Get(0), 0);           // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), M_PI); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 6);           // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 5);           // check the stack 4th.
+    s->Undo();               // Pi() doesn't save last X
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -145,11 +145,11 @@ TEST(DoubleMathTest, Exp)
     EXPECT_EQ(s->Get(2), 4);                           // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                           // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                     // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), exp((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                       // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                       // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -169,11 +169,11 @@ TEST(DoubleMathTest, Log)
     EXPECT_EQ(s->Get(2), 4);                           // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                           // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                     // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), log((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                       // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                       // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -193,11 +193,11 @@ TEST(DoubleMathTest, Log10)
     EXPECT_EQ(s->Get(2), 4);                            // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                            // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                       // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), log10((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                         // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                         // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -217,11 +217,11 @@ TEST(DoubleMathTest, Pow10)
     EXPECT_EQ(s->Get(2), 4);          // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);          // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);        // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), 1e6); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);          // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);          // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
     s->Push(2.5);
     s->Power10();
@@ -245,11 +245,11 @@ TEST(DoubleMathTest, Power)
     EXPECT_EQ(s->Get(2), 3);            // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);            // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                    // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::pow(5.0, 6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 4);                      // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 3);                      // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
     s->Push(5.0);
     s->Push(2.5);
@@ -275,11 +275,11 @@ TEST(DoubleMathTest, Sin)
     EXPECT_EQ(s->Get(2), 4);                           // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                           // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                       // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::sin((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                         // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                         // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -299,11 +299,11 @@ TEST(DoubleMathTest, Cos)
     EXPECT_EQ(s->Get(2), 4);                             // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                             // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                       // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::cos((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                         // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                         // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -323,11 +323,11 @@ TEST(DoubleMathTest, Tan)
     EXPECT_EQ(s->Get(2), 4);                             // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                             // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6.0);                       // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::tan((double)6.0)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                         // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                         // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -347,11 +347,11 @@ TEST(DoubleMathTest, Asin)
     EXPECT_EQ(s->Get(2), 4);                          // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                          // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0.5);                         // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::asin((double)0.50)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                           // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                           // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0.5); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5);   // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);   // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);   // check the stack 4th.
     delete s;
 }
 
@@ -371,11 +371,11 @@ TEST(DoubleMathTest, Acos)
     EXPECT_EQ(s->Get(2), 4);                         // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                         // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0.5);                        // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::acos((double)0.5)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                          // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                          // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0.5); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5);   // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);   // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);   // check the stack 4th.
     delete s;
 }
 
@@ -395,10 +395,10 @@ TEST(DoubleMathTest, Atan)
     EXPECT_EQ(s->Get(2), 4);                            // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);                            // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 0.5);                         // check the stack top.
-    EXPECT_DOUBLE_EQ(s->Get(1), ::atan((double)0.50)); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 5);                           // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 4);                           // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 0.5); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5);   // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4);   // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3);   // check the stack 4th.
     delete s;
 }

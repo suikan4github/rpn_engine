@@ -22,11 +22,11 @@ TEST(BasicMathTest, Add)
     EXPECT_EQ(s->Get(2), 3);  // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
 
-    s->LastX();
-    EXPECT_EQ(s->Get(0), 6);  // check the stack top.
-    EXPECT_EQ(s->Get(1), 11); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 4);  // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 6); // check the stack top.
+    EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
     delete s;
 }
 
@@ -46,7 +46,7 @@ TEST(BasicMathTest, Sub)
     EXPECT_EQ(s->Get(2), 3);  // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -67,7 +67,7 @@ TEST(BasicMathTest, Mul)
     EXPECT_EQ(s->Get(2), 3);  // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -88,7 +88,7 @@ TEST(BasicMathTest, Div)
     EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -109,7 +109,7 @@ TEST(BasicMathTest, Neg)
     EXPECT_EQ(s->Get(2), 4);  // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -130,7 +130,7 @@ TEST(BasicMathTest, Inv)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -151,7 +151,7 @@ TEST(BasicMathTest, Sqrt)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -172,7 +172,7 @@ TEST(BasicMathTest, Square)
     EXPECT_EQ(s->Get(2), 4);  // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3);  // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
     delete s;
 }
@@ -194,7 +194,7 @@ TEST(BasicMathTest, Complex)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
@@ -216,7 +216,7 @@ TEST(BasicMathTest, DeComplex)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
@@ -238,7 +238,7 @@ TEST(BasicMathTest, Conjugate)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
@@ -260,7 +260,7 @@ TEST(BasicMathTest, ToPolar)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
@@ -282,7 +282,7 @@ TEST(BasicMathTest, ToCartesian)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
@@ -304,7 +304,7 @@ TEST(BasicMathTest, SwapReIm)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
-    s->LastX();
+    s->Undo();
     EXPECT_EQ(s->Get(0), 0); // must not saved.
     delete s;
 }
