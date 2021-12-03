@@ -74,15 +74,6 @@ namespace rpn_engine
         Element Get(unsigned int position);
 
         /**
-         * @brief Set the given value to the stack top. 
-         * 
-         * @param e A value to set to the stack.
-         * @details
-         * In this operation, stack doesn't push/pop. Only the stack top is affected.
-         */
-        void SetTop(Element e);
-
-        /**
          * @brief Push a given value to the stack
          * 
          * @param e A value to push to the stack.
@@ -789,13 +780,6 @@ void rpn_engine::StackStrategy<Element>::RotatePush()
     // Get the bottom value and push it
     Element x = Get(stack_size_ - 1);
     Push(x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::SetTop(Element e)
-{
-    // Store e to the stack top.
-    stack_[0] = e;
 }
 
 template <class Element>

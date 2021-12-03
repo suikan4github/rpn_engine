@@ -239,22 +239,6 @@ TEST(BasicStackTest, RotatePush)
     delete s;
 }
 
-TEST(BasicStackTest, SetTop)
-{
-    IntStack *s;
-    s = new IntStack(4);
-    s->Push(1);
-    s->Push(2);
-    s->Push(3);
-    s->Push(4);
-    s->SetTop(100);
-    EXPECT_EQ(s->Get(0), 100); // check the stack top
-    EXPECT_EQ(s->Get(1), 3);   // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 2);   // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1);   // check the stack 4th.
-    delete s;
-}
-
 namespace rpn_engine
 {
     TEST(BasicStackTest, Undo)
