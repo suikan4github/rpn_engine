@@ -156,8 +156,7 @@ TEST(DoubleComplexTest, Complex)
 
     s->Undo();
     x = s->Get(0);
-    EXPECT_DOUBLE_EQ(x.real(), 0); // Undo buffered  is not saved.
-    delete s;
+    EXPECT_DOUBLE_EQ(x.real(), 4); // Undo check
 }
 
 TEST(DoubleComplexTest, DeComplex)
@@ -165,6 +164,7 @@ TEST(DoubleComplexTest, DeComplex)
     DoubleComplexStack *s;
     s = new DoubleComplexStack(4);
 
+    s->Push(0);
     s->Push(std::complex<double>(3, 4)); // 3+4i
     s->DeComplex();
 
@@ -175,7 +175,11 @@ TEST(DoubleComplexTest, DeComplex)
 
     s->Undo();
     x = s->Get(0);
-    EXPECT_DOUBLE_EQ(x.real(), 0); // Undo buffered  is not saved
+    y = s->Get(1);
+    EXPECT_DOUBLE_EQ(x.real(), 3); // Undo buffered
+    EXPECT_DOUBLE_EQ(x.imag(), 4); // Undo buffered
+    EXPECT_DOUBLE_EQ(y.real(), 0); // Undo buffered
+    EXPECT_DOUBLE_EQ(y.imag(), 0); // Undo buffered
     delete s;
 }
 

@@ -132,17 +132,13 @@ namespace rpn_engine
          */
         void RotatePush();
 
+    private:
+        FRIEND_TEST(BasicStackTest, Undo);
         /**
          * @brief Copy the stack to the Undo variable.
          * 
          */
         void SaveToUndoBuffer();
-
-        /**
-         * @brief Retrieve previous stack state.
-         * 
-         */
-        void Undo();
 
         /**
          * @brief Disable the undo saving
@@ -168,6 +164,13 @@ namespace rpn_engine
          * The surrounding can be nested. 
          */
         void restoreUndoSavingState(bool previous_state);
+
+    public:
+        /**
+         * @brief Retrieve previous stack state.
+         * 
+         */
+        void Undo();
 
         /********************************** MATHMATICAL OPERATION *****************************/
 
@@ -307,6 +310,10 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void Complex()
         {
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
+
             // Pop parameters
             auto x = this->Pop();
             auto y = this->Pop();
@@ -315,6 +322,8 @@ namespace rpn_engine
 
             // y + ix
             this->Push(y);
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -337,12 +346,18 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void DeComplex()
         {
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
+
             // Pop parameters
             auto x = this->Pop();
 
             // push real, push imag
             this->Push(Element(x.real()));
             this->Push(Element(x.imag()));
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -368,14 +383,17 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void Conjugate()
         {
-            // save X before operation
-            this->SaveToUndoBuffer();
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
 
             // Pop parameters
             auto x = this->Pop();
 
             // push real, push imag
             this->Push(std::conj(x));
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -400,14 +418,17 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void ToPolar()
         {
-            // save X before operation
-            this->SaveToUndoBuffer();
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
 
             // Pop parameters
             auto x = this->Pop();
 
             // push in polar notation
             this->Push(Element(std::abs(x), std::arg(x)));
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -432,14 +453,17 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void ToCartesian()
         {
-            // save X before operation
-            this->SaveToUndoBuffer();
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
 
             // Pop parameters
             auto x = this->Pop();
 
             // push in cartesian nortation : abs * exp( i * arg )
             this->Push(x.real() * std::exp(Element(0, 1) * x.imag()));
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -459,6 +483,11 @@ namespace rpn_engine
         // Implementation when the template is specialized by std::complex<> type.
         void SwapReIm()
         {
+
+            // Save stack state before mathematical operation
+            SaveToUndoBuffer();
+            auto last_state = disableUndoSaving();
+
             // save X before operation
             this->SaveToUndoBuffer();
 
@@ -467,6 +496,8 @@ namespace rpn_engine
 
             // push in cartesian nortation : abs * exp( i * arg )
             this->Push(Element(x.imag(), x.real()));
+
+            restoreUndoSavingState(last_state);
         }
 
         template <class E = Element,
@@ -676,17 +707,27 @@ Element rpn_engine::StackStrategy<Element>::Get(unsigned int postion)
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Push(Element e)
 {
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
+
     // copy stack[0..stack_size-2] to stack[1..stack_size_-1]
     for (unsigned int i = stack_size_ - 1; i > 0; i--)
         stack_[i] = stack_[i - 1];
 
     // Then store e to the stack top.
     stack_[0] = e;
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
 Element rpn_engine::StackStrategy<Element>::Pop()
 {
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
+
     // preserve the last top value.
     Element last_top = stack_[0];
 
@@ -695,6 +736,8 @@ Element rpn_engine::StackStrategy<Element>::Pop()
     for (unsigned int i = 0; i < stack_size_ - 1; i++)
         stack_[i] = stack_[i + 1];
 
+    restoreUndoSavingState(last_state);
+
     // return the preserved value.
     return last_top;
 }
@@ -702,20 +745,32 @@ Element rpn_engine::StackStrategy<Element>::Pop()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Duplicate()
 {
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
+
     // To duplicate, pop the stack and push it twice.
     Element x = Pop();
     Push(x);
     Push(x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Swap()
 {
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
+
     // To swap x and y, pop the stack, stack second and push them reverse.
     Element x = Pop();
     Element y = Pop();
     Push(x);
     Push(y);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -746,9 +801,12 @@ void rpn_engine::StackStrategy<Element>::SetTop(Element e)
 template <class Element>
 void rpn_engine::StackStrategy<Element>::SaveToUndoBuffer()
 {
-    // Store Stack state to the undo buffer.
-    for (int i = 0; i < stack_size_; i++)
-        undo_buffer_[i] = stack_[i];
+    if (undo_saving_enabled_)
+    {
+        // Store Stack state to the undo buffer.
+        for (int i = 0; i < stack_size_; i++)
+            undo_buffer_[i] = stack_[i];
+    }
 }
 
 template <class Element>

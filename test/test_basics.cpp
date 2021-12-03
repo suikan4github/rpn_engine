@@ -80,6 +80,24 @@ TEST(BasicStackTest, GetAndPush2)
     delete s;
 }
 
+TEST(BasicStackTest, PushAndUndo)
+{
+    IntStack *s;
+    s = new IntStack(4);
+    s->Push(1);
+    s->Push(2);
+    s->Push(3);
+    s->Push(4);
+    s->Push(5);
+
+    s->Undo();               // cancel last operation
+    EXPECT_EQ(s->Get(0), 4); //
+    EXPECT_EQ(s->Get(1), 3); //
+    EXPECT_EQ(s->Get(2), 2); //
+    EXPECT_EQ(s->Get(3), 1); //
+    delete s;
+}
+
 TEST(BasicStackTest, Pop)
 {
     IntStack *s;
@@ -90,10 +108,27 @@ TEST(BasicStackTest, Pop)
     s->Push(3);
     s->Push(4);
     EXPECT_EQ(s->Pop(), 4);  // check Whether the last pushed value is able to pop.
-    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
-    EXPECT_EQ(s->Get(1), 2); // check Whether the stack is poped up.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and popped up.
+    EXPECT_EQ(s->Get(1), 2); // check Whether the stack is popped up.
     EXPECT_EQ(s->Get(2), 1); // check Whether the stack top is popped up.
-    EXPECT_EQ(s->Get(3), 1); // check Whether the stack top is poped up.
+    EXPECT_EQ(s->Get(3), 1); // check Whether the stack top is popped up.
+    delete s;
+}
+
+TEST(BasicStackTest, PopAndUndo)
+{
+    IntStack *s;
+    s = new IntStack(4);
+    EXPECT_EQ(s->Pop(), 0); // check Whether the stack is initialize
+    s->Push(1);
+    s->Push(2);
+    s->Push(3);
+    s->Push(4);
+    EXPECT_EQ(s->Pop(), 4); // check Whether the last pushed value is able to pop.
+
+    // last operation is canceled.
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 4);
     delete s;
 }
 
@@ -108,8 +143,8 @@ TEST(BasicStackTest, Pop2)
     s->Push(3);
     s->Push(4);
     EXPECT_EQ(s->Pop(), 4);  // check Whether the last pushed value is able to pop.
-    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
-    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and poped up.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and popped up.
+    EXPECT_EQ(s->Get(0), 3); // check Whether the stack top is lost and popped up.
     delete s;
 }
 
@@ -126,6 +161,12 @@ TEST(BasicStackTest, Dup)
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 2); // check the stack 4th.
+
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
     delete s;
 }
 
@@ -142,6 +183,13 @@ TEST(BasicStackTest, Swap)
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+
     delete s;
 }
 
@@ -158,6 +206,13 @@ TEST(BasicStackTest, RotatePop)
     EXPECT_EQ(s->Get(1), 2); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 1); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 4); // check the stack 4th.
+
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+
     delete s;
 }
 
@@ -174,6 +229,13 @@ TEST(BasicStackTest, RotatePush)
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 2); // check the stack 4th.
+
+    s->Undo();
+    EXPECT_EQ(s->Get(0), 4); // check the stack top
+    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+
     delete s;
 }
 
@@ -193,28 +255,37 @@ TEST(BasicStackTest, SetTop)
     delete s;
 }
 
-TEST(BasicStackTest, Undo)
+namespace rpn_engine
 {
-    IntStack *s;
-    s = new IntStack(4);
+    TEST(BasicStackTest, Undo)
+    {
+        IntStack *s;
+        s = new IntStack(4);
 
-    s->Push(1);
-    s->Push(2);
-    s->Push(3);
-    s->Push(4);
+        s->Push(1);
+        s->Push(2);
+        s->Push(3);
+        s->Push(4);
 
-    EXPECT_EQ(s->Get(0), 4); // check the stack top
-    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+        EXPECT_EQ(s->Get(0), 4); // check the stack top
+        EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+        EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+        EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
 
-    s->SaveToUndoBuffer();
-    s->Pop();
-    s->Pop();
-    s->Undo();
-    EXPECT_EQ(s->Get(0), 4); // check the stack top
-    EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
-    EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
-    delete s;
+        s->SaveToUndoBuffer();
+        // Save stack state before mathematical operation
+        auto last_state = s->disableUndoSaving();
+
+        s->Pop();
+        s->Pop();
+
+        s->restoreUndoSavingState(last_state);
+
+        s->Undo();
+        EXPECT_EQ(s->Get(0), 4); // check the stack top
+        EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
+        EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
+        EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+        delete s;
+    }
 }

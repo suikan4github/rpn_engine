@@ -194,8 +194,9 @@ TEST(BasicMathTest, Complex)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); //
     delete s;
 }
 
@@ -216,8 +217,9 @@ TEST(BasicMathTest, DeComplex)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); // must not saved.
     delete s;
 }
 
@@ -238,8 +240,9 @@ TEST(BasicMathTest, Conjugate)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); // must not saved.
     delete s;
 }
 
@@ -260,8 +263,9 @@ TEST(BasicMathTest, ToPolar)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); // must not saved.
     delete s;
 }
 
@@ -282,8 +286,9 @@ TEST(BasicMathTest, ToCartesian)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); // must not saved.
     delete s;
 }
 
@@ -304,7 +309,8 @@ TEST(BasicMathTest, SwapReIm)
     EXPECT_EQ(s->Get(2), 4); // check the stack 3rd.
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
+    // Because the operation is empty, last push is canceled.
     s->Undo();
-    EXPECT_EQ(s->Get(0), 0); // must not saved.
+    EXPECT_EQ(s->Get(0), 5); // must not saved.
     delete s;
 }
