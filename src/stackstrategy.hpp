@@ -448,7 +448,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Add them as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -457,7 +457,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y-X  as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -466,7 +466,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then multiply them as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -475,7 +475,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y/X  as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -484,7 +484,7 @@ namespace rpn_engine
         /**
          * @brief Pop X and then -X as 32bit integer. Then push it.  
          * @details
-         * X is truncated to 32bit signed integer before opration. 
+         * X is truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -493,7 +493,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y bitwise OR X  as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -502,7 +502,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y bitwise XOR X  as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -511,7 +511,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y bitwise AND X  as 32bit integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit signed integer before opration. 
+         * Both X, Y are truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -520,7 +520,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y >> X  as 32bit UNSIGNED integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit unsigned integer before opration. 
+         * Both X, Y are truncated to 32bit unsigned integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -529,7 +529,7 @@ namespace rpn_engine
         /**
          * @brief Pop X,Y and then Y << X  as 32bit UNSIGNED integer. Then push it.  
          * @details
-         * Both X, Y are truncated to 32bit unsigned integer before opration. 
+         * Both X, Y are truncated to 32bit unsigned integer before operation. 
          * 
          * Last X register is affected.
          */
@@ -538,7 +538,7 @@ namespace rpn_engine
         /**
          * @brief Pop X and then bitwise NOT of X as 32bit integer. Then push it.  
          * @details
-         * X is truncated to 32bit signed integer before opration. 
+         * X is truncated to 32bit signed integer before operation. 
          * 
          * Last X register is affected.
          */
