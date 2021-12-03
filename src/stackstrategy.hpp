@@ -14,7 +14,7 @@
 #include <type_traits>
 
 #ifndef FRIEND_TEST
-// FRIEND_TEST is provided by google test. If not provided, just igonore it.
+// FRIEND_TEST is provided by google test. If not provided, just ignore it.
 #define FRIEND_TEST(x, y)
 #endif
 
@@ -36,7 +36,7 @@ namespace rpn_engine
      * The monadic operation pops one operand, calculate and push one operand.
      * The diadic operation pops two operands, calculate and push one operand.
      * Both monadic and diadic operation sames stack top (x) to last x register
-     * before the oepration. The last x register can be push to stack by LastX() member
+     * before the operation. The last x register can be push to stack by LastX() member
      * function. 
      * 
      * All functions supports complex template type, if the stack is specialized by
@@ -66,7 +66,7 @@ namespace rpn_engine
          * @brief Get the value of stack at specified position
          * 
          * @param position The distance from the stack top. 0 means the stack top. 
-         * 1 means the 1 depth from the stack top. If the value exeeds the stack size, assertion fails. 
+         * 1 means the 1 depth from the stack top. If the value exceeds the stack size, assertion fails. 
          * @return Element at the specified position.
          * @details
          * The contents of the stack is not affected. 
@@ -133,7 +133,7 @@ namespace rpn_engine
         void RotatePush();
 
         /**
-         * @brief Copy the stack top to the Laxt X variable.
+         * @brief Copy the stack top to the Last X variable.
          * 
          */
         void SaveToLastX();
@@ -183,7 +183,7 @@ namespace rpn_engine
         void Inverse();
 
         /**
-         * @brief Pop X and then push sqare root of X
+         * @brief Pop X and then push square root of X
          * 
          */
         void Sqrt();
@@ -275,7 +275,7 @@ namespace rpn_engine
          * @fn void Complex()
          * @brief Make complex : Pop X, Y and then Y + Xi and Push it.
          * @details
-         * If the stack is implemented with sclar element, this funciton does notihing
+         * If the stack is implemented with scalar element, this function does nothing
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -304,7 +304,7 @@ namespace rpn_engine
          * @fn void DeComplex()
          * @brief Pop X and then, push X.re, push X.im;
          * @details
-         * If the stack is implemented with sclar element, this funciton does notihing
+         * If the stack is implemented with scalar element, this function does nothing
          * 
          */
         template <class E = Element,
@@ -335,7 +335,7 @@ namespace rpn_engine
          * @details
          * The last X register is affected.
          * 
-         * If the stack is implemented with sclar element, this funciton does notihing
+         * If the stack is implemented with scalar element, this function does nothing
          * 
          */
         template <class E = Element,
@@ -368,7 +368,7 @@ namespace rpn_engine
          * The result is : 
          * @li re : Absolute value of the complex value. 
          * @li im : Argumentation of the complex value. 
-         * If the stack is implemented with sclar element, this funciton does notihing
+         * If the stack is implemented with scalar element, this function does nothing
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -397,7 +397,7 @@ namespace rpn_engine
          * The parameter is : 
          * @li re : Absolute value of the complex value. 
          * @li im : Argumentation of the complex value. 
-         * If the stack is implemented with sclar element, this funciton does notihing
+         * If the stack is implemented with scalar element, this function does nothing
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -550,7 +550,7 @@ namespace rpn_engine
         FRIEND_TEST(BasicBitwiseTest, ToElementValue);
         const unsigned int stack_size_;
         /**
-         * @brief The enetity of stack.
+         * @brief The entity of stack.
          * @details
          * The stack_[0] is the stack top. Index is allowed from 0 to stack_size_-1.
          */
@@ -650,7 +650,7 @@ Element rpn_engine::StackStrategy<Element>::Pop()
     Element last_top = stack_[0];
 
     // copy stack[1..stack_size-1] to stack[0..stack_size_-2]
-    // stap bottom is duplicated
+    // stop bottom is duplicated
     for (unsigned int i = 0; i < stack_size_ - 1; i++)
         stack_[i] = stack_[i + 1];
 
@@ -680,7 +680,7 @@ void rpn_engine::StackStrategy<Element>::Swap()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::RotatePop()
 {
-    // Roate the stack contents to the pop wise. To make it happen,
+    // Rotate the stack contents to the pop wise. To make it happen,
     // Pop the top at first. Then, copy it to the bottom.
     Element x = Pop();
     stack_[stack_size_ - 1] = x;
@@ -689,7 +689,7 @@ void rpn_engine::StackStrategy<Element>::RotatePop()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::RotatePush()
 {
-    // Roate the stack contents to the push wise. To make it happen,
+    // Rotate the stack contents to the push wise. To make it happen,
     // Get the bottom value and push it
     Element x = Get(stack_size_ - 1);
     Push(x);
@@ -719,7 +719,7 @@ void rpn_engine::StackStrategy<Element>::LastX()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Add()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -732,7 +732,7 @@ void rpn_engine::StackStrategy<Element>::Add()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Subtract()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -745,7 +745,7 @@ void rpn_engine::StackStrategy<Element>::Subtract()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Multiply()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -758,7 +758,7 @@ void rpn_engine::StackStrategy<Element>::Multiply()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Divide()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -771,7 +771,7 @@ void rpn_engine::StackStrategy<Element>::Divide()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Nagate()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -783,7 +783,7 @@ void rpn_engine::StackStrategy<Element>::Nagate()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Inverse()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -795,7 +795,7 @@ void rpn_engine::StackStrategy<Element>::Inverse()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Sqrt()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -807,7 +807,7 @@ void rpn_engine::StackStrategy<Element>::Sqrt()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Square()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -828,7 +828,7 @@ void rpn_engine::StackStrategy<Element>::Pi()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Exp()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -840,7 +840,7 @@ void rpn_engine::StackStrategy<Element>::Exp()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Log()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -852,7 +852,7 @@ void rpn_engine::StackStrategy<Element>::Log()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Log10()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -864,7 +864,7 @@ void rpn_engine::StackStrategy<Element>::Log10()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Power10()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -876,7 +876,7 @@ void rpn_engine::StackStrategy<Element>::Power10()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Power()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -889,7 +889,7 @@ void rpn_engine::StackStrategy<Element>::Power()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Sin()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -901,7 +901,7 @@ void rpn_engine::StackStrategy<Element>::Sin()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Cos()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -913,7 +913,7 @@ void rpn_engine::StackStrategy<Element>::Cos()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Tan()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -925,7 +925,7 @@ void rpn_engine::StackStrategy<Element>::Tan()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Asin()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -937,7 +937,7 @@ void rpn_engine::StackStrategy<Element>::Asin()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Acos()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -949,7 +949,7 @@ void rpn_engine::StackStrategy<Element>::Acos()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::Atan()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -967,7 +967,7 @@ Element rpn_engine::StackStrategy<Element>::ToElementValue(int32_t x)
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitAdd()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -982,7 +982,7 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitSubtract()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -997,7 +997,7 @@ void rpn_engine::StackStrategy<Element>::BitSubtract()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitMultiply()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1012,7 +1012,7 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitDivide()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1027,7 +1027,7 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitNagate()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1041,7 +1041,7 @@ void rpn_engine::StackStrategy<Element>::BitNagate()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitOr()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1056,7 +1056,7 @@ void rpn_engine::StackStrategy<Element>::BitOr()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitExor()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1071,7 +1071,7 @@ void rpn_engine::StackStrategy<Element>::BitExor()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitAnd()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1086,7 +1086,7 @@ void rpn_engine::StackStrategy<Element>::BitAnd()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1101,7 +1101,7 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
@@ -1116,7 +1116,7 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
 template <class Element>
 void rpn_engine::StackStrategy<Element>::BitNot()
 {
-    // Save LastX before mathumatical operation
+    // Save LastX before mathematical operation
     SaveToLastX();
 
     // Get parameters
