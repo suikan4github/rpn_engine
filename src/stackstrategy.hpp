@@ -144,6 +144,31 @@ namespace rpn_engine
          */
         void Undo();
 
+        /**
+         * @brief Disable the undo saving
+         * 
+         * @return previous state of the saving
+         * Disable the saving function of undo buffer. After calling this function,
+         * the @ref SaveToUndoBuffer() function do noting. 
+         * 
+         * The previous state of the enable / disable is returned. This state can be
+         * restored by calling restoreUndoSavingState(). 
+         */
+        bool disableUndoSaving();
+
+        /**
+         * @brief Restore the enable/disable state of undo saving
+         * 
+         * @param previous_state The state returned by disableUndoSaving();
+         * @details
+         * The disableUndoSaving() and restoreUndoSavingState() is pared functions.
+         * The surrounded code by these function will be inhibitted to save the undo
+         * buffer. 
+         * 
+         * The surrounding can be nested. 
+         */
+        void restoreUndoSavingState(bool previous_state);
+
         /********************************** MATHMATICAL OPERATION *****************************/
 
         /**
@@ -565,6 +590,7 @@ namespace rpn_engine
          */
         Element *const stack_;
         Element *const undo_buffer_;
+        bool undo_saving_enabled_;
 
         /**
          * @fn int32_t To32bitValue(Element x)
@@ -616,7 +642,8 @@ namespace rpn_engine
 template <class Element>
 rpn_engine::StackStrategy<Element>::StackStrategy(unsigned int stack_size) : stack_size_(stack_size),
                                                                              stack_(new Element[stack_size_]),
-                                                                             undo_buffer_(new Element[stack_size_])
+                                                                             undo_buffer_(new Element[stack_size_]),
+                                                                             undo_saving_enabled_(true)
 {
     assert(stack_size_ >= 2);
     // allocate stack
@@ -733,16 +760,38 @@ void rpn_engine::StackStrategy<Element>::Undo()
 }
 
 template <class Element>
+bool rpn_engine::StackStrategy<Element>::disableUndoSaving()
+{
+    // save the previous state
+    bool last_state = undo_saving_enabled_;
+
+    // disable saving;
+    undo_saving_enabled_ = false;
+
+    // return the previous sate.
+    return last_state;
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::restoreUndoSavingState(bool last_state)
+{
+    undo_saving_enabled_ = last_state;
+}
+
+template <class Element>
 void rpn_engine::StackStrategy<Element>::Add()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     Element y = Pop();
     // do the operation
     Push(y + x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -750,12 +799,15 @@ void rpn_engine::StackStrategy<Element>::Subtract()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     Element y = Pop();
     // do the operation
     Push(y - x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -763,12 +815,15 @@ void rpn_engine::StackStrategy<Element>::Multiply()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     Element y = Pop();
     // do the operation
     Push(y * x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -776,12 +831,15 @@ void rpn_engine::StackStrategy<Element>::Divide()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     Element y = Pop();
     // do the operation
     Push(y / x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -789,11 +847,14 @@ void rpn_engine::StackStrategy<Element>::Nagate()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(-x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -801,11 +862,14 @@ void rpn_engine::StackStrategy<Element>::Inverse()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(1 / x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -813,11 +877,14 @@ void rpn_engine::StackStrategy<Element>::Sqrt()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::sqrt(x));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -825,11 +892,14 @@ void rpn_engine::StackStrategy<Element>::Square()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(x * x);
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -837,9 +907,11 @@ void rpn_engine::StackStrategy<Element>::Pi()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // do the operation
     Push(M_PI);
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -847,11 +919,13 @@ void rpn_engine::StackStrategy<Element>::Exp()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::exp(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -859,11 +933,13 @@ void rpn_engine::StackStrategy<Element>::Log()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::log(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -871,11 +947,13 @@ void rpn_engine::StackStrategy<Element>::Log10()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::log10(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -883,11 +961,13 @@ void rpn_engine::StackStrategy<Element>::Power10()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::pow(10, x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -895,12 +975,14 @@ void rpn_engine::StackStrategy<Element>::Power()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     Element y = Pop();
     // do the operation
     Push(std::pow(y, x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -908,11 +990,13 @@ void rpn_engine::StackStrategy<Element>::Sin()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::sin(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -920,11 +1004,13 @@ void rpn_engine::StackStrategy<Element>::Cos()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::cos(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -932,11 +1018,13 @@ void rpn_engine::StackStrategy<Element>::Tan()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::tan(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -944,11 +1032,13 @@ void rpn_engine::StackStrategy<Element>::Asin()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::asin(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -956,11 +1046,13 @@ void rpn_engine::StackStrategy<Element>::Acos()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::acos(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -968,11 +1060,13 @@ void rpn_engine::StackStrategy<Element>::Atan()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     Element x = Pop();
     // do the operation
     Push(std::atan(x));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -986,6 +1080,7 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -994,6 +1089,7 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
     // do the operation
     uint32_t r = x + y;
     Push(ToElementValue(r));
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1001,6 +1097,7 @@ void rpn_engine::StackStrategy<Element>::BitSubtract()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1009,6 +1106,8 @@ void rpn_engine::StackStrategy<Element>::BitSubtract()
     // do the operation
     uint32_t r = y - x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1016,6 +1115,7 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1024,6 +1124,8 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
     // do the operation
     uint32_t r = y * x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1031,6 +1133,7 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1039,6 +1142,8 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
     // do the operation
     uint32_t r = y / x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1046,6 +1151,7 @@ void rpn_engine::StackStrategy<Element>::BitNagate()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1053,6 +1159,8 @@ void rpn_engine::StackStrategy<Element>::BitNagate()
     // do the operation
     uint32_t r = -x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1060,6 +1168,7 @@ void rpn_engine::StackStrategy<Element>::BitOr()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1068,6 +1177,8 @@ void rpn_engine::StackStrategy<Element>::BitOr()
     // do the operation
     uint32_t r = y | x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1075,6 +1186,7 @@ void rpn_engine::StackStrategy<Element>::BitExor()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1083,6 +1195,8 @@ void rpn_engine::StackStrategy<Element>::BitExor()
     // do the operation
     uint32_t r = y ^ x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1090,6 +1204,7 @@ void rpn_engine::StackStrategy<Element>::BitAnd()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1098,6 +1213,8 @@ void rpn_engine::StackStrategy<Element>::BitAnd()
     // do the operation
     uint32_t r = y & x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1105,6 +1222,7 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
@@ -1113,6 +1231,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
     // do the operation
     uint32_t r = y >> x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1120,6 +1240,7 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
@@ -1128,6 +1249,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
     // do the operation
     uint32_t r = y << x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
 
 template <class Element>
@@ -1135,6 +1258,7 @@ void rpn_engine::StackStrategy<Element>::BitNot()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
+    auto last_state = disableUndoSaving();
 
     // Get parameters
     auto x = To32bitValue(Pop());
@@ -1142,4 +1266,6 @@ void rpn_engine::StackStrategy<Element>::BitNot()
     // do the operation
     uint32_t r = ~x;
     Push(ToElementValue(r));
+
+    restoreUndoSavingState(last_state);
 }
