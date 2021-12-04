@@ -256,14 +256,18 @@ namespace rpn_engine
         EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
         EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
 
+        EXPECT_EQ(s->undo_saving_enabled_, true); // check the enabled state
         s->SaveToUndoBuffer();
         // Save stack state before mathematical operation
-        auto last_state = s->disableUndoSaving();
+        {
+            IntStack::DisableUndoSaving disable(s);
+            EXPECT_EQ(s->undo_saving_enabled_, false); // check the enabled state
 
-        s->Pop();
-        s->Pop();
-
-        s->restoreUndoSavingState(last_state);
+            s->Pop();
+            s->Pop();
+            EXPECT_EQ(s->undo_saving_enabled_, false); // check the enabled state
+        }
+        EXPECT_EQ(s->undo_saving_enabled_, true); // check the enabled state
 
         s->Undo();
         EXPECT_EQ(s->Get(0), 4); // check the stack top
