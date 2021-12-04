@@ -9,7 +9,7 @@
  * 
  */
 #include <cassert>
-#include <math.h>
+#include <cmath>
 #include <complex>
 #include <type_traits>
 
