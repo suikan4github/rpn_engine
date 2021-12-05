@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 11)
 
 # Add the executable for the testcase which is using googletest
-add_executable(rpn_test test_all.cpp
+add_executable(rpn_test 
                 test_basics.cpp 
                 test_basic_math.cpp 
                 test_double_math.cpp
