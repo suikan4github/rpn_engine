@@ -26,19 +26,21 @@ target_link_libraries(rpn_test
 
                         # Find and integrate the Google Test package
 
-
+# Load the FetchContent module
 include(FetchContent)
 
+# Declaration of googletest as content
 FetchContent_Declare(
   	googletest
   	GIT_REPOSITORY https://github.com/google/googletest.git
   	GIT_TAG release-1.10.0
 )
 
+# Fetch the googletest
 FetchContent_MakeAvailable(googletest)
 
-# Include the CMake file from Google Test
+# Include the GoogleTest
 include(GoogleTest)
 
-# Search Google Test test cases and link.
+# Search Google Test test cases and link to CMake
 gtest_discover_tests(rpn_test)
