@@ -21,8 +21,7 @@ target_include_directories(rpn_test
 
 # Which library have to be linked?
 target_link_libraries(rpn_test 
-                        GTest::GTest 
-                        GTest::Main 
+                        gtest_main
                         rpn_engine
                         ) 
 
