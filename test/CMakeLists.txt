@@ -4,12 +4,13 @@ file(GLOB TEST_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 # Add the executable for the testcase which is using googletest
 add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SRC})
 
-# Add the include directory for test project.
+# Add the library under the test.
 target_link_libraries(${TEST_EXECUTABLE_NAME}  
                         gtest_main
                         ${TEST_LIBRARY_NAME}
                          )
 
+# Add the include directory for test executable.
 target_include_directories(${TEST_EXECUTABLE_NAME}
                             PUBLIC
                             ${PROJECT_SOURCE_DIR}/src
