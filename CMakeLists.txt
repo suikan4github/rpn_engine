@@ -1,10 +1,12 @@
 # To use the FetchContent_* command, version 3.11 is required.
 cmake_minimum_required(VERSION "3.11")
 
-# Parameters inside project
-project("rpn_engine_dev")
-
 # Do not edit lines below
+# To configure the project name, edit the src/parameter.cmake
+
+# Parameters inside project
+include("src/parameters.cmake")
+project("${MY_LIBRARY_NAME}_dev")
 
 # Compiler option
 # GoogleTest requirest C++11 or later
