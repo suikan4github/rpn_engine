@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.11)
 # Parameters inside project
 project(rpn_engine)
 # Comment out next line if the project is library
-set(EXECUTABLE_NAME ${PROJECT_NAME})
+# set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 # Do not edit the lines below 
 
