@@ -10,7 +10,7 @@ set(EXECUTABLE_NAME ${PROJECT_NAME})
 
 # Test executable and library name
 set(TEST_EXECUTABLE_NAME test_${PROJECT_NAME})
-set(TEST_LIBRARY_NAME test${PROJECT_NAME})
+set(TEST_LIBRARY_NAME ${PROJECT_NAME}_for_test)
 
 
 
