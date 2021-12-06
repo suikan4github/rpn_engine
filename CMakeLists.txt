@@ -1,6 +1,18 @@
 # To use the FetchContent_* command, version 3.11 is required.
 cmake_minimum_required(VERSION 3.11)
-project(rpn_test)
+
+# Parameters inside project
+project(rpn_engine)
+# Comment out next line if the project is library
+set(EXECUTABLE_NAME ${PROJECT_NAME})
+
+# Do not edit the lines below 
+
+# Test executable and library name
+set(TEST_EXECUTABLE_NAME test_${PROJECT_NAME})
+set(TEST_LIBRARY_NAME test${PROJECT_NAME})
+
+
 
 # Compiler option
 # GoogleTest requirest C++11 or later
@@ -12,6 +24,10 @@ set(CMAKE_CXX_STANDARD 11)
 # root of the project, to run the ctest correctly. 
 # Thus, place this command at the root of project.
 include(CTest)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
 
 
 # Subdirectories
