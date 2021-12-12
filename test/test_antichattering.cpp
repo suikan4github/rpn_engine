@@ -19,24 +19,32 @@ namespace rpn_engine
     // Checking null pointer triggers assertion
     TEST(AntiChatteringDeathTest, ConstructorWrongPtr)
     {
+#ifndef NDEBUG
+        // We test only when assert() works.
         ASSERT_DEATH(AntiChattering ac(10, 10, nullptr, 9, 3), "nullptr != key_pressed_call_back_");
+#endif
     }
 
     // Checking null pointer triggers assertion
     TEST(AntiChatteringDeathTest, ConstructorWrongLHThreshold)
     {
+#ifndef NDEBUG
+        // We test only when assert() works.
         // lh_threashold must be greater than zero
         ASSERT_DEATH(AntiChattering ac(2, 0, &CallBackStub, 9, 3),
                      "lh_threashold_ > 1");
+#endif
     }
 
     // Checking null pointer triggers assertion
     TEST(AntiChatteringDeathTest, ConstructorWrongHLThreshold)
     {
-
+#ifndef NDEBUG
+        // We test only when assert() works.
         // hl_threashold must be greater than zero
         ASSERT_DEATH(AntiChattering ac(0, 2, &CallBackStub, 9, 3),
                      "hl_threashold_ > 1");
+#endif
     }
 
     // Checking Simple turn on

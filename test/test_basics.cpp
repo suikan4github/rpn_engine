@@ -10,23 +10,29 @@ typedef rpn_engine::StackStrategy<int> IntStack;
 TEST(BasicStackDeathTest, StackSizeLimit)
 {
     IntStack *s;
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(
         {
             s = new IntStack(0); // must not be non zero
         },
         "Assertion `stack_size_ >= 2' failed");
+#endif
 }
 
 // Testing the restriction of the stack size and get() member function.
 TEST(BasicStackDeathTest, GetPositionExceedStackLimit)
 {
     IntStack *s;
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(
         {
             s = new IntStack(4);
             s->Get(4); // Accessing the position exeeds the Stack size.
         },
         "Assertion `stack_size_ > postion' failed");
+#endif
 }
 
 TEST(BasicStackTest, StackInitialValueCheck)
