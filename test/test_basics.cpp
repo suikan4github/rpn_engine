@@ -7,7 +7,7 @@
 typedef rpn_engine::StackStrategy<int> IntStack;
 
 // Testing the restriction of the stack size .
-TEST(BasicStackTest, StackSizeLimit)
+TEST(BasicStackDeathTest, StackSizeLimit)
 {
     IntStack *s;
     ASSERT_DEATH(
@@ -18,7 +18,7 @@ TEST(BasicStackTest, StackSizeLimit)
 }
 
 // Testing the restriction of the stack size and get() member function.
-TEST(BasicStackTest, GetPositionExceedStackLimit)
+TEST(BasicStackDeathTest, GetPositionExceedStackLimit)
 {
     IntStack *s;
     ASSERT_DEATH(

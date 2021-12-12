@@ -17,13 +17,13 @@ namespace rpn_engine
     };
 
     // Checking null pointer triggers assertion
-    TEST(AntiChattering, ConstructorWrongPtr)
+    TEST(AntiChatteringDeathTest, ConstructorWrongPtr)
     {
         ASSERT_DEATH(AntiChattering ac(10, 10, nullptr, 9, 3), "nullptr != key_pressed_call_back_");
     }
 
     // Checking null pointer triggers assertion
-    TEST(AntiChattering, ConstructorWrongLHThreshold)
+    TEST(AntiChatteringDeathTest, ConstructorWrongLHThreshold)
     {
         // lh_threashold must be greater than zero
         ASSERT_DEATH(AntiChattering ac(2, 0, &CallBackStub, 9, 3),
@@ -31,7 +31,7 @@ namespace rpn_engine
     }
 
     // Checking null pointer triggers assertion
-    TEST(AntiChattering, ConstructorWrongHLThreshold)
+    TEST(AntiChatteringDeathTest, ConstructorWrongHLThreshold)
     {
 
         // hl_threashold must be greater than zero
