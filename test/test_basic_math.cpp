@@ -15,7 +15,7 @@ TEST(BasicMathTest, Add)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Add();
+    s->Operation(rpn_engine::Op::add);
 
     EXPECT_EQ(s->Get(0), 11); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);  // check the stack 2nd.
@@ -39,7 +39,7 @@ TEST(BasicMathTest, Sub)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Subtract();
+    s->Operation(rpn_engine::Op::sub);
 
     EXPECT_EQ(s->Get(0), -1); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);  // check the stack 2nd.
@@ -60,7 +60,7 @@ TEST(BasicMathTest, Mul)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Multiply();
+    s->Operation(rpn_engine::Op::mul);
 
     EXPECT_EQ(s->Get(0), 30); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);  // check the stack 2nd.
@@ -81,7 +81,7 @@ TEST(BasicMathTest, Div)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Divide();
+    s->Operation(rpn_engine::Op::div);
 
     EXPECT_EQ(s->Get(0), 0); // check the stack top.
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
@@ -102,7 +102,7 @@ TEST(BasicMathTest, Neg)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Nagate();
+    s->Operation(rpn_engine::Op::neg);
 
     EXPECT_EQ(s->Get(0), -6); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);  // check the stack 2nd.
@@ -123,7 +123,7 @@ TEST(BasicMathTest, Inv)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Inverse();
+    s->Operation(rpn_engine::Op::inv);
 
     EXPECT_EQ(s->Get(0), 0); // check the stack top.
     EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
@@ -144,7 +144,7 @@ TEST(BasicMathTest, Sqrt)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Sqrt();
+    s->Operation(rpn_engine::Op::sqrt);
 
     EXPECT_EQ(s->Get(0), 2); // check the stack top.
     EXPECT_EQ(s->Get(1), 5); // check the stack 2nd.
@@ -165,7 +165,7 @@ TEST(BasicMathTest, Square)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Square();
+    s->Operation(rpn_engine::Op::square);
 
     EXPECT_EQ(s->Get(0), 36); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);  // check the stack 2nd.

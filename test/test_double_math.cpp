@@ -16,7 +16,7 @@ TEST(DoubleMathTest, Add)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Add();
+    s->Operation(rpn_engine::Op::add);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 11.0); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);           // check the stack 2nd.
@@ -40,7 +40,7 @@ TEST(DoubleMathTest, Div)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Divide();
+    s->Operation(rpn_engine::Op::div);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.833333333333333333); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);                           // check the stack 2nd.
@@ -64,7 +64,7 @@ TEST(DoubleMathTest, Inverse)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Inverse();
+    s->Operation(rpn_engine::Op::inv);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.16666666666666666666); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                             // check the stack 2nd.
@@ -88,7 +88,7 @@ TEST(DoubleMathTest, Sqrt)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Sqrt();
+    s->Operation(rpn_engine::Op::sqrt);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 2.4494897427831780981); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                            // check the stack 2nd.
@@ -112,7 +112,7 @@ TEST(DoubleMathTest, Pi)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Pi();
+    s->Operation(rpn_engine::Op::pi);
 
     // Comparing with 20 digit Pi. The double float is 15digit by decimal.
     // Google test is ignoring las few digit. So, it is comparing about 12digit.

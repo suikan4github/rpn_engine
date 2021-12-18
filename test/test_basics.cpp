@@ -162,7 +162,7 @@ TEST(BasicStackTest, Dup)
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    s->Duplicate();
+    s->Operation(rpn_engine::Op::duplicate);
     EXPECT_EQ(s->Get(0), 4); // check the stack top
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.
@@ -184,7 +184,7 @@ TEST(BasicStackTest, Swap)
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    s->Swap();
+    s->Operation(rpn_engine::Op::swap);
     EXPECT_EQ(s->Get(0), 3); // check the stack top
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
@@ -194,7 +194,7 @@ TEST(BasicStackTest, Swap)
     EXPECT_EQ(s->Get(0), 4); // check the stack top
     EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
-    EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
+    EXPECT_EQ(s->Get(3), 1); // check the stacks 4th.
 
     delete s;
 }
@@ -207,7 +207,7 @@ TEST(BasicStackTest, RotatePop)
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    s->RotatePop();
+    s->Operation(rpn_engine::Op::rotate_pop);
     EXPECT_EQ(s->Get(0), 3); // check the stack top
     EXPECT_EQ(s->Get(1), 2); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 1); // check the stack 3rd.
@@ -230,7 +230,7 @@ TEST(BasicStackTest, RotatePush)
     s->Push(2);
     s->Push(3);
     s->Push(4);
-    s->RotatePush();
+    s->Operation(rpn_engine::Op::rotate_push);
     EXPECT_EQ(s->Get(0), 1); // check the stack top
     EXPECT_EQ(s->Get(1), 4); // check the stack 2nd.
     EXPECT_EQ(s->Get(2), 3); // check the stack 3rd.

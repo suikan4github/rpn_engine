@@ -4,9 +4,9 @@
  * @brief Generic Stack machine header file.
  * @version 0.1
  * @date 2021-11-27
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #include <cassert>
 #include <cmath>
@@ -20,28 +20,49 @@
 
 /**
  * @brief Engine implementation of RPN stack machine.
- * 
+ *
  */
 namespace rpn_engine
 {
 
     /**
+     * @brief enum class to specify the operation on stack
+     *
+     */
+    enum class Op
+    {
+        duplicate,   ///< Get stack top and push
+        swap,        ///< Swap stack top and second
+        rotate_pop,  ///< Rotate stack to pop wise
+        rotate_push, ///< Rotate stack to push wise
+        add,         ///< Pop X, Y, do X+Y, then push
+        sub,         ///< Pop X, Y, do Y-X, then push
+        mul,         ///< Pop X, Y, do X*Y, then push
+        div,         ///< Pop X, Y, do Y/X, then push
+        neg,         ///< Pop X, do -X, then push
+        inv,         ///< Pop X, do 1/X, then push
+        sqrt,        ///< Pop X, do sqrt(X), then push
+        square,      ///< Pop X, do X*X, then push
+        pi,          ///< Push 3.141592...
+    };
+
+    /**
      * @brief A generic stack.
-     * 
+     *
      * @tparam Element A type name as element of stack
      * @details
-     * A generic stack for the RPN machine. This stack works based of the specialized machine. 
+     * A generic stack for the RPN machine. This stack works based of the specialized machine.
      * Give a type parameter to customize it.
-     * 
+     *
      * The monadic operation pops one operand, calculate and push one operand.
      * The diadic operation pops two operands, calculate and push one operand.
      * Both monadic and diadic operation saves stack  to undo buffer
      * before the operation. The undo buffer can be copy back to stack by the
-     * Undo() member function. 
-     * 
+     * Undo() member function.
+     *
      * All functions supports complex template type, if the stack is specialized by
      * std::complex<> type. On the other hand, if the stack is specialized by the
-     * scalar type, following functions do nothing : 
+     * scalar type, following functions do nothing :
      * @li @ref Complex
      * @li @ref DecComplex
      * @li @ref Conjugate
@@ -54,90 +75,64 @@ namespace rpn_engine
     public:
         /**
          * @brief Construct a new Stack Strategy object
-         * 
-         * @param stack_size The size of stack. Must be non-zero value. 
+         *
+         * @param stack_size The size of stack. Must be non-zero value.
          * @details
-         * In the cae of stack_size == 0, assertion failed. 
+         * In the cae of stack_size == 0, assertion failed.
          */
         StackStrategy(unsigned int stack_size);
         ~StackStrategy();
         /********************************** BASIC OPERATION *****************************/
+        void Operation(Op opecode);
+
         /**
          * @brief Get the value of stack at specified position
-         * 
-         * @param position The distance from the stack top. 0 means the stack top. 
-         * 1 means the 1 depth from the stack top. If the value exceeds the stack size, assertion fails. 
+         *
+         * @param position The distance from the stack top. 0 means the stack top.
+         * 1 means the 1 depth from the stack top. If the value exceeds the stack size, assertion fails.
          * @return Element at the specified position.
          * @details
-         * The contents of the stack is not affected. 
+         * The contents of the stack is not affected.
          */
         Element Get(unsigned int position);
 
         /**
          * @brief Push a given value to the stack
-         * 
+         *
          * @param e A value to push to the stack.
          * @details
-         * All contents of the stack are pushed down to the depth direction. 
+         * All contents of the stack are pushed down to the depth direction.
          * Then, e is copied to the stack top. The vale in the stack bottom will be lost.
          */
-        void Push(Element e);
+        void Push(const Element &e);
 
         /**
          * @brief Pop a value from the stack top.
-         * 
+         *
          * @return Element The value of the stack top.
          * @details
-         * The value of the stack top is returned. 
-         * 
-         * The contents of the stack are shifted to the shallow direction. 
-         * The stack bottom value is duplicated. 
+         * The value of the stack top is returned.
+         *
+         * The contents of the stack are shifted to the shallow direction.
+         * The stack bottom value is duplicated.
          */
         Element Pop();
 
         /**
-         * @brief Duplicate the stack top.
-         * @details 
-         *  x=pop; push(x); push(x);
+         * @brief Retrieve previous stack state.
+         *
          */
-        void Duplicate();
-
-        /**
-         * @brief Swap the X and Y (top and second).
-         * @details 
-         *  x=pop; y=pop; push(x); push(y);
-         */
-        void Swap();
-
-        /**
-         * @brief Rotate down the stack.
-         * @details 
-         *  Pop the stack top and insert it to the stack bottom;
-         */
-        void RotatePop();
-
-        /**
-         * @brief Rotate up the stack.
-         * @details 
-         * Get the stack bottom and push it to the top;
-         */
-        void RotatePush();
+        void Undo();
 
     private:
         FRIEND_TEST(BasicStackTest, Undo);
         /**
-         * @brief Copy the stack to the Undo variable.
-         * 
-         */
-        void SaveToUndoBuffer();
-
-        /**
          * @brief Disabling to save the stack by RAII
          * @details
          * To disable the stack saving for undo, create an object of this
-         * class. The constructor save the current undo enable / disable state 
-         * then, set it disable. 
-         * 
+         * class. The constructor save the current undo enable / disable state
+         * then, set it disable.
+         *
          * At the exit of the scope, the object is automatically deleted and
          * destructor retrieve the previous enable / disable state.
          */
@@ -162,60 +157,87 @@ namespace rpn_engine
             bool last_state_;
         };
 
-    public:
         /**
-         * @brief Retrieve previous stack state.
-         * 
+         * @brief Duplicate the stack top.
+         * @details
+         *  x=pop; push(x); push(x);
          */
-        void Undo();
+        void Duplicate();
+
+        /**
+         * @brief Swap the X and Y (top and second).
+         * @details
+         *  x=pop; y=pop; push(x); push(y);
+         */
+        void Swap();
+
+        /**
+         * @brief Rotate down the stack.
+         * @details
+         *  Pop the stack top and insert it to the stack bottom;
+         */
+        void RotatePop();
+
+        /**
+         * @brief Rotate up the stack.
+         * @details
+         * Get the stack bottom and push it to the top;
+         */
+        void RotatePush();
+
+        /**
+         * @brief Copy the stack to the Undo variable.
+         *
+         */
+        void SaveToUndoBuffer();
 
         /********************************** MATHMATICAL OPERATION *****************************/
 
         /**
          * @brief Pop X, Y and then push Y+X
-         * 
+         *
          */
         void Add();
 
         /**
          * @brief Pop X, Y and then push Y-X
-         * 
+         *
          */
         void Subtract();
 
         /**
          * @brief Pop X, Y and then push Y*X
-         * 
+         *
          */
         void Multiply();
 
         /**
          * @brief Pop X, Y and then push Y/X
-         * 
+         *
          */
         void Divide();
 
         /**
          * @brief Pop X and then push -X
-         * 
+         *
          */
         void Nagate();
 
         /**
          * @brief Pop X and then push 1/X
-         * 
+         *
          */
         void Inverse();
 
         /**
          * @brief Pop X and then push square root of X
-         * 
+         *
          */
         void Sqrt();
 
         /**
          * @brief Pop X and then push X * X
-         * 
+         *
          */
         void Square();
 
@@ -226,71 +248,72 @@ namespace rpn_engine
          */
         void Pi();
 
+    public:
         /********************************** TRANSCENDENTAL OPERATION *****************************/
 
         /**
          * @brief Pop X and then push Exponential of X.
-         * 
+         *
          */
         void Exp();
 
         /**
          * @brief Pop X and then push Natural Logarithm of X
-         * 
+         *
          */
         void Log();
 
         /**
          * @brief Pop X and then push 10 based logarithm of X
-         * 
+         *
          */
         void Log10();
 
         /**
          * @brief Pop X and then push X'th power of 10
-         * 
+         *
          */
         void Power10();
 
         /**
          * @brief Pop X, Y and then push Y^X
-         * 
+         *
          */
         void Power();
 
         /**
-         * @brief Pop X and then push Sine(x). 
-         * 
+         * @brief Pop X and then push Sine(x).
+         *
          */
         void Sin();
 
         /**
          * @brief Pop X and then push CoSine(x)
-         * 
+         *
          */
         void Cos();
 
         /**
          * @brief Pop X and then push Tangent(x)
-         * 
+         *
          */
         void Tan();
 
         /**
          * @brief Pop X and then push arcsin(x)
-         * 
+         *
          */
         void Asin();
 
         /**
          * @brief Pop X and then push Acos(x)
-         * 
+         *
          */
         void Acos();
 
         /**
          * @brief Pop X and then push Atan(x)
-         * 
+         *
          */
         void Atan();
 
@@ -334,7 +357,7 @@ namespace rpn_engine
          * @brief Pop X and then, push X.re, push X.im;
          * @details
          * If the stack is implemented with scalar element, this function does nothing
-         * 
+         *
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -362,14 +385,14 @@ namespace rpn_engine
         }
 
         /**
-         * 
+         *
          * @fn void Conjugate()
          * @brief Pop X and then, push conj(X)
          * @details
          * The Undo buffer is affected.
-         * 
+         *
          * If the stack is implemented with scalar element, this function does nothing
-         * 
+         *
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -399,9 +422,9 @@ namespace rpn_engine
          * @fn void ToPolar()
          * @brief Pop X as cartesian complex and convert it to polar notation. and then Push it.
          * @details
-         * The result is : 
-         * @li re : Absolute value of the complex value. 
-         * @li im : Argumentation of the complex value. 
+         * The result is :
+         * @li re : Absolute value of the complex value.
+         * @li im : Argumentation of the complex value.
          * If the stack is implemented with scalar element, this function does nothing
          */
         template <class E = Element,
@@ -430,11 +453,11 @@ namespace rpn_engine
 
         /**
          * @fn void ToCartesian()
-         * @brief Pop X as polar complex and convert it to the cartesian complex. And then push it. 
-         * @details 
-         * The parameter is : 
-         * @li re : Absolute value of the complex value. 
-         * @li im : Argumentation of the complex value. 
+         * @brief Pop X as polar complex and convert it to the cartesian complex. And then push it.
+         * @details
+         * The parameter is :
+         * @li re : Absolute value of the complex value.
+         * @li im : Argumentation of the complex value.
          * If the stack is implemented with scalar element, this function does nothing
          */
         template <class E = Element,
@@ -463,7 +486,7 @@ namespace rpn_engine
 
         /**
          * @fn void SwapReIm()
-         * @brief Pop X, swat the re, im part and then  push it. 
+         * @brief Pop X, swat the re, im part and then  push it.
          */
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
@@ -493,100 +516,100 @@ namespace rpn_engine
         /********************************** BITWISE OPERATION *****************************/
 
         /**
-         * @brief Pop X,Y and then Add them as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Add them as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitAdd();
 
         /**
-         * @brief Pop X,Y and then Y-X  as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Y-X  as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitSubtract();
 
         /**
-         * @brief Pop X,Y and then multiply them as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then multiply them as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitMultiply();
 
         /**
-         * @brief Pop X,Y and then Y/X  as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Y/X  as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitDivide();
 
         /**
-         * @brief Pop X and then -X as 32bit integer. Then push it.  
+         * @brief Pop X and then -X as 32bit integer. Then push it.
          * @details
-         * X is truncated to 32bit signed integer before operation. 
-         * 
+         * X is truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitNagate();
 
         /**
-         * @brief Pop X,Y and then Y bitwise OR X  as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Y bitwise OR X  as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitOr();
 
         /**
-         * @brief Pop X,Y and then Y bitwise XOR X  as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Y bitwise XOR X  as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitExor();
 
         /**
-         * @brief Pop X,Y and then Y bitwise AND X  as 32bit integer. Then push it.  
+         * @brief Pop X,Y and then Y bitwise AND X  as 32bit integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit signed integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
         void BitAnd();
 
         /**
-         * @brief Pop X,Y and then Y >> X  as 32bit UNSIGNED integer. Then push it.  
+         * @brief Pop X,Y and then Y >> X  as 32bit UNSIGNED integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit unsigned integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit unsigned integer before operation.
+         *
          * Undo buffer is affected.
          */
         void LogicalShiftRight();
 
         /**
-         * @brief Pop X,Y and then Y << X  as 32bit UNSIGNED integer. Then push it.  
+         * @brief Pop X,Y and then Y << X  as 32bit UNSIGNED integer. Then push it.
          * @details
-         * Both X, Y are truncated to 32bit unsigned integer before operation. 
-         * 
+         * Both X, Y are truncated to 32bit unsigned integer before operation.
+         *
          * Undo buffer is affected.
          */
         void LogicalShiftLeft();
 
         /**
-         * @brief Pop X and then bitwise NOT of X as 32bit integer. Then push it.  
+         * @brief Pop X and then bitwise NOT of X as 32bit integer. Then push it.
          * @details
-         * X is truncated to 32bit signed integer before operation. 
-         * 
+         * X is truncated to 32bit signed integer before operation.
+         *
          * Undo buffer is affected.
          */
 
@@ -608,15 +631,15 @@ namespace rpn_engine
         /**
          * @fn int32_t To32bitValue(Element x)
          * @brief Convert parameter to int32_t
-         * 
+         *
          * @param x Value to convert.
          * @return int32_t Converted value.
          * @details
          * Truncate given value to signed 64bit integer. Then, extract lower 32bit value.
-         * The truncation is round to zero 
-         * 
-         * Note that in case the given X exceed the range of the 64bit signed integer, 
-         * The result is unpredictable. 
+         * The truncation is round to zero
+         *
+         * Note that in case the given X exceed the range of the 64bit signed integer,
+         * The result is unpredictable.
          */
 
         template <class E = Element,
@@ -643,9 +666,9 @@ namespace rpn_engine
 
         /**
          * @brief Convert parameter to Element
-         * 
-         * @param x 
-         * @return Element 
+         *
+         * @param x
+         * @return Element
          */
         Element ToElementValue(int32_t x);
     };
@@ -687,7 +710,7 @@ Element rpn_engine::StackStrategy<Element>::Get(unsigned int postion)
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::Push(Element e)
+void rpn_engine::StackStrategy<Element>::Push(const Element &e)
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
@@ -879,7 +902,7 @@ void rpn_engine::StackStrategy<Element>::Inverse()
     // Get parameters
     Element x = Pop();
     // do the operation
-    Push(1 / x);
+    Push(1.0 / x);
 }
 
 template <class Element>
@@ -1241,4 +1264,55 @@ void rpn_engine::StackStrategy<Element>::BitNot()
     // do the operation
     uint32_t r = ~x;
     Push(ToElementValue(r));
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
+{
+
+    switch (opecode)
+    {
+    case Op::duplicate:
+        Duplicate();
+        break;
+    case Op::swap:
+        Swap();
+        break;
+    case Op::rotate_pop:
+        RotatePop();
+        break;
+    case Op::rotate_push:
+        RotatePush();
+        break;
+    case Op::add:
+        Add();
+        break;
+    case Op::sub:
+        Subtract();
+        break;
+    case Op::mul:
+        Multiply();
+        break;
+    case Op::div:
+        Divide();
+        break;
+    case Op::neg:
+        Nagate();
+        break;
+    case Op::inv:
+        Inverse();
+        break;
+    case Op::sqrt:
+        Sqrt();
+        break;
+    case Op::square:
+        Square();
+        break;
+    case Op::pi:
+        Pi();
+        break;
+
+    default:
+        assert(true);
+    }
 }
