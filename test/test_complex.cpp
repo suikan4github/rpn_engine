@@ -148,7 +148,7 @@ TEST(DoubleComplexTest, Complex)
 
     s->Push(3.0);
     s->Push(4);
-    s->Complex();
+    s->Operation(rpn_engine::Op::complex);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 3); // check real part of top.
@@ -166,7 +166,7 @@ TEST(DoubleComplexTest, DeComplex)
 
     s->Push(0);
     s->Push(std::complex<double>(3, 4)); // 3+4i
-    s->DeComplex();
+    s->Operation(rpn_engine::Op::decomplex);
 
     auto x = s->Get(0);
     auto y = s->Get(1);
@@ -189,7 +189,7 @@ TEST(DoubleComplexTest, Conjugate)
     s = new DoubleComplexStack(4);
 
     s->Push(std::complex<double>(3, 4)); // 3+4i
-    s->Conjugate();
+    s->Operation(rpn_engine::Op::conjugate);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 3);  // check real part.
@@ -208,7 +208,7 @@ TEST(DoubleComplexTest, ToPorlar)
     s = new DoubleComplexStack(4);
 
     s->Push(std::complex<double>(1, 1)); // 1+i
-    s->ToPolar();
+    s->Operation(rpn_engine::Op::topolar);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), sqrt((double)2.0)); // Abs of 1+i is 1.41421356...
@@ -222,7 +222,7 @@ TEST(DoubleComplexTest, ToCartesian)
     s = new DoubleComplexStack(4);
 
     s->Push(std::complex<double>(sqrt((double)2.0), M_PI_4)); // 1.414 + i(3.1415/4)
-    s->ToCartesian();
+    s->Operation(rpn_engine::Op::tocartesian);
 
     // must be converted to 1+i;
     auto x = s->Get(0);
@@ -239,7 +239,7 @@ TEST(DoubleComplexTest, SwapReIm)
     s->Push(3);
     s->Push(4);
     s->Push(std::complex<double>(1, 2)); // 1+2i
-    s->SwapReIm();
+    s->Operation(rpn_engine::Op::swapreim);
 
     // must be converted to 2+i;
     EXPECT_DOUBLE_EQ(s->Get(0).real(), 2.0); //

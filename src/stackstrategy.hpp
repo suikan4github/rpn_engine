@@ -31,30 +31,48 @@ namespace rpn_engine
      */
     enum class Op
     {
-        duplicate,   ///< Get stack top and push
-        swap,        ///< Swap stack top and second
-        rotate_pop,  ///< Rotate stack to pop wise
-        rotate_push, ///< Rotate stack to push wise
-        add,         ///< Pop X, Y, do X+Y, then push
-        sub,         ///< Pop X, Y, do Y-X, then push
-        mul,         ///< Pop X, Y, do X*Y, then push
-        div,         ///< Pop X, Y, do Y/X, then push
-        neg,         ///< Pop X, do -X, then push
-        inv,         ///< Pop X, do 1/X, then push
-        sqrt,        ///< Pop X, do sqrt(X), then push
-        square,      ///< Pop X, do X*X, then push
-        pi,          ///< Push 3.141592...
-        exp,         ///< Pop X, do e^X, then push
-        log,         ///< Pop X, do log(x), then push
-        log10,       ///< Pop X, do log10(X), then push
-        power10,     ///< Pop X, do 10^X, then push
-        power,       ///< Pop X, Y, do X^Y, then push
-        sin,         ///< Pop X, do sin X, then push
-        cos,         ///< Pop X, do cos X, then push
-        tan,         ///< Pop X, do tan X, then push
-        asin,        ///< Pop X, do asin X, then push
-        acos,        ///< Pop X, do acos X, then push
-        atan,        ///< Pop X, do atan X, then push
+        duplicate,           ///< Get stack top and push
+        swap,                ///< Swap stack top and second
+        rotate_pop,          ///< Rotate stack to pop wise
+        rotate_push,         ///< Rotate stack to push wise
+        add,                 ///< Pop X, Y, do X+Y, then push
+        sub,                 ///< Pop X, Y, do Y-X, then push
+        mul,                 ///< Pop X, Y, do X*Y, then push
+        div,                 ///< Pop X, Y, do Y/X, then push
+        neg,                 ///< Pop X, do -X, then push
+        inv,                 ///< Pop X, do 1/X, then push
+        sqrt,                ///< Pop X, do sqrt(X), then push
+        square,              ///< Pop X, do X*X, then push
+        pi,                  ///< Push 3.141592...
+        exp,                 ///< Pop X, do e^X, then push
+        log,                 ///< Pop X, do log(x), then push
+        log10,               ///< Pop X, do log10(X), then push
+        power10,             ///< Pop X, do 10^X, then push
+        power,               ///< Pop X, Y, do X^Y, then push
+        sin,                 ///< Pop X, do sin X, then push
+        cos,                 ///< Pop X, do cos X, then push
+        tan,                 ///< Pop X, do tan X, then push
+        asin,                ///< Pop X, do asin X, then push
+        acos,                ///< Pop X, do acos X, then push
+        atan,                ///< Pop X, do atan X, then push
+        complex,             ///< Pop X, Y, do Y+Xj, then push
+        decomplex,           ///< Pop X, Push Re(X), Push Im(X)
+        conjugate,           ///< Pop X, Push (Conjugate X)
+        topolar,             ///< Pop X, Push (Cartesian to Polar X)
+        tocartesian,         ///< Pop X, Push (Polar to Cartesian X)
+        swapreim,            ///< Pop X, Push Im(X)+Re(X)*j
+        bitadd,              ///< Pop X, Y, do Y + X, then push
+        bitsub,              ///< Pop X, Y, do Y - X, then push
+        bitmul,              ///< Pop X, Y, do  X * Y, then push
+        bitdiv,              ///< Pop X, Y, do Y / X, then push
+        bit_neg,             ///< Pop X, do  -X, then push
+        bit_or,              ///< Pop X, Y, do Y | X, then push
+        bit_xor,             ///< Pop X, Y, do Y ^ X, then push
+        bit_and,             ///< Pop X, Y, do Y & X, then push
+        logical_shift_right, ///< Pop X, Y, do Y >> X, then push
+        logical_shift_left,  ///< Pop X, Y, do Y << X, then push
+        bit_not              ///< Pop X,  do  ~X, then push
+
     };
 
     /**
@@ -331,7 +349,6 @@ namespace rpn_engine
          */
         void Atan();
 
-    public:
         /********************************** COMPLEX OPERATION *****************************/
 
         /**
@@ -1358,6 +1375,57 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         break;
     case Op::atan:
         Atan();
+        break;
+    case Op::complex:
+        Complex();
+        break;
+    case Op::decomplex:
+        DeComplex();
+        break;
+    case Op::conjugate:
+        Conjugate();
+        break;
+    case Op::topolar:
+        ToPolar();
+        break;
+    case Op::tocartesian:
+        ToCartesian();
+        break;
+    case Op::swapreim:
+        SwapReIm();
+        break;
+    case Op::bitadd:
+        BitAdd();
+        break;
+    case Op::bitsub:
+        BitSubtract();
+        break;
+    case Op::bitmul:
+        BitMultiply();
+        break;
+    case Op::bitdiv:
+        BitDivide();
+        break;
+    case Op::bit_neg:
+        BitNagate();
+        break;
+    case Op::bit_or:
+        BitOr();
+        break;
+    case Op::bit_xor:
+        BitExor();
+        break;
+    case Op::bit_and:
+        BitAnd();
+        break;
+    case Op::logical_shift_left:
+        LogicalShiftLeft();
+        break;
+    case Op::logical_shift_right:
+        LogicalShiftRight();
+        break;
+    case Op::bit_not:
+        BitNot();
         break;
 
     default:

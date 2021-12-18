@@ -16,7 +16,7 @@ TEST(ComplexBitwiseTest, BitAdd)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->BitAdd();
+    s->Operation(rpn_engine::Op::bitadd);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 5); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -31,7 +31,7 @@ TEST(ComplexBitwiseTest, BitSubtract)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->BitSubtract();
+    s->Operation(rpn_engine::Op::bitsub);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -46,7 +46,7 @@ TEST(ComplexBitwiseTest, BitMultiply)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->BitMultiply();
+    s->Operation(rpn_engine::Op::bitmul);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 6); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -61,7 +61,7 @@ TEST(ComplexBitwiseTest, BitDivide)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->BitDivide();
+    s->Operation(rpn_engine::Op::bitdiv);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -76,7 +76,7 @@ TEST(ComplexBitwiseTest, BitNagate)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->BitNagate();
+    s->Operation(rpn_engine::Op::bit_neg);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), -2); // real part must be integer
     EXPECT_EQ(c.imag(), 0);  // imaginary part must be 0
@@ -91,7 +91,7 @@ TEST(ComplexBitwiseTest, BitOr)
     s->Push(std::complex<double>(3.4, 5));   // 0x3
     s->Push(std::complex<double>(6.1, 7.3)); // 0x6
 
-    s->BitOr();
+    s->Operation(rpn_engine::Op::bit_or);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 7); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -106,7 +106,7 @@ TEST(ComplexBitwiseTest, BitExor)
     s->Push(std::complex<double>(3.4, 5));   // 0x3
     s->Push(std::complex<double>(6.1, 7.3)); // 0x6
 
-    s->BitExor();
+    s->Operation(rpn_engine::Op::bit_xor);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 5); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -121,7 +121,7 @@ TEST(ComplexBitwiseTest, BitAnd)
     s->Push(std::complex<double>(3.4, 5));   // 0x3
     s->Push(std::complex<double>(6.1, 7.3)); // 0x6
 
-    s->BitAnd();
+    s->Operation(rpn_engine::Op::bit_and);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 2); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -136,7 +136,7 @@ TEST(ComplexBitwiseTest, LogicalShiftRight)
     s->Push(std::complex<double>(12.4, 5));  // 0x3
     s->Push(std::complex<double>(2.1, 7.3)); // 0x6
 
-    s->LogicalShiftRight();
+    s->Operation(rpn_engine::Op::logical_shift_right);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 3); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -151,7 +151,7 @@ TEST(ComplexBitwiseTest, LogicalShiftLeft)
     s->Push(std::complex<double>(12.4, 5));  // 0x3
     s->Push(std::complex<double>(2.1, 7.3)); // 0x6
 
-    s->LogicalShiftLeft();
+    s->Operation(rpn_engine::Op::logical_shift_left);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 48); // real part must be integer
     EXPECT_EQ(c.imag(), 0);  // imaginary part must be 0
@@ -166,7 +166,7 @@ TEST(ComplexBitwiseTest, BitNot)
     s->Push(std::complex<double>(12.4, 5));  // 0x3
     s->Push(std::complex<double>(2.1, 7.3)); // 0x6
 
-    s->BitNot();
+    s->Operation(rpn_engine::Op::bit_not);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), (int32_t)0xFFFFFFFD); // real part must be integer
     EXPECT_EQ(c.imag(), 0);                   // imaginary part must be 0

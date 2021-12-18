@@ -186,7 +186,7 @@ TEST(BasicMathTest, Complex)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Complex(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::complex); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -209,7 +209,7 @@ TEST(BasicMathTest, DeComplex)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->DeComplex(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::decomplex); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -232,7 +232,7 @@ TEST(BasicMathTest, Conjugate)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Conjugate(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::conjugate); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -255,7 +255,7 @@ TEST(BasicMathTest, ToPolar)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->ToPolar(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::topolar); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -278,7 +278,7 @@ TEST(BasicMathTest, ToCartesian)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->ToCartesian(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::tocartesian); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -301,7 +301,7 @@ TEST(BasicMathTest, SwapReIm)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->SwapReIm(); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::swapreim); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
