@@ -44,6 +44,17 @@ namespace rpn_engine
         sqrt,        ///< Pop X, do sqrt(X), then push
         square,      ///< Pop X, do X*X, then push
         pi,          ///< Push 3.141592...
+        exp,         ///< Pop X, do e^X, then push
+        log,         ///< Pop X, do log(x), then push
+        log10,       ///< Pop X, do log10(X), then push
+        power10,     ///< Pop X, do 10^X, then push
+        power,       ///< Pop X, Y, do X^Y, then push
+        sin,         ///< Pop X, do sin X, then push
+        cos,         ///< Pop X, do cos X, then push
+        tan,         ///< Pop X, do tan X, then push
+        asin,        ///< Pop X, do asin X, then push
+        acos,        ///< Pop X, do acos X, then push
+        atan,        ///< Pop X, do atan X, then push
     };
 
     /**
@@ -83,6 +94,10 @@ namespace rpn_engine
         StackStrategy(unsigned int stack_size);
         ~StackStrategy();
         /********************************** BASIC OPERATION *****************************/
+        /**
+         * @brief Single interface for the operation.
+         * @param opecode Opecode of the operation to do.
+         */
         void Operation(Op opecode);
 
         /**
@@ -248,7 +263,6 @@ namespace rpn_engine
          */
         void Pi();
 
-    public:
         /********************************** TRANSCENDENTAL OPERATION *****************************/
 
         /**
@@ -317,6 +331,7 @@ namespace rpn_engine
          */
         void Atan();
 
+    public:
         /********************************** COMPLEX OPERATION *****************************/
 
         /**
@@ -1310,6 +1325,39 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         break;
     case Op::pi:
         Pi();
+        break;
+    case Op::exp:
+        Exp();
+        break;
+    case Op::log:
+        Log();
+        break;
+    case Op::log10:
+        Log10();
+        break;
+    case Op::power10:
+        Power10();
+        break;
+    case Op::power:
+        Power();
+        break;
+    case Op::sin:
+        Sin();
+        break;
+    case Op::cos:
+        Cos();
+        break;
+    case Op::tan:
+        Tan();
+        break;
+    case Op::asin:
+        Asin();
+        break;
+    case Op::acos:
+        Acos();
+        break;
+    case Op::atan:
+        Atan();
         break;
 
     default:

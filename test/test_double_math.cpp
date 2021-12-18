@@ -138,7 +138,7 @@ TEST(DoubleMathTest, Exp)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Exp();
+    s->Operation(rpn_engine::Op::exp);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 403.4287934927351226); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                           // check the stack 2nd.
@@ -162,7 +162,7 @@ TEST(DoubleMathTest, Log)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Log();
+    s->Operation(rpn_engine::Op::log);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 1.791759469228055000); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                           // check the stack 2nd.
@@ -186,7 +186,7 @@ TEST(DoubleMathTest, Log10)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Log10();
+    s->Operation(rpn_engine::Op::log10);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.7781512503836436325); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                            // check the stack 2nd.
@@ -210,7 +210,7 @@ TEST(DoubleMathTest, Pow10)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Power10();
+    s->Operation(rpn_engine::Op::power10);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 1e6); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);          // check the stack 2nd.
@@ -224,7 +224,7 @@ TEST(DoubleMathTest, Pow10)
     EXPECT_EQ(s->Get(3), 3); // check the stack 4th.
 
     s->Push(2.5);
-    s->Power10();
+    s->Operation(rpn_engine::Op::power10);
     EXPECT_DOUBLE_EQ(s->Get(0), 316.22776601683793); // check the stack top.
     delete s;
 }
@@ -238,7 +238,7 @@ TEST(DoubleMathTest, Power)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Power();
+    s->Operation(rpn_engine::Op::power);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 15625); // check the stack top.
     EXPECT_EQ(s->Get(1), 4);            // check the stack 2nd.
@@ -253,7 +253,7 @@ TEST(DoubleMathTest, Power)
 
     s->Push(5.0);
     s->Push(2.5);
-    s->Power();
+    s->Operation(rpn_engine::Op::power);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 55.90169943749474241); // check the stack top.
     delete s;
@@ -268,7 +268,7 @@ TEST(DoubleMathTest, Sin)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Sin();
+    s->Operation(rpn_engine::Op::sin);
 
     EXPECT_DOUBLE_EQ(s->Get(0), -0.27941549819892587); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                           // check the stack 2nd.
@@ -292,7 +292,7 @@ TEST(DoubleMathTest, Cos)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Cos();
+    s->Operation(rpn_engine::Op::cos);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.96017028665036602054); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                             // check the stack 2nd.
@@ -316,7 +316,7 @@ TEST(DoubleMathTest, Tan)
     s->Push(4);
     s->Push(5.0);
     s->Push(6.0);
-    s->Tan();
+    s->Operation(rpn_engine::Op::tan);
 
     EXPECT_DOUBLE_EQ(s->Get(0), -0.2910061913847491570); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                             // check the stack 2nd.
@@ -340,7 +340,7 @@ TEST(DoubleMathTest, Asin)
     s->Push(4);
     s->Push(5.0);
     s->Push(0.5);
-    s->Asin();
+    s->Operation(rpn_engine::Op::asin);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.52359877559829887); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                          // check the stack 2nd.
@@ -364,7 +364,7 @@ TEST(DoubleMathTest, Acos)
     s->Push(4);
     s->Push(5.0);
     s->Push(0.5);
-    s->Acos();
+    s->Operation(rpn_engine::Op::acos);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 1.0471975511965977); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                         // check the stack 2nd.
@@ -388,7 +388,7 @@ TEST(DoubleMathTest, Atan)
     s->Push(4);
     s->Push(5.0);
     s->Push(0.5);
-    s->Atan();
+    s->Operation(rpn_engine::Op::atan);
 
     EXPECT_DOUBLE_EQ(s->Get(0), 0.4636476090008061162); // check the stack top.
     EXPECT_EQ(s->Get(1), 5);                            // check the stack 2nd.

@@ -69,7 +69,7 @@ TEST(DoubleComplexTest, Exp)
     s->Operation(rpn_engine::Op::mul);
     s->Push(4);
     s->Operation(rpn_engine::Op::div);
-    s->Exp();
+    s->Operation(rpn_engine::Op::exp);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), ::cos(M_PI / 4)); // check real part of top.
@@ -85,7 +85,7 @@ TEST(DoubleComplexTest, Log)
     s->Push(3.0);
     s->Push(4);
     s->Push(std::complex<double>(0, 1));
-    s->Log();
+    s->Operation(rpn_engine::Op::log);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);      // check real part of top.
@@ -101,7 +101,7 @@ TEST(DoubleComplexTest, Power10)
     s->Push(3.0);
     s->Push(4);
     s->Push(std::complex<double>(0, 1));
-    s->Power10();
+    s->Operation(rpn_engine::Op::power10);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), -0.6682015101903129); // check real part of top.
@@ -117,7 +117,7 @@ TEST(DoubleComplexTest, Power)
     s->Push(3.0);
     s->Push(M_PI);
     s->Push(std::complex<double>(0, 1));
-    s->Power();
+    s->Operation(rpn_engine::Op::power);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0.4132921161015943); // check real part of top.
@@ -133,7 +133,7 @@ TEST(DoubleComplexTest, Sin)
     s->Push(3.0);
     s->Push(4);
     s->Push(std::complex<double>(0, 1));
-    s->Sin();
+    s->Operation(rpn_engine::Op::sin);
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);                    // check real part of top.
