@@ -159,6 +159,18 @@ namespace rpn_engine
 
     private:
         FRIEND_TEST(BasicStackTest, Undo);
+        FRIEND_TEST(BasicBitwiseTest, To32bitValue);
+        FRIEND_TEST(BasicBitwiseTest, ToElementValue);
+        const unsigned int stack_size_;
+        /**
+         * @brief The entity of stack.
+         * @details
+         * The stack_[0] is the stack top. Index is allowed from 0 to stack_size_-1.
+         */
+        Element *const stack_;
+        Element *const undo_buffer_;
+        bool undo_saving_enabled_;
+
         /**
          * @brief Disabling to save the stack by RAII
          * @details
@@ -646,19 +658,6 @@ namespace rpn_engine
          */
 
         void BitNot();
-
-    private:
-        FRIEND_TEST(BasicBitwiseTest, To32bitValue);
-        FRIEND_TEST(BasicBitwiseTest, ToElementValue);
-        const unsigned int stack_size_;
-        /**
-         * @brief The entity of stack.
-         * @details
-         * The stack_[0] is the stack top. Index is allowed from 0 to stack_size_-1.
-         */
-        Element *const stack_;
-        Element *const undo_buffer_;
-        bool undo_saving_enabled_;
 
         /**
          * @fn int32_t To32bitValue(Element x)
