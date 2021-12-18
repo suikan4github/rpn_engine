@@ -113,11 +113,12 @@ namespace rpn_engine
      * All functions supports complex template type, if the stack is specialized by
      * std::complex<> type. On the other hand, if the stack is specialized by the
      * scalar type, following functions do nothing :
-     * @li @ref Complex
-     * @li @ref DecComplex
-     * @li @ref Conjugate
-     * @li @ref ToPolar
-     * @li @ref ToCartesian
+     * @li Complex
+     * @li DecComplex
+     * @li Conjugate
+     * @li ToPolar
+     * @li ToCartesian
+     * @li SwapReIm
      */
     template <class Element>
     class StackStrategy
