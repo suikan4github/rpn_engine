@@ -4,6 +4,7 @@
 #include "stackstrategy.hpp"
 #include <stdexcept>
 
+using rpn_engine::Op;
 typedef rpn_engine::StackStrategy<int> IntStack;
 
 // Testing the restriction of the stack size .
@@ -21,6 +22,270 @@ TEST(BasicStackDeathTest, StackSizeLimit)
 }
 
 // Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_0)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_0), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_1)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_1), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_2)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_2), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_3)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_3), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_4)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_4), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_5)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_6), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_6)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_6), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_7)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_7), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_8)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_8), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_9)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_9), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_a)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_a), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_b)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_b), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_c)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_c), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_d)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_d), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_e)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_e), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, num_f)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::num_f), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, period)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::period), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, clx)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::clx), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, del)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::del), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, undo)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::undo), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, change_display)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::change_display), "false");
+#endif
+}
+
+// Testing the restriction of the stack size and get() member function.
+TEST(BasicStackDeathTest, eex)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::eex), "false");
+#endif
+}
+
+// Testing the wrong opecode
 TEST(BasicStackDeathTest, GetPositionExceedStackLimit)
 {
     IntStack *s;

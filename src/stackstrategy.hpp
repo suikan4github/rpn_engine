@@ -71,8 +71,29 @@ namespace rpn_engine
         bit_and,             ///< Pop X, Y, do Y & X, then push
         logical_shift_right, ///< Pop X, Y, do Y >> X, then push
         logical_shift_left,  ///< Pop X, Y, do Y << X, then push
-        bit_not              ///< Pop X,  do  ~X, then push
-
+        bit_not,             ///< Pop X,  do  ~X, then push
+        num_0,               ///< Constant for key input. Do not feed to Stack engine.
+        num_1,               ///< Constant for key input. Do not feed to Stack engine.
+        num_2,               ///< Constant for key input. Do not feed to Stack engine.
+        num_3,               ///< Constant for key input. Do not feed to Stack engine.
+        num_4,               ///< Constant for key input. Do not feed to Stack engine.
+        num_5,               ///< Constant for key input. Do not feed to Stack engine.
+        num_6,               ///< Constant for key input. Do not feed to Stack engine.
+        num_7,               ///< Constant for key input. Do not feed to Stack engine.
+        num_8,               ///< Constant for key input. Do not feed to Stack engine.
+        num_9,               ///< Constant for key input. Do not feed to Stack engine.
+        num_a,               ///< Constant for key input. Do not feed to Stack engine.
+        num_b,               ///< Constant for key input. Do not feed to Stack engine.
+        num_c,               ///< Constant for key input. Do not feed to Stack engine.
+        num_d,               ///< Constant for key input. Do not feed to Stack engine.
+        num_e,               ///< Constant for key input. Do not feed to Stack engine.
+        num_f,               ///< Constant for key input. Do not feed to Stack engine.
+        period,              ///< Constant for key input. Do not feed to Stack engine.
+        clx,                 ///< Clear X register. Do not feed to Stack engine.
+        del,                 ///< Delete one char or clx. Do not feed to Stack engine.
+        undo,                ///< Undo the previous operation. Do not feed to Stack engine.
+        change_display,      ///< Change the display mode ( fix, sci, end). Do not feed to Stack engine.
+        eex,                 ///< Delimiter for exponent intput. Do not feed to Stack engine.
     };
 
     /**
@@ -1427,7 +1448,7 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         BitNot();
         break;
 
-    default:
-        assert(true);
+    default: // in case of wrong op code.
+        assert(false);
     }
 }
