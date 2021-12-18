@@ -255,7 +255,7 @@ TEST(BasicMathTest, ToPolar)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Operation(rpn_engine::Op::topolar); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::to_polar); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -278,7 +278,7 @@ TEST(BasicMathTest, ToCartesian)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Operation(rpn_engine::Op::tocartesian); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::to_cartesian); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.
@@ -301,7 +301,7 @@ TEST(BasicMathTest, SwapReIm)
     s->Push(4);
     s->Push(5);
     s->Push(6);
-    s->Operation(rpn_engine::Op::swapreim); // must be no operation in scalar specialization
+    s->Operation(rpn_engine::Op::swap_re_im); // must be no operation in scalar specialization
 
     // must be no change
     EXPECT_EQ(s->Get(0), 6); // check the stack top.

@@ -16,7 +16,7 @@ TEST(ComplexBitwiseTest, BitAdd)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->Operation(rpn_engine::Op::bitadd);
+    s->Operation(rpn_engine::Op::bit_add);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 5); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -31,7 +31,7 @@ TEST(ComplexBitwiseTest, BitSubtract)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->Operation(rpn_engine::Op::bitsub);
+    s->Operation(rpn_engine::Op::bit_sub);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0
@@ -61,7 +61,7 @@ TEST(ComplexBitwiseTest, BitDivide)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->Operation(rpn_engine::Op::bitdiv);
+    s->Operation(rpn_engine::Op::bit_div);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 1); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0

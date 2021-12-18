@@ -58,13 +58,13 @@ namespace rpn_engine
         complex,             ///< Pop X, Y, do Y+Xj, then push
         decomplex,           ///< Pop X, Push Re(X), Push Im(X)
         conjugate,           ///< Pop X, Push (Conjugate X)
-        topolar,             ///< Pop X, Push (Cartesian to Polar X)
-        tocartesian,         ///< Pop X, Push (Polar to Cartesian X)
-        swapreim,            ///< Pop X, Push Im(X)+Re(X)*j
-        bitadd,              ///< Pop X, Y, do Y + X, then push
-        bitsub,              ///< Pop X, Y, do Y - X, then push
+        to_polar,            ///< Pop X, Push (Cartesian to Polar X)
+        to_cartesian,        ///< Pop X, Push (Polar to Cartesian X)
+        swap_re_im,          ///< Pop X, Push Im(X)+Re(X)*j
+        bit_add,             ///< Pop X, Y, do Y + X, then push
+        bit_sub,             ///< Pop X, Y, do Y - X, then push
         bitmul,              ///< Pop X, Y, do  X * Y, then push
-        bitdiv,              ///< Pop X, Y, do Y / X, then push
+        bit_div,             ///< Pop X, Y, do Y / X, then push
         bit_neg,             ///< Pop X, do  -X, then push
         bit_or,              ///< Pop X, Y, do Y | X, then push
         bit_xor,             ///< Pop X, Y, do Y ^ X, then push
@@ -1384,25 +1384,25 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
     case Op::conjugate:
         Conjugate();
         break;
-    case Op::topolar:
+    case Op::to_polar:
         ToPolar();
         break;
-    case Op::tocartesian:
+    case Op::to_cartesian:
         ToCartesian();
         break;
-    case Op::swapreim:
+    case Op::swap_re_im:
         SwapReIm();
         break;
-    case Op::bitadd:
+    case Op::bit_add:
         BitAdd();
         break;
-    case Op::bitsub:
+    case Op::bit_sub:
         BitSubtract();
         break;
     case Op::bitmul:
         BitMultiply();
         break;
-    case Op::bitdiv:
+    case Op::bit_div:
         BitDivide();
         break;
     case Op::bit_neg:

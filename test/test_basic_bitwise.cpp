@@ -50,12 +50,12 @@ TEST(BasicBitwiseTest, BitAdd)
 
     s->Push(3);
     s->Push(7);
-    s->Operation(rpn_engine::Op::bitadd);
+    s->Operation(rpn_engine::Op::bit_add);
     EXPECT_EQ(s->Get(0), 10);
 
     s->Push(3.14);
     s->Push(7.1);
-    s->Operation(rpn_engine::Op::bitadd);
+    s->Operation(rpn_engine::Op::bit_add);
     EXPECT_EQ(s->Get(0), 10);
 
     s->Undo();
@@ -71,13 +71,13 @@ TEST(BasicBitwiseTest, BitSubtract)
 
     s->Push(3);
     s->Push(7);
-    s->Operation(rpn_engine::Op::bitsub);
+    s->Operation(rpn_engine::Op::bit_sub);
     EXPECT_EQ(s->Get(0), -4);
 
     // truncation test
     s->Push(3.14);
     s->Push(7.1);
-    s->Operation(rpn_engine::Op::bitsub);
+    s->Operation(rpn_engine::Op::bit_sub);
     EXPECT_EQ(s->Get(0), -4);
 
     // Undo test
@@ -135,7 +135,7 @@ TEST(BasicBitwiseTest, BitDivide)
     s->Push(4.2);
     s->Push(7.1);
     s->Push(3.1);
-    s->Operation(rpn_engine::Op::bitdiv);
+    s->Operation(rpn_engine::Op::bit_div);
     EXPECT_EQ(s->Get(0), 2);
     EXPECT_EQ(s->Get(1), 4.2);
 
