@@ -132,6 +132,8 @@ namespace rpn_engine
          * In the cae of stack_size == 0, assertion failed.
          */
         StackStrategy(unsigned int stack_size);
+        // Surpress the default constructor.
+        StackStrategy() = delete;
         ~StackStrategy();
         /********************************** BASIC OPERATION *****************************/
         /**
