@@ -94,6 +94,7 @@ namespace rpn_engine
         undo,                ///< Undo the previous operation. Do not feed to Stack engine.
         change_display,      ///< Change the display mode ( fix, sci, end). Do not feed to Stack engine.
         eex,                 ///< Delimiter for exponent intput. Do not feed to Stack engine.
+        enter                ///< Delimiter between number.
     };
 
     /**
