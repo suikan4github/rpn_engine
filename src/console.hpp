@@ -76,14 +76,14 @@ namespace rpn_engine
         /**
          * @brief Input from pad.
          *
-         * @param key which key are pressed?
+         * @param opcode which key are pressed?
          * @details
-         * The key must be logical key. That mean, it is free from the key matrix design and
+         * The opcode must be logical key. That mean, it is free from the key matrix design and
          * chattering.
          *
          * Any value from @ref rpn_engine::Op type are allowed.
          */
-        void Input(rpn_engine::Op key);
+        void Input(rpn_engine::Op opcode);
 
         /**
          * @brief Get the Text representation for display.
@@ -112,7 +112,8 @@ namespace rpn_engine
         int8_t GetDecimalPointPosition();
 
     private:
-        FRIEND_TEST(Console, ModeTest);
+        FRIEND_TEST(Console, Mode);
+        FRIEND_TEST(Console, PrimitivePi);
 
         StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;

@@ -18,7 +18,7 @@ TEST(Console, IsFuncKeyPressed)
 
 namespace rpn_engine
 {
-    TEST(Console, ModeTest)
+    TEST(Console, Mode)
     {
         rpn_engine::Console c;
 
@@ -29,5 +29,16 @@ namespace rpn_engine
         EXPECT_EQ(c.display_mode_, DisplayMode::engineering);
         c.Input(Op::change_display);
         EXPECT_EQ(c.display_mode_, DisplayMode::fixed);
+    }
+}
+
+namespace rpn_engine
+{
+    TEST(Console, PrimitivePi)
+    {
+        rpn_engine::Console c;
+
+        c.Input(Op::pi);
+        EXPECT_DOUBLE_EQ(c.engine_.Get(0).real(), 3.14159265358979323846);
     }
 }
