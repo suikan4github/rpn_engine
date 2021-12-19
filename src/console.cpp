@@ -59,11 +59,9 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
             display_mode_ = DisplayMode::fixed;
 
         break;
-    case Op::pi:
+    default:
         engine_.Operation(opcode);
         break;
-    default:
-        assert(false);
     }
 
     PostExecutionProcess();
