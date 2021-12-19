@@ -72,6 +72,10 @@ namespace rpn_engine
         logical_shift_right, ///< Pop X, Y, do Y >> X, then push
         logical_shift_left,  ///< Pop X, Y, do Y << X, then push
         bit_not,             ///< Pop X,  do  ~X, then push
+        change_display,      ///< Change the display mode ( fix, sci, end). Do not feed to Stack engine.
+        enter,               ///< Delimiter between number.
+        clx,                 ///< Clear X register. Do not feed to Stack engine.
+        undo,                ///< Undo the previous operation. Do not feed to Stack engine.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.
         num_2,               ///< Constant for key input. Do not feed to Stack engine.
@@ -89,12 +93,8 @@ namespace rpn_engine
         num_e,               ///< Constant for key input. Do not feed to Stack engine.
         num_f,               ///< Constant for key input. Do not feed to Stack engine.
         period,              ///< Constant for key input. Do not feed to Stack engine.
-        clx,                 ///< Clear X register. Do not feed to Stack engine.
-        del,                 ///< Delete one char or clx. Do not feed to Stack engine.
-        undo,                ///< Undo the previous operation. Do not feed to Stack engine.
-        change_display,      ///< Change the display mode ( fix, sci, end). Do not feed to Stack engine.
         eex,                 ///< Delimiter for exponent intput. Do not feed to Stack engine.
-        enter                ///< Delimiter between number.
+        del,                 ///< Delete one char or clx. Do not feed to Stack engine.
     };
 
     /**

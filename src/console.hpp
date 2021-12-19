@@ -30,6 +30,12 @@ namespace rpn_engine
     };
 
     /**
+     * @brief Element type of the stack
+     *
+     */
+    typedef std::complex<double> StackElement;
+
+    /**
      * @brief User interface of a calculator
      *
      */
@@ -108,12 +114,32 @@ namespace rpn_engine
     private:
         FRIEND_TEST(Console, ModeTest);
 
-        StackStrategy<std::complex<double>> engine_;
+        StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;
         DisplayMode display_mode_;
         bool is_editing_;
         bool is_pushable_;
         // Needs the number of digits + one character for null termination
         char text_buffer_[kNumberOfDigits + 1];
+
+        // Flush the editing buffer and make stack ready to operate.
+        void PreExecutionProcess();
+
+        // Get the stack top and make it text to right.
+        void PostExecutionProcess();
+
+        /**
+         * @brief
+         *
+         * @param opcode
+         */
+        void HandleNonEditingOp(rpn_engine::Op opcode);
+
+        /**
+         * @brief
+         *
+         * @param opcode
+         */
+        void HandleEditingOp(rpn_engine::Op opcode);
     };
 }
