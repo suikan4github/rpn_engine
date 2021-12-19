@@ -109,7 +109,7 @@ namespace rpn_engine
          *
          * @return int8_t -1 as no decimal point. 0 as right of the digit 0 ( right most)
          */
-        int8_t GetDecimalPointPosition();
+        int32_t GetDecimalPointPosition();
 
     private:
         FRIEND_TEST(Console, Mode);
@@ -122,22 +122,38 @@ namespace rpn_engine
         bool is_pushable_;
         // Needs the number of digits + one character for null termination
         char text_buffer_[kNumberOfDigits + 1];
+        // -1 : none. 0..8 : right of digit N.
+        int32_t decimal_point_position_;
 
-        // Flush the editing buffer and make stack ready to operate.
-        void PreExecutionProcess();
+        /**
+         * @brief Preparing non-editing opecode execution.
+         * @details Flush the editing buffer to stack and make stack ready to operate.
+         * set is_editing_ to false.
+         * set is_pushable_ to true.
+         */
+        void
+        PreExecutionProcess();
 
-        // Get the stack top and make it text to right.
+        /**
+         * @brief Finalizing execution
+         * @details Set is_pushable_ to true. And then, get the stack top and
+         * convert it to text style.
+         *
+         * The text format follows  display_mode_. The position of decimal point
+         * is stored to decimal_point_position_
+         */
         void PostExecutionProcess();
 
         /**
-         * @brief
+         * @brief Handle opcode for "operation"
          *
-         * @param opcode
+         * @param opcode Instruction to execute
+         * @details Handles opcode for "operation". For example, add, sub, mul...
          */
         void HandleNonEditingOp(rpn_engine::Op opcode);
 
         /**
-         * @brief
+         * @brief Hanldle opcode for number input
          *
          * @param opcode
          */

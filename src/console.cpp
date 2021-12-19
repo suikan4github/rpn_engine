@@ -32,9 +32,9 @@ void rpn_engine::Console::PreExecutionProcess()
     if (is_editing_) // if editing, convert text to value and set it to stack.
     {
         assert(false); // to do : Create value to push.
-        engine_.Pop(); // discard the stack top to simulate overwriting the stack top.
         engine_.Push(value);
         is_editing_ = false; // ed of editing
+        is_pushable_ = true; // after editing, stack is pushable.
     }
 }
 
@@ -50,7 +50,7 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
     switch (opcode)
     {
     case Op::change_display:
-
+        // Rotate the display mode for each time "display_mode" key pushed.
         if (display_mode_ == DisplayMode::fixed)
             display_mode_ = DisplayMode::scientific;
         else if (display_mode_ == DisplayMode::scientific)
@@ -58,6 +58,11 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
         else
             display_mode_ = DisplayMode::fixed;
 
+        break;
+    case Op::pi:
+        if (!is_pushable_)         // If stack is not pushbale,
+            engine_.Pop();         // discard stack top.
+        engine_.Operation(opcode); // And then, push Pi
         break;
     default:
         engine_.Operation(opcode);
