@@ -98,9 +98,10 @@ void rpn_engine::Console::Input(Op opcode)
     ;
 }
 
+#include <iomanip>
 void rpn_engine::Console::RenderFixedMode()
 {
-    const int kBoundaryOfScientific = 99999999.5; // 8 digits of 9 and rounding bias.
+    const double kBoundaryOfScientific = 99999999.5; // 8 digits of 9 and rounding bias.
     // Get top of stack
     StackElement x = engine_.Get(0);
     // We display only real part.
@@ -113,28 +114,28 @@ void rpn_engine::Console::RenderFixedMode()
         value = -value;
 
     if (value >= kBoundaryOfScientific) // if too large,
-        ;                               // display in the scientific format
+        assert(false);                  // display in the scientific format
     else
     {
         // extract the exponent.
-        if (value >= 9999999.5)
+        if (value >= 9999999.95)
             exponent = 0;
-        else if (value >= 999999.5)
+        else if (value >= 999999.995)
             exponent = 1;
-        else if (value >= 99999.5)
+        else if (value >= 99999.9995)
             exponent = 2;
-        else if (value >= 9999.5)
+        else if (value >= 9999.99995)
             exponent = 3;
-        else if (value >= 999.5)
+        else if (value >= 999.999995)
             exponent = 4;
-        else if (value >= 99.5)
+        else if (value >= 99.9999995)
             exponent = 5;
-        else if (value >= 9.5)
+        else if (value >= 9.99999995)
             exponent = 6;
         else if (value >= 0.00000005)
             exponent = 7;
         else
-            ; // display in the scientific format
+            exponent = 7; // display in the scientific format
 
         // Let's normalize
         for (int i = 0; i < exponent; i++)
