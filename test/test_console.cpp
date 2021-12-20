@@ -58,6 +58,7 @@ namespace rpn_engine
         c.RenderFixedMode();
         EXPECT_STREQ(c.text_buffer_, "-31400000");
         EXPECT_EQ(c.decimal_point_position_, 7);
+
         // #.#######
         c.engine_.Push(9.99999994);
         c.RenderFixedMode();
@@ -206,7 +207,26 @@ namespace rpn_engine
         c.RenderFixedMode();
         EXPECT_STREQ(c.text_buffer_, "-99999999");
         EXPECT_EQ(c.decimal_point_position_, 0);
+    }
+}
+
+namespace rpn_engine
+{
+    // Test the value which is unable to show in the fixed mode.
+    // ex, very large, very small number.
+    TEST(Console, FixedModeOoB)
+    {
+        rpn_engine::Console c;
 #if 0
+        c.engine_.Push(1e8);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, " 10000 08");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(0.00000004);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, " 4000-08");
+        EXPECT_EQ(c.decimal_point_position_, 7);
 #endif
     }
 }

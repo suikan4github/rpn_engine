@@ -116,6 +116,7 @@ namespace rpn_engine
         FRIEND_TEST(Console, Mode);
         FRIEND_TEST(Console, PrimitivePi);
         FRIEND_TEST(Console, FixedMode);
+        FRIEND_TEST(Console, FixedModeOoB);
 
         StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;
