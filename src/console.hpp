@@ -1,6 +1,7 @@
 
 #include "stackstrategy.hpp"
 #include "cmath"
+#include "cstdio"
 
 namespace rpn_engine
 {
@@ -114,6 +115,7 @@ namespace rpn_engine
     private:
         FRIEND_TEST(Console, Mode);
         FRIEND_TEST(Console, PrimitivePi);
+        FRIEND_TEST(Console, FixedMode);
 
         StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;
@@ -158,5 +160,9 @@ namespace rpn_engine
          * @param opcode
          */
         void HandleEditingOp(rpn_engine::Op opcode);
+
+        void RenderFixedMode();
+        void RenderScientificMode();
+        void RenderEngineeringMode();
     };
 }

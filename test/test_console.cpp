@@ -42,3 +42,21 @@ namespace rpn_engine
         EXPECT_DOUBLE_EQ(c.engine_.Get(0).real(), 3.14159265358979323846);
     }
 }
+
+namespace rpn_engine
+{
+    TEST(Console, FixedMode)
+    {
+        rpn_engine::Console c;
+
+        c.engine_.Push(3.14);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, " 31400000");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-3.14);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "-31400000");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+    }
+}
