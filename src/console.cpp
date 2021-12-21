@@ -177,6 +177,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     const int kBufferSize = 20;
     const int kExponentPos = 10;
     const char kFormatSpec[] = "%+-15.7e";
+    const char kExponentMark = 'e';
     // temporally rendering area
     char buffer[kBufferSize];
 
@@ -188,7 +189,8 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
 
     std::snprintf(buffer, kBufferSize, kFormatSpec, value);
     // check wether the format is OK.
-    assert(buffer[kExponentPos] == 'e');
+    assert(buffer[kExponentPos] == kExponentMark);
 
-    exponent = std::atoi(&buffer[10]);
+    // get a exponent part of #.######e####
+    exponent = std::atoi(&buffer[kExponentPos + 1]);
 }

@@ -237,14 +237,14 @@ namespace rpn_engine
     {
         rpn_engine::Console c;
 #if 0
-        c.engine_.Push(1e8);
+        c.engine_.Push(4e8);
         c.RenderFixedMode();
-        EXPECT_STREQ(c.text_buffer_, " 10000 08");
+        EXPECT_STREQ(c.text_buffer_, "+10000+08");
         EXPECT_EQ(c.decimal_point_position_, 7);
 
         c.engine_.Push(0.00000004);
         c.RenderFixedMode();
-        EXPECT_STREQ(c.text_buffer_, " 4000-08");
+        EXPECT_STREQ(c.text_buffer_, "+40000-08");
         EXPECT_EQ(c.decimal_point_position_, 7);
 #endif
     }
