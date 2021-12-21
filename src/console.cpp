@@ -98,7 +98,6 @@ void rpn_engine::Console::Input(Op opcode)
     ;
 }
 
-#include <iomanip>
 void rpn_engine::Console::RenderFixedMode()
 {
     //    const double kBoundaryOfScientific = 99999999.5; // 8 digits of 9 and rounding bias.
@@ -169,4 +168,8 @@ void rpn_engine::Console::RenderFixedMode()
         text_buffer_[0] = minus ? '-' : ' ';
         decimal_point_position_ = exponent;
     }
+}
+
+void rpn_engine::Console::RenderScientificMode()
+{
 }

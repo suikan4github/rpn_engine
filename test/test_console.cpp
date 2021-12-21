@@ -201,12 +201,31 @@ namespace rpn_engine
         c.RenderFixedMode();
         EXPECT_STREQ(c.text_buffer_, " 99999999");
         EXPECT_EQ(c.decimal_point_position_, 0);
-        std::cout << "c.text_buffer_: " << c.text_buffer_ << std::endl;
 
         c.engine_.Push(-99999999.4);
         c.RenderFixedMode();
         EXPECT_STREQ(c.text_buffer_, "-99999999");
         EXPECT_EQ(c.decimal_point_position_, 0);
+
+        // #.#######
+        c.engine_.Push(0.00000014);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, " 00000001");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-0.00000014);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "-00000001");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+        c.engine_.Push(0.00000015);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, " 00000002");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-0.00000015);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "-00000002");
+        EXPECT_EQ(c.decimal_point_position_, 7);
     }
 }
 

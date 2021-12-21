@@ -156,13 +156,26 @@ namespace rpn_engine
         void HandleNonEditingOp(rpn_engine::Op opcode);
 
         /**
-         * @brief Hanldle opcode for number input
+         * @brief Handle opcode for number input
          *
          * @param opcode
          */
         void HandleEditingOp(rpn_engine::Op opcode);
 
+        /**
+         * @brief Convert the number of stack top to the text presentation in the fixed mode.
+         * @details
+         * The result is stored in the text_buffer_ and decimal_point_position_.
+         * If the number is bigger than or smaller than the one which
+         * 8digit fixed number can represent, the number is rendered as
+         * the scientific mode.
+         */
         void RenderFixedMode();
+
+        /**
+         * @brief Convert the numver of the stack top to the text presentation in the scientific mode.
+         *
+         */
         void RenderScientificMode();
         void RenderEngineeringMode();
     };
