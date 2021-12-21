@@ -176,7 +176,7 @@ namespace rpn_engine
          * @brief Convert the numver of the stack top to the text presentation in the scientific mode.
          *
          */
-        void RenderScientificMode();
+        void RenderScientificMode(bool engineering_mode);
         void RenderEngineeringMode();
     };
 }

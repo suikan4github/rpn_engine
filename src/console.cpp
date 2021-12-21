@@ -1,5 +1,7 @@
 #include "console.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <cstdio>
 
 using rpn_engine::Op;
 
@@ -170,6 +172,23 @@ void rpn_engine::Console::RenderFixedMode()
     }
 }
 
-void rpn_engine::Console::RenderScientificMode()
+void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
 {
+    const int kBufferSize = 20;
+    const int kExponentPos = 10;
+    const char kFormatSpec[] = "%+-15.7e";
+    // temporally rendering area
+    char buffer[kBufferSize];
+
+    // Get top of stack
+    StackElement x = engine_.Get(0);
+    // We display only real part.
+    auto value = x.real();
+    int exponent; // The display value in the text_buffer_[] is integer. So, we need exponent.
+
+    std::snprintf(buffer, kBufferSize, kFormatSpec, value);
+    // check wether the format is OK.
+    assert(buffer[kExponentPos] == 'e');
+
+    exponent = std::atoi(&buffer[10]);
 }
