@@ -226,6 +226,23 @@ namespace rpn_engine
         c.RenderFixedMode();
         EXPECT_STREQ(c.text_buffer_, "-00000002");
         EXPECT_EQ(c.decimal_point_position_, 7);
+
+        // very large number
+        c.engine_.Push(100000000);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "+10000+08");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-100000000);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "-10000+08");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        // very small number
+        c.engine_.Push(1e-8);
+        c.RenderFixedMode();
+        EXPECT_STREQ(c.text_buffer_, "+10000-08");
+        EXPECT_EQ(c.decimal_point_position_, 7);
     }
 }
 
@@ -233,19 +250,108 @@ namespace rpn_engine
 {
     // Test the value which is unable to show in the fixed mode.
     // ex, very large, very small number.
-    TEST(Console, FixedModeOoB)
+    TEST(Console, ScientificMode)
     {
         rpn_engine::Console c;
-#if 0
         c.engine_.Push(4e8);
-        c.RenderFixedMode();
-        EXPECT_STREQ(c.text_buffer_, "+10000+08");
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+40000+08");
         EXPECT_EQ(c.decimal_point_position_, 7);
 
         c.engine_.Push(0.00000004);
-        c.RenderFixedMode();
+        c.RenderScientificMode(false); // render in the scientific mode
         EXPECT_STREQ(c.text_buffer_, "+40000-08");
         EXPECT_EQ(c.decimal_point_position_, 7);
-#endif
+
+        c.engine_.Push(0.000004);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+40000-06");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(0.0004);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+40000-04");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(0.04);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+40000-02");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(3.14);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+31400+00");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        // Very large number
+        c.engine_.Push(1e100);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "+99999+99");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-1e100);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, "-99999+99");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        // Very small number
+        c.engine_.Push(1e-100);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, " 00000000");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(-1e-100);
+        c.RenderScientificMode(false); // render in the scientific mode
+        EXPECT_STREQ(c.text_buffer_, " 00000000");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+    }
+}
+
+namespace rpn_engine
+{
+    // Test the value which is unable to show in the fixed mode.
+    // ex, very large, very small number.
+    TEST(Console, EngineeringMode)
+    {
+        rpn_engine::Console c;
+        c.engine_.Push(3.14);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+31400+00");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(31.4);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+31400+00");
+        EXPECT_EQ(c.decimal_point_position_, 6);
+
+        c.engine_.Push(314);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+31400+00");
+        EXPECT_EQ(c.decimal_point_position_, 5);
+
+        c.engine_.Push(3140);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+31400+03");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(1e-6);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+10000-06");
+        EXPECT_EQ(c.decimal_point_position_, 7);
+
+        c.engine_.Push(0.1e-6);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+10000-09");
+        EXPECT_EQ(c.decimal_point_position_, 5);
+
+        c.engine_.Push(0.01e-6);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+10000-09");
+        EXPECT_EQ(c.decimal_point_position_, 6);
+
+        c.engine_.Push(0.001e-6);
+        c.RenderScientificMode(true); // render in the Engineering mode
+        EXPECT_STREQ(c.text_buffer_, "+10000-09");
+        EXPECT_EQ(c.decimal_point_position_, 7);
     }
 }

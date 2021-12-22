@@ -116,7 +116,8 @@ namespace rpn_engine
         FRIEND_TEST(Console, Mode);
         FRIEND_TEST(Console, PrimitivePi);
         FRIEND_TEST(Console, FixedMode);
-        FRIEND_TEST(Console, FixedModeOoB);
+        FRIEND_TEST(Console, ScientificMode);
+        FRIEND_TEST(Console, EngineeringMode);
 
         StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;
@@ -174,9 +175,8 @@ namespace rpn_engine
 
         /**
          * @brief Convert the numver of the stack top to the text presentation in the scientific mode.
-         *
+         * @param engineering_mode true : engineering mode, false : scientific mode.
          */
         void RenderScientificMode(bool engineering_mode);
-        void RenderEngineeringMode();
     };
 }

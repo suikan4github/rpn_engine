@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 
 using rpn_engine::Op;
 
@@ -50,8 +51,10 @@ void rpn_engine::Console::PostExecutionProcess()
         RenderFixedMode();
         break;
     case rpn_engine::DisplayMode::scientific:
+        RenderScientificMode(false);
         break;
     case rpn_engine::DisplayMode::engineering:
+        RenderScientificMode(true);
         break;
     default:
         assert(false);
@@ -116,13 +119,15 @@ void rpn_engine::Console::RenderFixedMode()
         value = -value;
 
     if (value >= kBoundaryOfScientific) // if too large,
-        assert(false);                  // display in the scientific format
+        RenderScientificMode(false);    // display in the scientific format
+    else if (5e-8 > value)              // if too small
+        RenderScientificMode(false);    // display in the scientific format
     else
     {
         int int_value = 0;
 
         if (int(value + 0.5) > kBoundaryOfScientific)
-            ; // scientific mode
+            RenderScientificMode(false); // display in the scientific format
         else if (kBoundaryOfScientific > (value * 1e7 + 0.5))
         {
             exponent = 7;
@@ -163,6 +168,8 @@ void rpn_engine::Console::RenderFixedMode()
             exponent = 0;
             int_value = value * 1e0 + 0.5;
         }
+        else
+            assert(false);
 
         // text_buffer_[0] is space for sign
         std::sprintf(&text_buffer_[1], "%08d", int_value);
@@ -178,6 +185,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     const int kExponentPos = 10;
     const char kFormatSpec[] = "%+-15.7e";
     const char kExponentMark = 'e';
+    const char kDisplayFormatSpec[] = "%+03d";
     // temporally rendering area
     char buffer[kBufferSize];
 
@@ -185,12 +193,55 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     StackElement x = engine_.Get(0);
     // We display only real part.
     auto value = x.real();
-    int exponent; // The display value in the text_buffer_[] is integer. So, we need exponent.
 
+    // Convert to a text format as #.#######e#####
     std::snprintf(buffer, kBufferSize, kFormatSpec, value);
-    // check wether the format is OK.
+    // Check wether the format is OK.
     assert(buffer[kExponentPos] == kExponentMark);
 
-    // get a exponent part of #.######e####
-    exponent = std::atoi(&buffer[kExponentPos + 1]);
+    // Get a exponent part of #.#######e#####
+    int exponent = std::atoi(&buffer[kExponentPos + 1]);
+
+    decimal_point_position_ = 7; // right of the upper most digit
+
+    if (exponent > 99) // if the number exceed the max display number
+        if (value > 0)
+            std::strcpy(text_buffer_, "+99999+99"); // sign of max number
+        else
+            std::strcpy(text_buffer_, "-99999+99"); // sign of max number
+
+    else if (-99 > exponent)                    // if the number is lower than the min display number
+        std::strcpy(text_buffer_, " 00000000"); // flash to zero
+    else                                        // the number is in the normal range
+    {
+        int i = 0;
+        int j = 0;
+        text_buffer_[i++] = buffer[j++]; // Sign
+        text_buffer_[i++] = buffer[j++]; // upper most
+        j++;                             // skip decimal point
+        text_buffer_[i++] = buffer[j++]; // 2nd upper digit
+        text_buffer_[i++] = buffer[j++]; // 3rd upper digit
+        text_buffer_[i++] = buffer[j++]; // 4th upper digit
+        text_buffer_[i++] = buffer[j++]; // 5th upper digit
+
+        if (engineering_mode)
+        {
+            int old_exponent = exponent;
+            // align exponent as integer multiple of 3.
+            exponent /= 3;
+            exponent *= 3;
+            // calculate the offset from the engineering exponent.
+            int offset_exponent = old_exponent - exponent;
+
+            // adjust the decimal point for engineering point.
+            if (0 > offset_exponent) // that means the exponent is minus and offset is not zero
+            {
+                exponent -= 3;                         // this is required only when the old_exponent is not the integer multiple of 3
+                offset_exponent = 3 + offset_exponent; // adjust for the minus exponent
+            }
+            decimal_point_position_ -= offset_exponent;
+        }
+
+        std::snprintf(&text_buffer_[i], 4, kDisplayFormatSpec, exponent);
+    }
 }
