@@ -355,3 +355,32 @@ namespace rpn_engine
         EXPECT_EQ(c.decimal_point_position_, 7);
     }
 }
+
+TEST(Console, Inputmode)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::pi);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 31415927");
+    EXPECT_EQ(decimal_point, 7);
+
+    // Scientific mode
+    c.Input(Op::change_display);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+31415+00");
+    EXPECT_EQ(decimal_point, 7);
+
+    // Engineering mode
+    c.Input(Op::change_display);
+    c.Input(Op::square);
+    c.Input(Op::square);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+97409+00");
+    EXPECT_EQ(decimal_point, 6);
+}

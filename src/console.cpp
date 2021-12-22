@@ -28,6 +28,16 @@ void rpn_engine::Console::SetIsFuncKeyPressed(bool state)
     is_func_key_pressed_ = state;
 }
 
+void rpn_engine::Console::GetText(char display_text[])
+{
+    std::strcpy(display_text, text_buffer_);
+}
+
+int32_t rpn_engine::Console::GetDecimalPointPosition()
+{
+    return decimal_point_position_;
+}
+
 void rpn_engine::Console::PreExecutionProcess()
 {
     StackElement value;
