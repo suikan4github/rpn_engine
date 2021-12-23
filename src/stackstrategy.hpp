@@ -29,8 +29,9 @@ namespace rpn_engine
      * @brief enum class to specify the operation on stack
      *
      */
-    enum class Op
+    enum class Op : unsigned int
     {
+        // Calculation opcode
         duplicate,           ///< Get stack top and push
         swap,                ///< Swap stack top and second
         rotate_pop,          ///< Rotate stack to pop wise
@@ -73,9 +74,10 @@ namespace rpn_engine
         logical_shift_left,  ///< Pop X, Y, do Y << X, then push
         bit_not,             ///< Pop X,  do  ~X, then push
         change_display,      ///< Change the display mode ( fix, sci, end). Do not feed to Stack engine.
-        enter,               ///< Delimiter between number.
+        enter,               ///< Delimiter between numbers.
         clx,                 ///< Clear X register. Do not feed to Stack engine.
         undo,                ///< Undo the previous operation. Do not feed to Stack engine.
+                             // Editing op code.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.
         num_2,               ///< Constant for key input. Do not feed to Stack engine.
@@ -153,6 +155,12 @@ namespace rpn_engine
          * The contents of the stack is not affected.
          */
         Element Get(unsigned int position);
+
+        /**
+         * @brief Overwrite stack top
+         * @param e Value to overwrite the stack top
+         */
+        void SetX(const Element &e);
 
         /**
          * @brief Push a given value to the stack
@@ -763,6 +771,16 @@ Element rpn_engine::StackStrategy<Element>::Get(unsigned int postion)
 {
     assert(stack_size_ > postion);
     return stack_[postion];
+}
+
+template <class Element>
+void rpn_engine::StackStrategy<Element>::SetX(const Element &e)
+{
+    // Save stack state before mathematical operation
+    SaveToUndoBuffer();
+    DisableUndoSaving disable_undo(this); // Disabling by RAII
+
+    stack_[0] = e;
 }
 
 template <class Element>

@@ -124,10 +124,16 @@ namespace rpn_engine
         DisplayMode display_mode_;
         bool is_editing_;
         bool is_pushable_;
+        int mantissa_cursor_;
+        bool is_editing_float_;
         // Needs the number of digits + one character for null termination
         char text_buffer_[kNumberOfDigits + 1];
         // -1 : none. 0..8 : right of digit N.
         int32_t decimal_point_position_;
+        // store the mantissa text during editing.
+        char mantissa_buffer_[kNumberOfDigits + 1];
+        // store the exponent text during editing.
+        char exponent_buffer_[kNumberOfDigits + 1];
 
         /**
          * @brief Preparing non-editing opecode execution.

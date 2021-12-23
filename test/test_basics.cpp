@@ -351,6 +351,21 @@ TEST(BasicStackTest, GetAndPush2)
     delete s;
 }
 
+TEST(BasicStackTest, Set)
+{
+    IntStack *s;
+    s = new IntStack(4);
+    s->Push(1);
+    s->Push(2);
+    s->Push(3);
+    s->Push(4);
+    EXPECT_EQ(s->Get(0), 4); // Check pushed value
+    s->SetX(8);
+    EXPECT_EQ(s->Get(0), 8); // Check pushed value
+    EXPECT_EQ(s->Get(1), 3); // Check pushed value
+    delete s;
+}
+
 TEST(BasicStackTest, PushAndUndo)
 {
     IntStack *s;

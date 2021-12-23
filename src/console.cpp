@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <type_traits>
 
 using rpn_engine::Op;
 
@@ -10,8 +11,11 @@ rpn_engine::Console::Console() : engine_(StackStrategy<std::complex<double>>(kDe
                                  is_func_key_pressed_(false),
                                  display_mode_(DisplayMode::fixed),
                                  is_editing_(false),
-                                 is_pushable_(false)
+                                 is_pushable_(false),
+                                 mantissa_cursor_(1),
+                                 is_editing_float_(false)
 {
+    PostExecutionProcess();
 }
 
 rpn_engine::Console::~Console()
@@ -102,6 +106,48 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
 
 void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 {
+    if (!is_editing_) // if not editing
+    {                 // do preparation.
+        is_editing_float_ = false;
+        mantissa_cursor_ = 1;
+        std::strcpy(mantissa_buffer_, " 0       "); // fill by 9 spaces.Sign and 8 digits
+        std::strcpy(exponent_buffer_, " 00");       // fill by 3 space. Sing and 2 digits
+        decimal_point_position_ = -1;               // -1 means, do not display the decimal point.
+
+        is_editing_ = true;
+    }
+    switch (opcode)
+    {
+    case Op::num_0:
+    case Op::num_1:
+    case Op::num_2:
+    case Op::num_3:
+    case Op::num_4:
+    case Op::num_5:
+    case Op::num_6:
+    case Op::num_7:
+    case Op::num_8:
+    case Op::num_9:
+        if (is_editing_float_)
+        {
+            exponent_buffer_[1] = exponent_buffer_[2]; // shift up the digit;
+            // calculate the character to put to the right most digit of exponent.
+            exponent_buffer_[2] = static_cast<std::underlying_type<Op>::type>(opcode) -
+                                  static_cast<std::underlying_type<Op>::type>(Op::num_0) +
+                                  '0';
+            std::strcpy(&text_buffer_[6], mantissa_buffer_); // overwrite by exponent
+        }
+        else if (9 > mantissa_cursor_) // if still space to write
+        {
+            mantissa_buffer_[mantissa_cursor_] = static_cast<std::underlying_type<Op>::type>(opcode) -
+                                                 static_cast<std::underlying_type<Op>::type>(Op::num_0) +
+                                                 '0';
+            mantissa_cursor_++; // move cursor forward
+            std::strcpy(text_buffer_, mantissa_buffer_);
+        }
+
+        break;
+    }
 }
 
 void rpn_engine::Console::Input(Op opcode)
@@ -110,7 +156,6 @@ void rpn_engine::Console::Input(Op opcode)
         HandleNonEditingOp(opcode);
     else
         HandleEditingOp(opcode);
-    ;
 }
 
 void rpn_engine::Console::RenderFixedMode()
@@ -128,10 +173,10 @@ void rpn_engine::Console::RenderFixedMode()
     if (minus)
         value = -value;
 
-    if (value >= kBoundaryOfScientific) // if too large,
-        RenderScientificMode(false);    // display in the scientific format
-    else if (5e-8 > value)              // if too small
-        RenderScientificMode(false);    // display in the scientific format
+    if (value >= kBoundaryOfScientific)  // if too large,
+        RenderScientificMode(false);     // display in the scientific format
+    else if (5e-8 > value && value != 0) // if too small
+        RenderScientificMode(false);     // display in the scientific format
     else
     {
         int int_value = 0;
