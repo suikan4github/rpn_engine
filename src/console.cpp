@@ -7,6 +7,9 @@
 
 using rpn_engine::Op;
 
+static const int kFullMantissa = 9;
+static const int kUpperMostDigit = 7;
+
 rpn_engine::Console::Console() : engine_(StackStrategy<std::complex<double>>(kDepthOfStack)),
                                  is_func_key_pressed_(false),
                                  display_mode_(DisplayMode::fixed),
@@ -106,47 +109,81 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
 
 void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 {
-    if (!is_editing_) // if not editing
-    {                 // do preparation.
-        is_editing_float_ = false;
-        mantissa_cursor_ = 1;
-        std::strcpy(mantissa_buffer_, " 0       "); // fill by 9 spaces.Sign and 8 digits
-        std::strcpy(exponent_buffer_, " 00");       // fill by 3 space. Sing and 2 digits
-        decimal_point_position_ = -1;               // -1 means, do not display the decimal point.
 
-        is_editing_ = true;
-    }
-    switch (opcode)
+    if (opcode == Op::eex && !is_editing_) // The eex during non editing mode
+        HandleNonEditingOp(Op ::pi);       // is translated as pi
+    else
     {
-    case Op::num_0:
-    case Op::num_1:
-    case Op::num_2:
-    case Op::num_3:
-    case Op::num_4:
-    case Op::num_5:
-    case Op::num_6:
-    case Op::num_7:
-    case Op::num_8:
-    case Op::num_9:
-        if (is_editing_float_)
-        {
-            exponent_buffer_[1] = exponent_buffer_[2]; // shift up the digit;
-            // calculate the character to put to the right most digit of exponent.
-            exponent_buffer_[2] = static_cast<std::underlying_type<Op>::type>(opcode) -
-                                  static_cast<std::underlying_type<Op>::type>(Op::num_0) +
-                                  '0';
-            std::strcpy(&text_buffer_[6], mantissa_buffer_); // overwrite by exponent
-        }
-        else if (9 > mantissa_cursor_) // if still space to write
-        {
-            mantissa_buffer_[mantissa_cursor_] = static_cast<std::underlying_type<Op>::type>(opcode) -
-                                                 static_cast<std::underlying_type<Op>::type>(Op::num_0) +
-                                                 '0';
-            mantissa_cursor_++; // move cursor forward
-            std::strcpy(text_buffer_, mantissa_buffer_);
-        }
 
-        break;
+        if (!is_editing_) // if not editing
+        {                 // do preparation.
+            is_editing_float_ = false;
+            mantissa_cursor_ = 1;                                // digit 7
+            std::strcpy(mantissa_buffer_, " 0       ");          // fill by 9 spaces.Sign and 8 digits
+            std::strcpy(exponent_buffer_, " 00");                // fill by 3 space. Sing and 2 digits
+            decimal_point_position_ = kDecimalPointNotDisplayed; // -1 means, do not display the decimal point.
+
+            is_editing_ = true;
+        }
+        switch (opcode)
+        {
+        case Op::num_0:
+        case Op::num_1:
+        case Op::num_2:
+        case Op::num_3:
+        case Op::num_4:
+        case Op::num_5:
+        case Op::num_6:
+        case Op::num_7:
+        case Op::num_8:
+        case Op::num_9:
+            if (is_editing_float_)
+            {
+                exponent_buffer_[1] = exponent_buffer_[2]; // shift up the exponent digit;
+                // calculate the character to put to the right most digit of exponent.
+                exponent_buffer_[2] = static_cast<std::underlying_type<Op>::type>(opcode) -
+                                      static_cast<std::underlying_type<Op>::type>(Op::num_0) +
+                                      '0';
+                std::strcpy(&text_buffer_[6], mantissa_buffer_); // overwrite by exponent
+            }
+            else if (kFullMantissa > mantissa_cursor_) // if still space to write
+            {
+                mantissa_buffer_[mantissa_cursor_] = static_cast<std::underlying_type<Op>::type>(opcode) -
+                                                     static_cast<std::underlying_type<Op>::type>(Op::num_0) +
+                                                     '0';
+                mantissa_cursor_++; // move cursor forward
+            }
+
+            break;
+        case Op::eex:
+            // if it is not float editing mode and ready to enter to the float editing mode
+            if (!is_editing_float_ &&
+                (kFullMantissa - 4 >= mantissa_cursor_ || decimal_point_position_ != kDecimalPointNotDisplayed))
+            {
+                is_editing_float_ = true;
+            }
+            break;
+        case Op::period:
+            if (is_editing_float_)
+                ;                                                          // do nothing
+            else if (decimal_point_position_ != kDecimalPointNotDisplayed) // if decimal point already exist
+                ;                                                          // do nothing
+            else
+            {
+                if (mantissa_cursor_ == 1)                                          // if the cursor is left most digits
+                    decimal_point_position_ = kUpperMostDigit;                      // place decimal point to its right
+                else if (kFullMantissa >= mantissa_cursor_ && mantissa_cursor_ > 1) // if not, place decimal point to its left
+                    decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
+                else
+                    assert(false);
+            }
+            break;
+        default:
+            assert(false);
+        }
+        std::strcpy(text_buffer_, mantissa_buffer_);
+        if (is_editing_float_)
+            std::strcpy(&text_buffer_[6], exponent_buffer_);
     }
 }
 
@@ -257,7 +294,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     // Get a exponent part of #.#######e#####
     int exponent = std::atoi(&buffer[kExponentPos + 1]);
 
-    decimal_point_position_ = 7; // right of the upper most digit
+    decimal_point_position_ = kUpperMostDigit; // right of the upper most digit
 
     if (exponent > 99) // if the number exceed the max display number
         if (value > 0)
@@ -268,7 +305,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     else if (-99 > exponent)                    // if the number is lower than the min display number
         std::strcpy(text_buffer_, " 00000000"); // flash to zero
     else                                        // the number is in the normal range
-    {
+    {                                           // copy the mantissa withtout decimal point
         int i = 0;
         int j = 0;
         text_buffer_[i++] = buffer[j++]; // Sign
@@ -288,7 +325,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
             // calculate the offset from the engineering exponent.
             int offset_exponent = old_exponent - exponent;
 
-            // adjust the decimal point for engineering point.
+            // adjust the decimal point for engineering format.
             if (0 > offset_exponent) // that means the exponent is minus and offset is not zero
             {
                 exponent -= 3;                         // this is required only when the old_exponent is not the integer multiple of 3
@@ -296,7 +333,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
             }
             decimal_point_position_ -= offset_exponent;
         }
-
+        // append exponent to mantissa
         std::snprintf(&text_buffer_[i], 4, kDisplayFormatSpec, exponent);
     }
 }

@@ -44,6 +44,11 @@ namespace rpn_engine
     {
     public:
         /**
+         * @brief Special value to identify the decimal point is not displayed
+         *
+         */
+        const int kDecimalPointNotDisplayed = 256;
+        /**
          * @brief Construct a new Console object
          *
          */
@@ -128,7 +133,7 @@ namespace rpn_engine
         bool is_editing_float_;
         // Needs the number of digits + one character for null termination
         char text_buffer_[kNumberOfDigits + 1];
-        // -1 : none. 0..8 : right of digit N.
+        // 0..8 : right of digit N. kDecimalPointNotDisplayed : do not display
         int32_t decimal_point_position_;
         // store the mantissa text during editing.
         char mantissa_buffer_[kNumberOfDigits + 1];
