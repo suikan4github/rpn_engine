@@ -353,6 +353,6 @@ TEST(ConsoleEditing, DelMantissa)
 }
 
 //
-TEST(ConsoleEditing, DelMantissa)
+TEST(ConsoleEditing, Enter)
 {
 }
