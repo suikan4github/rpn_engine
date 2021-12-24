@@ -161,6 +161,42 @@ TEST(ConsoleEditing, SetNum_EEX5)
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed); // must be without decimal point
 }
 
+// floating input less or equal 4 digits
+TEST(ConsoleEditing, SetNum_EEX6)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  00"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_1);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  01"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_2);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  12"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_3);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  23"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
 // Left most decimal point
 TEST(ConsoleEditing, DecimalPointAtDigit7)
 {
@@ -231,4 +267,92 @@ TEST(ConsoleEditing, DecimalPointAtDigit0)
     decimal_point = c.GetDecimalPointPosition();
     EXPECT_STREQ(display_text, " 12345678"); // must not change
     EXPECT_EQ(decimal_point, 0);             // must zero
+}
+
+// Right most decimal point
+TEST(ConsoleEditing, DelFloat)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  00"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_1);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  01"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_2);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  12"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  01"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  00"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123     "); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+//
+TEST(ConsoleEditing, DelMantissa)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123     "); // must delete last digit
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1       "); // must delete last digit
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // must delete last digit
+    EXPECT_EQ(decimal_point, 7);
+}
+
+//
+TEST(ConsoleEditing, DelMantissa)
+{
 }

@@ -51,9 +51,35 @@ void rpn_engine::Console::PreExecutionProcess()
 
     if (is_editing_) // if editing, convert text to value and set it to stack.
     {
-        assert(false); // to do : Create value to push.
+        float mantissa;
+        int exponent = 0;
+        char temp_buffer[12];
+
+        if (is_editing_float_)
+        {
+            std::sscanf(exponent_buffer_, "%d", &exponent);
+        }
+
+        // Convert the mantissa_buffer and decimal point to the one "nominal" literal with decimal point
+        int current_decimal_position = 8;  // initial point is left most ( sign )
+        int current_destination_index = 0; // initial index of destination string.
+        // from lest most to right most ( 9 digits)
+        for (int index = 0; index < 9; index++)
+        {
+            temp_buffer[current_destination_index++] = mantissa_buffer_[index]; // copy one digit
+
+            if (current_decimal_position == decimal_point_position_) // If decimal point is needed
+                temp_buffer[current_destination_index++] = '.';      // add point
+            current_decimal_position--;                              // Forwarding pointer
+        }
+
+        temp_buffer[9] = '\0'; // terminate the string.
+
+        std::sscanf(temp_buffer, "%f", &mantissa); // Convert nominal literal to float.
+        value = mantissa * std::pow(10, exponent); // adjust exponent
+
         engine_.Push(value);
-        is_editing_ = false; // ed of editing
+        is_editing_ = false; // end of editing
         is_pushable_ = true; // after editing, stack is pushable.
     }
 }
@@ -98,6 +124,12 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
         if (!is_pushable_)         // If stack is not pushbale,
             engine_.Pop();         // discard stack top.
         engine_.Operation(opcode); // And then, push Pi
+        break;
+    case Op::clx:
+        engine_.SetX(0.0);
+        is_pushable_ = false;
+        break;
+    case Op::enter:
         break;
     default:
         engine_.Operation(opcode);
@@ -144,7 +176,6 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                 exponent_buffer_[2] = static_cast<std::underlying_type<Op>::type>(opcode) -
                                       static_cast<std::underlying_type<Op>::type>(Op::num_0) +
                                       '0';
-                std::strcpy(&text_buffer_[6], mantissa_buffer_); // overwrite by exponent
             }
             else if (kFullMantissa > mantissa_cursor_) // if still space to write
             {
@@ -176,6 +207,33 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                     decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
                 else
                     assert(false);
+            }
+            break;
+        case Op::del:
+            if (is_editing_float_)
+            {
+                if (!std::strcmp(exponent_buffer_, " 00"))
+                    is_editing_float_ = false;
+                else if (!std::strcmp(exponent_buffer_, "-00"))
+                    exponent_buffer_[0] = ' '; // delete minus sign
+                else
+                { // 1/10 the eponent
+                    exponent_buffer_[2] = exponent_buffer_[1];
+                    exponent_buffer_[1] = '0';
+                }
+            }
+            else // not float
+            {
+                if (mantissa_cursor_ == 2) // if deleting right most digit
+                {
+                    HandleNonEditingOp(Op::clx); // delete X.
+                    return;                      // HandleNonEditingOp() render the text_buffer_. So ,we can leave now.
+                }
+                else
+                {
+                    mantissa_cursor_--;
+                    mantissa_buffer_[mantissa_cursor_] = ' '; // delete one digit
+                }
             }
             break;
         default:

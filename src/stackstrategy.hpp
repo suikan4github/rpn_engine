@@ -1469,7 +1469,15 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
     case Op::bit_not:
         BitNot();
         break;
-
+    case Op::clx:
+        assert(false);
+        break;
+    case Op::enter:
+        assert(false);
+        break;
+    case Op::change_display:
+        assert(false);
+        break;
     default: // in case of wrong op code.
         assert(false);
     }
