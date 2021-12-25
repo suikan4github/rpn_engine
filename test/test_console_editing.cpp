@@ -575,3 +575,60 @@ TEST(ConsoleEditing, ChsOp)
     EXPECT_STREQ(display_text, "-12300000"); // must negate
     EXPECT_EQ(decimal_point, 5);
 }
+
+// Test various input
+TEST(ConsoleEditing, NumAndEnter1)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::num_6);
+    c.Input(Op::num_7);
+    c.Input(Op::num_8);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345678");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    // test to place decimal point
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345678"); // must not change
+    EXPECT_EQ(decimal_point, 0);             // must zero
+}
+
+// Test various input
+TEST(ConsoleEditing, NumAndEnter2)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::period);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::num_6);
+    c.Input(Op::num_7);
+    c.Input(Op::num_8);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345678");
+    EXPECT_EQ(decimal_point, 7);
+
+    // test to place decimal point
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345678"); // must not change
+    EXPECT_EQ(decimal_point, 7);             // 7
+}

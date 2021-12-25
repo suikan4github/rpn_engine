@@ -51,7 +51,7 @@ void rpn_engine::Console::PreExecutionProcess()
 
     if (is_editing_) // if editing, convert text to value and set it to stack.
     {
-        float mantissa;
+        double mantissa;
         int exponent = 0;
         char temp_buffer[12];
 
@@ -73,10 +73,10 @@ void rpn_engine::Console::PreExecutionProcess()
             current_decimal_position--;                              // Forwarding pointer
         }
 
-        temp_buffer[9] = '\0'; // terminate the string.
+        temp_buffer[current_destination_index] = '\0'; // terminate the string.
 
-        std::sscanf(temp_buffer, "%f", &mantissa); // Convert nominal literal to float.
-        value = mantissa * std::pow(10, exponent); // adjust exponent
+        std::sscanf(temp_buffer, "%lf", &mantissa); // Convert nominal literal to float.
+        value = mantissa * std::pow(10, exponent);  // adjust exponent
 
         engine_.Push(value);
         is_editing_ = false; // end of editing
