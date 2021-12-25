@@ -86,7 +86,6 @@ void rpn_engine::Console::PreExecutionProcess()
 
 void rpn_engine::Console::PostExecutionProcess()
 {
-    is_pushable_ = true;
 
     switch (display_mode_)
     {
@@ -100,7 +99,7 @@ void rpn_engine::Console::PostExecutionProcess()
         RenderScientificMode(true);
         break;
     default:
-        assert(false);
+        assert(false); // program logic error
     }
 }
 
@@ -118,21 +117,25 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
             display_mode_ = DisplayMode::engineering;
         else
             display_mode_ = DisplayMode::fixed;
-
+        is_pushable_ = true;
         break;
     case Op::pi:
         if (!is_pushable_)         // If stack is not pushbale,
             engine_.Pop();         // discard stack top.
         engine_.Operation(opcode); // And then, push Pi
+        is_pushable_ = true;
         break;
     case Op::clx:
         engine_.SetX(0.0);
         is_pushable_ = false;
         break;
     case Op::enter:
+        engine_.Operation(Op::duplicate);
+        is_pushable_ = false;
         break;
     default:
         engine_.Operation(opcode);
+        is_pushable_ = true;
         break;
     }
 
@@ -206,7 +209,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                 else if (kFullMantissa >= mantissa_cursor_ && mantissa_cursor_ > 1) // if not, place decimal point to its left
                     decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
                 else
-                    assert(false);
+                    assert(false); // program logic error
             }
             break;
         case Op::del:
@@ -237,7 +240,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             }
             break;
         default:
-            assert(false);
+            assert(false); // unimplemented error
         }
         std::strcpy(text_buffer_, mantissa_buffer_);
         if (is_editing_float_)
@@ -319,7 +322,7 @@ void rpn_engine::Console::RenderFixedMode()
             int_value = value * 1e0 + 0.5;
         }
         else
-            assert(false);
+            assert(false); // program logic error
 
         // text_buffer_[0] is space for sign
         std::sprintf(&text_buffer_[1], "%08d", int_value);
@@ -347,7 +350,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
     // Convert to a text format as #.#######e#####
     std::snprintf(buffer, kBufferSize, kFormatSpec, value);
     // Check wether the format is OK.
-    assert(buffer[kExponentPos] == kExponentMark);
+    assert(buffer[kExponentPos] == kExponentMark); // program logic error
 
     // Get a exponent part of #.#######e#####
     int exponent = std::atoi(&buffer[kExponentPos + 1]);
