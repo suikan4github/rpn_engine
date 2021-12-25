@@ -222,5 +222,14 @@ namespace rpn_engine
          * @param engineering_mode true : engineering mode, false : scientific mode.
          */
         void RenderScientificMode(bool engineering_mode);
+
+        /**
+         * @brief Convert the number of stack top to the hex representation.
+         * @details
+         * Before conversion, the value is rounded to integer .
+         * The value is displayed as 32bit integer in hex format.
+         *
+         */
+        void RenderHexMode();
     };
 }

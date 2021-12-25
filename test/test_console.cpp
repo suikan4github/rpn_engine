@@ -402,4 +402,34 @@ TEST(Console, HexMode)
 
     c.SetIsHexMode(false);
     EXPECT_FALSE(c.GetIsHexMode());
+
+    c.Input(Op::hex);
+    EXPECT_TRUE(c.GetIsHexMode());
+
+    c.Input(Op::dec);
+    EXPECT_FALSE(c.GetIsHexMode());
+}
+
+TEST(Console, HexModeRenering)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_0);
+
+    c.Input(Op::hex);
+    EXPECT_TRUE(c.GetIsHexMode());
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 0000000A");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::dec);
+    EXPECT_FALSE(c.GetIsHexMode());
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 10000000");
+    EXPECT_EQ(decimal_point, 6);
 }

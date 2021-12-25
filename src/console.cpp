@@ -100,20 +100,25 @@ void rpn_engine::Console::PreExecutionProcess()
 
 void rpn_engine::Console::PostExecutionProcess()
 {
-    switch (display_mode_)
+    if (is_hex_mode_) // if hex mode
+        RenderHexMode();
+    else // decimal mode
     {
-    case rpn_engine::DisplayMode::fixed:
-        RenderFixedMode();
-        break;
-    case rpn_engine::DisplayMode::scientific:
-        RenderScientificMode(false);
-        break;
-    case rpn_engine::DisplayMode::engineering:
-        RenderScientificMode(true);
-        break;
-    default:
-        assert(false); // program logic error
-    }
+        switch (display_mode_)
+        {
+        case rpn_engine::DisplayMode::fixed:
+            RenderFixedMode();
+            break;
+        case rpn_engine::DisplayMode::scientific:
+            RenderScientificMode(false);
+            break;
+        case rpn_engine::DisplayMode::engineering:
+            RenderScientificMode(true);
+            break;
+        default:
+            assert(false); // program logic error
+        }
+    } // hex / decimal mode
 }
 
 void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
@@ -146,6 +151,14 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
     case Op::enter:
         engine_.Operation(Op::duplicate);
         is_pushable_ = false; // Only clx and enter makes NOT pushable
+        break;
+    case Op::hex: // change to hex mode
+        SetIsHexMode(true);
+        is_pushable_ = true;
+        break;
+    case Op::dec: // change to decimal mode
+        SetIsHexMode(false);
+        is_pushable_ = true;
         break;
     default: // all other opcode should be passed through to the engine.
         engine_.Operation(opcode);
@@ -271,7 +284,6 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             else                                                                // If fixed point input mode
                 mantissa_buffer_[0] = (mantissa_buffer_[0] == '-') ? ' ' : '-'; // change sign of mantissa
 
-            ;
             break;
         default:
             assert(false); // unimplemented error
@@ -431,4 +443,13 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
         // append exponent to mantissa
         std::snprintf(&text_buffer_[i], 4, kDisplayFormatSpec, exponent);
     }
+}
+
+void rpn_engine::Console::RenderHexMode()
+{
+    // get the stack top, take real part and round.
+    int32_t value = engine_.Get(0).real() + 0.5;
+
+    std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
+    decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point
 }
