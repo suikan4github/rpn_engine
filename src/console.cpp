@@ -89,7 +89,6 @@ void rpn_engine::Console::PreExecutionProcess()
 
 void rpn_engine::Console::PostExecutionProcess()
 {
-
     switch (display_mode_)
     {
     case rpn_engine::DisplayMode::fixed:
@@ -113,7 +112,8 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
     switch (opcode)
     {
     case Op::change_display:
-        // Rotate the display mode for each time "display_mode" key pushed.
+        // Display mode rotates fixed->scientific->engineering->fixed for each time
+        // change_display command is issued.
         if (display_mode_ == DisplayMode::fixed)
             display_mode_ = DisplayMode::scientific;
         else if (display_mode_ == DisplayMode::scientific)
@@ -130,13 +130,13 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
         break;
     case Op::clx:
         engine_.SetX(0.0);
-        is_pushable_ = false;
+        is_pushable_ = false; // Only clx and enter makes NOT pushable
         break;
     case Op::enter:
         engine_.Operation(Op::duplicate);
-        is_pushable_ = false;
+        is_pushable_ = false; // Only clx and enter makes NOT pushable
         break;
-    default:
+    default: // all other opcode should be passed through to the engine.
         engine_.Operation(opcode);
         is_pushable_ = true;
         break;
@@ -148,11 +148,8 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
 void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 {
 
-    if (opcode == Op::eex && !is_editing_) // The eex during non editing mode
-        HandleNonEditingOp(Op ::pi);       // is translated as pi
-
-    else if (opcode == Op::chs && !is_editing_) // The chs during non editing mode
-        HandleNonEditingOp(Op ::neg);           // is translated as negate operation
+    if (opcode == Op::chs && !is_editing_) // The chs during non editing mode
+        HandleNonEditingOp(Op ::neg);      // is translated as negate operation
     else
     {
 
@@ -200,6 +197,18 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             if (!is_editing_float_ &&
                 (kFullMantissa - 4 >= mantissa_cursor_ || decimal_point_position_ != kDecimalPointNotDisplayed))
             {
+                if (!std::strcmp(mantissa_buffer_, " 00000000") || // If the mantissa is 0
+                    !std::strcmp(mantissa_buffer_, " 0000000 ") ||
+                    !std::strcmp(mantissa_buffer_, " 000000  ") ||
+                    !std::strcmp(mantissa_buffer_, " 00000   ") ||
+                    !std::strcmp(mantissa_buffer_, " 0000    ") ||
+                    !std::strcmp(mantissa_buffer_, " 000     ") ||
+                    !std::strcmp(mantissa_buffer_, " 00      ") ||
+                    !std::strcmp(mantissa_buffer_, " 0       "))
+                {
+                    std::strcpy(mantissa_buffer_, " 1       ");          // enforce it 1
+                    decimal_point_position_ = kDecimalPointNotDisplayed; // do not display "."
+                }
                 is_editing_float_ = true;
             }
             break;

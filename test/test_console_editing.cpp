@@ -81,8 +81,8 @@ TEST(ConsoleEditing, SetEEX)
     c.Input(Op::eex);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 31415927"); // must be pi
-    EXPECT_EQ(decimal_point, 7);
+    EXPECT_STREQ(display_text, " 1     00"); // must be pi
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
 
 // floating input prevention
@@ -631,4 +631,19 @@ TEST(ConsoleEditing, NumAndEnter2)
     decimal_point = c.GetDecimalPointPosition();
     EXPECT_STREQ(display_text, " 12345678"); // must not change
     EXPECT_EQ(decimal_point, 7);             // 7
+}
+
+// Test various input
+TEST(ConsoleEditing, EEXOnZero)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::clx);
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1     00");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
