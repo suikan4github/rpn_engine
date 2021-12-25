@@ -38,7 +38,23 @@ namespace rpn_engine
 
     /**
      * @brief User interface of a calculator
+     * @details
+     * User interface class of the RPN calculator.
      *
+     * This class receives input key by @ref Input() function and calculate
+     * by its internal stack machine. The result is obtained by the
+     * @ref GetText() function and @ref GetDecimalPointPosition() function.
+     *
+     * There are 3 display mode .
+     * @li Fixed mode : The number is displayed as SNNN.NNNNN where S and N are sign and number, respectively
+     * @li Scientific mode. The number is displayed as SM.MMMMSEE where S,M and E are sign, mantissa and exponent, respectively.
+     * @li Engineering mode. Special scientific mode which the exponent is always integer multiple of 3.
+     *
+     * There is an special hex mode. The hex mode override the above display mode.
+     * And it always shows number as 32bit integer. The number is shown as 8digit
+     * zero filled hex signed integer.
+     *
+     * The result is always rounded and wrapped around to the 32bit integer.
      */
     class Console
     {
@@ -78,6 +94,21 @@ namespace rpn_engine
          * ready by the @ref GetIsFuncKeyPressed() member function.
          */
         void SetIsFuncKeyPressed(bool state);
+
+        /**
+         * @brief Get the is_hex_mode_ state
+         *
+         * @return true Hex mode
+         * @return false Decimal mode
+         */
+        bool GetIsHexMode();
+
+        /**
+         * @brief Set the is_hex_mode_ state
+         *
+         * @param state New state of the hex mode.
+         */
+        void SetIsHexMode(bool state);
 
         /**
          * @brief Input from pad.
@@ -132,6 +163,7 @@ namespace rpn_engine
         bool is_pushable_;
         int mantissa_cursor_;
         bool is_editing_float_;
+        bool is_hex_mode_;
         // Needs the number of digits + one character for null termination
         char text_buffer_[kNumberOfDigits + 1];
         // 0..8 : right of digit N. kDecimalPointNotDisplayed : do not display

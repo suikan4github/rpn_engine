@@ -77,6 +77,8 @@ namespace rpn_engine
         enter,               ///< Delimiter between numbers.
         clx,                 ///< Clear X register. Do not feed to Stack engine.
         undo,                ///< Undo the previous operation. Do not feed to Stack engine.
+        hex,                 ///< Change to hex mode.
+        dec,                 ///< Change to dec mode.
                              // Editing op code.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.

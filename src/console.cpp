@@ -16,7 +16,8 @@ rpn_engine::Console::Console() : engine_(StackStrategy<std::complex<double>>(kDe
                                  is_editing_(false),
                                  is_pushable_(false),
                                  mantissa_cursor_(1),
-                                 is_editing_float_(false)
+                                 is_editing_float_(false),
+                                 is_hex_mode_(false)
 {
     PostExecutionProcess();
 }
@@ -33,6 +34,16 @@ bool rpn_engine::Console::GetIsFuncKeyPressed()
 void rpn_engine::Console::SetIsFuncKeyPressed(bool state)
 {
     is_func_key_pressed_ = state;
+}
+
+bool rpn_engine::Console::GetIsHexMode()
+{
+    return is_hex_mode_;
+}
+
+void rpn_engine::Console::SetIsHexMode(bool state)
+{
+    is_hex_mode_ = state;
 }
 
 void rpn_engine::Console::GetText(char display_text[])
@@ -273,7 +284,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 
 void rpn_engine::Console::Input(Op opcode)
 {
-    if ((Op::undo >= opcode) && (opcode >= Op::duplicate))
+    if ((Op::num_0 > opcode) && (opcode >= Op::duplicate))
         HandleNonEditingOp(opcode);
     else
         HandleEditingOp(opcode);
