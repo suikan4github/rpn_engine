@@ -95,29 +95,29 @@ TEST(BasicBitwiseTest, BitMultiply)
     s->Push(3.14);
     s->Push(3);
     s->Push(7);
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     EXPECT_EQ(s->Get(0), 21);
     EXPECT_EQ(s->Get(1), 3.14);
 
     s->Push(-3);
     s->Push(7);
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     EXPECT_EQ(s->Get(0), -21);
 
     s->Push(3);
     s->Push(-7);
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     EXPECT_EQ(s->Get(0), -21);
 
     s->Push(-3);
     s->Push(-7);
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     EXPECT_EQ(s->Get(0), 21);
 
     // truncation test
     s->Push(3.14);
     s->Push(7.1);
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     EXPECT_EQ(s->Get(0), 21);
 
     // Undo test

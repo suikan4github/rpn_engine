@@ -46,7 +46,7 @@ TEST(ComplexBitwiseTest, BitMultiply)
     s->Push(std::complex<double>(3.4, 5));
     s->Push(std::complex<double>(2.1, 7.3));
 
-    s->Operation(rpn_engine::Op::bitmul);
+    s->Operation(rpn_engine::Op::bit_mul);
     auto c = s->Get(0);
     EXPECT_EQ(c.real(), 6); // real part must be integer
     EXPECT_EQ(c.imag(), 0); // imaginary part must be 0

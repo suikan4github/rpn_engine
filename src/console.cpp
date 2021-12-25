@@ -62,40 +62,50 @@ void rpn_engine::Console::PreExecutionProcess()
 
     if (is_editing_) // if editing, convert text to value and set it to stack.
     {
-        double mantissa;
-        int exponent = 0;
-        char temp_buffer[12];
-
-        if (is_editing_float_)
+        if (is_hex_mode_)
         {
-            std::sscanf(exponent_buffer_, "%d", &exponent);
+            int32_t hexvalue;
+            std::sscanf(mantissa_buffer_, "%X", &hexvalue); // Convert nominal literal to int32_t.
+            value = hexvalue;
         }
-
-        // Convert the mantissa_buffer and decimal point to the one "nominal" literal with decimal point
-        // The format of mantissa is "smmmmmmmm" where s is sign, m is digits.
-        // We want to nominal format "smmm.mmmmm" where "." is decimal point The decimal point position
-        // is calculated from variable decimal_point_position_
-        int current_decimal_position = 8;  // initial point is left most ( sign )
-        int current_destination_index = 0; // initial index of destination string.
-        // from lest most to right most ( 9 digits)
-        for (int index = 0; index < 9; index++)
+        else
         {
-            temp_buffer[current_destination_index++] = mantissa_buffer_[index]; // copy one digit
 
-            if (current_decimal_position == decimal_point_position_) // If decimal point is needed
-                temp_buffer[current_destination_index++] = '.';      // add point
-            current_decimal_position--;                              // Forwarding pointer
-        }
+            double mantissa;
+            int exponent = 0;
+            char temp_buffer[12];
 
-        temp_buffer[current_destination_index] = '\0'; // terminate the string.
+            if (is_editing_float_)
+            {
+                std::sscanf(exponent_buffer_, "%d", &exponent);
+            }
 
-        std::sscanf(temp_buffer, "%lf", &mantissa); // Convert nominal literal to float.
-        value = mantissa * std::pow(10, exponent);  // adjust exponent
+            // Convert the mantissa_buffer and decimal point to the one "nominal" literal with decimal point
+            // The format of mantissa is "smmmmmmmm" where s is sign, m is digits.
+            // We want to nominal format "smmm.mmmmm" where "." is decimal point The decimal point position
+            // is calculated from variable decimal_point_position_
+            int current_decimal_position = 8;  // initial point is left most ( sign )
+            int current_destination_index = 0; // initial index of destination string.
+            // from lest most to right most ( 9 digits)
+            for (int index = 0; index < 9; index++)
+            {
+                temp_buffer[current_destination_index++] = mantissa_buffer_[index]; // copy one digit
 
+                if (current_decimal_position == decimal_point_position_) // If decimal point is needed
+                    temp_buffer[current_destination_index++] = '.';      // add point
+                current_decimal_position--;                              // Forwarding pointer
+            }
+
+            temp_buffer[current_destination_index] = '\0'; // terminate the string.
+
+            std::sscanf(temp_buffer, "%lf", &mantissa); // Convert nominal literal to float.
+            value = mantissa * std::pow(10, exponent);  // adjust exponent
+
+        } // ? hexmode
         engine_.Push(value);
         is_editing_ = false; // end of editing
         is_pushable_ = true; // after editing, stack is pushable.
-    }
+    }                        // ? editing
 }
 
 void rpn_engine::Console::PostExecutionProcess()
@@ -173,7 +183,12 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 {
 
     if (opcode == Op::chs && !is_editing_) // The chs during non editing mode
-        HandleNonEditingOp(Op ::neg);      // is translated as negate operation
+    {
+        if (is_hex_mode_)
+            HandleNonEditingOp(Op ::bit_neg); // is translated as bit negate operation
+        else
+            HandleNonEditingOp(Op ::neg); // is translated as negate operation
+    }
     else
     {
 
@@ -214,41 +229,66 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                                                      '0';
                 mantissa_cursor_++; // move cursor forward
             }
-
+            break;
+        case Op::num_a:
+        case Op::num_b:
+        case Op::num_c:
+        case Op::num_d:
+        case Op::num_e:
+        case Op::num_f:
+            if (is_editing_float_)
+                assert(false);                         // logic error
+            else if (kFullMantissa > mantissa_cursor_) // if still space to write
+            {
+                mantissa_buffer_[mantissa_cursor_] = static_cast<std::underlying_type<Op>::type>(opcode) -
+                                                     static_cast<std::underlying_type<Op>::type>(Op::num_a) +
+                                                     'A';
+                mantissa_cursor_++; // move cursor forward
+            }
             break;
         case Op::eex:
-            // if it is not float editing mode and ready to enter to the float editing mode
-            if (!is_editing_float_ &&
-                (kFullMantissa - 4 >= mantissa_cursor_ || decimal_point_position_ != kDecimalPointNotDisplayed))
+            if (is_hex_mode_)
+                ; // do nothing
+            else  // if not hex mode.
             {
-                if (!std::strcmp(mantissa_buffer_, " 00000000") || // If the mantissa is 0
-                    !std::strcmp(mantissa_buffer_, " 0000000 ") ||
-                    !std::strcmp(mantissa_buffer_, " 000000  ") ||
-                    !std::strcmp(mantissa_buffer_, " 00000   ") ||
-                    !std::strcmp(mantissa_buffer_, " 0000    ") ||
-                    !std::strcmp(mantissa_buffer_, " 000     ") ||
-                    !std::strcmp(mantissa_buffer_, " 00      ") ||
-                    !std::strcmp(mantissa_buffer_, " 0       "))
+                // if it is not float editing mode and ready to enter to the float editing mode
+                if (!is_editing_float_ &&
+                    (kFullMantissa - 4 >= mantissa_cursor_ || decimal_point_position_ != kDecimalPointNotDisplayed))
                 {
-                    std::strcpy(mantissa_buffer_, " 1       ");          // enforce it 1
-                    decimal_point_position_ = kDecimalPointNotDisplayed; // do not display "."
+                    if (!std::strcmp(mantissa_buffer_, " 00000000") || // If the mantissa is 0
+                        !std::strcmp(mantissa_buffer_, " 0000000 ") ||
+                        !std::strcmp(mantissa_buffer_, " 000000  ") ||
+                        !std::strcmp(mantissa_buffer_, " 00000   ") ||
+                        !std::strcmp(mantissa_buffer_, " 0000    ") ||
+                        !std::strcmp(mantissa_buffer_, " 000     ") ||
+                        !std::strcmp(mantissa_buffer_, " 00      ") ||
+                        !std::strcmp(mantissa_buffer_, " 0       "))
+                    {
+                        std::strcpy(mantissa_buffer_, " 1       ");          // enforce it 1
+                        decimal_point_position_ = kDecimalPointNotDisplayed; // do not display "."
+                    }
+                    is_editing_float_ = true;
                 }
-                is_editing_float_ = true;
             }
             break;
         case Op::period:
-            if (is_editing_float_)
-                ;                                                          // do nothing
-            else if (decimal_point_position_ != kDecimalPointNotDisplayed) // if decimal point already exist
-                ;                                                          // do nothing
-            else
+            if (is_hex_mode_)
+                ; // do nothing
+            else  // if not hex mode.
             {
-                if (mantissa_cursor_ == 1)                                          // if the cursor is left most digits
-                    decimal_point_position_ = kUpperMostDigit;                      // place decimal point to its right
-                else if (kFullMantissa >= mantissa_cursor_ && mantissa_cursor_ > 1) // if not, place decimal point to its left
-                    decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
+                if (is_editing_float_)
+                    ;                                                          // do nothing
+                else if (decimal_point_position_ != kDecimalPointNotDisplayed) // if decimal point already exist
+                    ;                                                          // do nothing
                 else
-                    assert(false); // program logic error
+                {
+                    if (mantissa_cursor_ == 1)                                          // if the cursor is left most digits
+                        decimal_point_position_ = kUpperMostDigit;                      // place decimal point to its right
+                    else if (kFullMantissa >= mantissa_cursor_ && mantissa_cursor_ > 1) // if not, place decimal point to its left
+                        decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
+                    else
+                        assert(false); // program logic error
+                }
             }
             break;
         case Op::del:
@@ -268,7 +308,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             {
                 if (mantissa_cursor_ == 2) // if deleting right most digit
                 {
-                    HandleNonEditingOp(Op::clx); // delete X.
+                    HandleNonEditingOp(Op::clx); // delete X. And then, set is_editing = false implicitly.
                     return;                      // HandleNonEditingOp() render the text_buffer_. So ,we can leave now.
                 }
                 else
@@ -279,11 +319,16 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             }
             break;
         case Op::chs:
-            if (is_editing_float_)                                              // If floating input mode
-                exponent_buffer_[0] = (exponent_buffer_[0] == '-') ? ' ' : '-'; // change sign of exponent
-            else                                                                // If fixed point input mode
-                mantissa_buffer_[0] = (mantissa_buffer_[0] == '-') ? ' ' : '-'; // change sign of mantissa
+            if (is_hex_mode_)
+                ; // do nothing
+            else  // if not hex mode.
+            {
 
+                if (is_editing_float_)                                              // If floating input mode
+                    exponent_buffer_[0] = (exponent_buffer_[0] == '-') ? ' ' : '-'; // change sign of exponent
+                else                                                                // If fixed point input mode
+                    mantissa_buffer_[0] = (mantissa_buffer_[0] == '-') ? ' ' : '-'; // change sign of mantissa
+            }
             break;
         default:
             assert(false); // unimplemented error
@@ -448,7 +493,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
 void rpn_engine::Console::RenderHexMode()
 {
     // get the stack top, take real part and round.
-    int32_t value = engine_.Get(0).real() + 0.5;
+    int32_t value = std::round(engine_.Get(0).real());
 
     std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
     decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point

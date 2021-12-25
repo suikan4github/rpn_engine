@@ -64,7 +64,7 @@ namespace rpn_engine
         swap_re_im,          ///< Pop X, Push Im(X)+Re(X)*j
         bit_add,             ///< Pop X, Y, do Y + X, then push
         bit_sub,             ///< Pop X, Y, do Y - X, then push
-        bitmul,              ///< Pop X, Y, do  X * Y, then push
+        bit_mul,             ///< Pop X, Y, do  X * Y, then push
         bit_div,             ///< Pop X, Y, do Y / X, then push
         bit_neg,             ///< Pop X, do  -X, then push
         bit_or,              ///< Pop X, Y, do Y | X, then push
@@ -1445,7 +1445,7 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
     case Op::bit_sub:
         BitSubtract();
         break;
-    case Op::bitmul:
+    case Op::bit_mul:
         BitMultiply();
         break;
     case Op::bit_div:
