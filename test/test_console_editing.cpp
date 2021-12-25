@@ -684,7 +684,7 @@ TEST(ConsoleEditing, NumAndEnter4)
     EXPECT_EQ(decimal_point, 7);             // 7
 }
 
-// Test various input
+// EEX when there is not zero
 TEST(ConsoleEditing, EEXOnZero)
 {
     rpn_engine::Console c;
@@ -697,4 +697,66 @@ TEST(ConsoleEditing, EEXOnZero)
     decimal_point = c.GetDecimalPointPosition();
     EXPECT_STREQ(display_text, " 1     00");
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+TEST(ConsoleEditing, EEXOnZero2)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::clx);
+    c.Input(Op::num_0);
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1     00");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+TEST(ConsoleEditing, EEXOnZero3)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::clx);
+    c.Input(Op::num_0);
+    c.Input(Op::period);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1     00");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// duplicate eex
+TEST(ConsoleEditing, DuplicateEex)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::clx);
+    c.Input(Op::num_3);
+    c.Input(Op::period);
+    c.Input(Op::num_1);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 314   04");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::eex);
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 314   04"); // must not change
+    EXPECT_EQ(decimal_point, 7);
 }
