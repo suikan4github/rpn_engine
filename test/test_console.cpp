@@ -384,3 +384,22 @@ TEST(Console, Inputmode)
     EXPECT_STREQ(display_text, "+97409+00");
     EXPECT_EQ(decimal_point, 6);
 }
+
+TEST(Console, HexMode)
+{
+    rpn_engine::Console c;
+
+    EXPECT_FALSE(c.GetIsHexMode());
+
+    c.SetIsHexMode(false);
+    EXPECT_FALSE(c.GetIsHexMode());
+
+    c.SetIsHexMode(true);
+    EXPECT_TRUE(c.GetIsHexMode());
+
+    c.SetIsHexMode(true);
+    EXPECT_TRUE(c.GetIsHexMode());
+
+    c.SetIsHexMode(false);
+    EXPECT_FALSE(c.GetIsHexMode());
+}
