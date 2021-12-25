@@ -97,6 +97,7 @@ namespace rpn_engine
         period,              ///< Constant for key input. Do not feed to Stack engine.
         eex,                 ///< Delimiter for exponent intput. Do not feed to Stack engine.
         del,                 ///< Delete one char or clx. Do not feed to Stack engine.
+        chs,                 ///< negate the sign
     };
 
     /**

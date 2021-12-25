@@ -269,7 +269,7 @@ TEST(ConsoleEditing, DecimalPointAtDigit0)
     EXPECT_EQ(decimal_point, 0);             // must zero
 }
 
-// Right most decimal point
+// Test del key in exponent
 TEST(ConsoleEditing, DelFloat)
 {
     rpn_engine::Console c;
@@ -323,8 +323,8 @@ TEST(ConsoleEditing, DelFloat)
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
 
-//
-TEST(ConsoleEditing, DelMantissa)
+// Test del key in fixed point
+TEST(ConsoleEditing, DelFixed)
 {
     rpn_engine::Console c;
     char display_text[12];
@@ -354,6 +354,7 @@ TEST(ConsoleEditing, DelMantissa)
 
 namespace rpn_engine
 {
+    // Test enter key
     TEST(ConsoleEditing, Enter)
     {
         rpn_engine::Console c;
@@ -406,4 +407,171 @@ namespace rpn_engine
         EXPECT_EQ(e.real(), 123.0);
         EXPECT_EQ(e.imag(), 0);
     }
+}
+
+// Test chs on fixed input
+TEST(ConsoleEditing, ChsFixed)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-1234    "); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Test chs on floating input
+TEST(ConsoleEditing, ChsFloat)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.Input(Op::num_5);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  05"); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234 -05"); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  05"); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Test chs and del on fixed input
+TEST(ConsoleEditing, ChsDelFixed)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-1234    "); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-123     "); // must hold sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-12      "); // must hold sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-1       "); // must hold sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // must 0
+    EXPECT_EQ(decimal_point, 7);
+}
+
+// Test chs del on floating input
+TEST(ConsoleEditing, ChsDelFloat)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.Input(Op::num_5);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  05"); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234 -05"); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234 -00"); // must hold sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  00"); // must change sign
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Test chs as operation
+TEST(ConsoleEditing, ChsOp)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12300000"); //
+    EXPECT_EQ(decimal_point, 5);
+
+    c.Input(Op::chs);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-12300000"); // must negate
+    EXPECT_EQ(decimal_point, 5);
 }

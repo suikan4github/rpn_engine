@@ -147,6 +147,9 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 
     if (opcode == Op::eex && !is_editing_) // The eex during non editing mode
         HandleNonEditingOp(Op ::pi);       // is translated as pi
+
+    else if (opcode == Op::chs && !is_editing_) // The chs during non editing mode
+        HandleNonEditingOp(Op ::neg);           // is translated as negate operation
     else
     {
 
@@ -238,6 +241,14 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                     mantissa_buffer_[mantissa_cursor_] = ' '; // delete one digit
                 }
             }
+            break;
+        case Op::chs:
+            if (is_editing_float_)                                              // If floating input mode
+                exponent_buffer_[0] = (exponent_buffer_[0] == '-') ? ' ' : '-'; // change sign of exponent
+            else                                                                // If fixed point input mode
+                mantissa_buffer_[0] = (mantissa_buffer_[0] == '-') ? ' ' : '-'; // change sign of mantissa
+
+            ;
             break;
         default:
             assert(false); // unimplemented error
