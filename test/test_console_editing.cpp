@@ -634,6 +634,57 @@ TEST(ConsoleEditing, NumAndEnter2)
 }
 
 // Test various input
+TEST(ConsoleEditing, NumAndEnter3)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::period);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::eex);
+    c.Input(Op::num_8);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123   08");
+    EXPECT_EQ(decimal_point, 7);
+
+    // test to place decimal point
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+12300+08"); //
+    EXPECT_EQ(decimal_point, 7);             // 7
+}
+
+// Test various input
+TEST(ConsoleEditing, NumAndEnter4)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::eex);
+    c.Input(Op::num_8);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123   08");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    // test to place decimal point
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+12300+10"); //
+    EXPECT_EQ(decimal_point, 7);             // 7
+}
+
+// Test various input
 TEST(ConsoleEditing, EEXOnZero)
 {
     rpn_engine::Console c;
