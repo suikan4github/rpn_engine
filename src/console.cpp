@@ -61,6 +61,9 @@ void rpn_engine::Console::PreExecutionProcess()
         }
 
         // Convert the mantissa_buffer and decimal point to the one "nominal" literal with decimal point
+        // The format of mantissa is "smmmmmmmm" where s is sign, m is digits.
+        // We want to nominal format "smmm.mmmmm" where "." is decimal point The decimal point position
+        // is calculated from variable decimal_point_position_
         int current_decimal_position = 8;  // initial point is left most ( sign )
         int current_destination_index = 0; // initial index of destination string.
         // from lest most to right most ( 9 digits)
