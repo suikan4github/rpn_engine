@@ -480,8 +480,8 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
             // adjust the decimal point for engineering format.
             if (0 > offset_exponent) // that means the exponent is minus and offset is not zero
             {
-                exponent -= 3;                         // this is required only when the old_exponent is not the integer multiple of 3
-                offset_exponent = 3 + offset_exponent; // adjust for the minus exponent
+                exponent -= 3;        // this is required only when the old_exponent is not the integer multiple of 3
+                offset_exponent += 3; // adjust for the minus exponent
             }
             decimal_point_position_ -= offset_exponent;
         }
