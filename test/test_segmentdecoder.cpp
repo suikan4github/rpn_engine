@@ -50,3 +50,38 @@ TEST(SegmentDecoderDeathTest, Overwrapping_period)
 {
     ASSERT_DEATH(SegmentDecoder sd(0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0xc0), "mask & seg_period_");
 }
+
+// Segment check
+TEST(SegmentDecoder, DecodeSegments)
+{
+    SegmentDecoder sd(0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80);
+
+    EXPECT_EQ(sd.decode(' '), 0);
+    EXPECT_EQ(sd.decode('+'), 0);
+    EXPECT_EQ(sd.decode('-'), 0x40);
+    EXPECT_EQ(sd.decode('0'), 0x3f);
+    EXPECT_EQ(sd.decode('1'), 0x06);
+    EXPECT_EQ(sd.decode('2'), 0x5b);
+    EXPECT_EQ(sd.decode('3'), 0x4f);
+    EXPECT_EQ(sd.decode('4'), 0x66);
+    EXPECT_EQ(sd.decode('5'), 0x6d);
+    EXPECT_EQ(sd.decode('6'), 0x7d);
+    EXPECT_EQ(sd.decode('7'), 0x07);
+    EXPECT_EQ(sd.decode('8'), 0x7f);
+    EXPECT_EQ(sd.decode('9'), 0x6f);
+    EXPECT_EQ(sd.decode('a'), 0x77);
+    EXPECT_EQ(sd.decode('A'), 0x77);
+    EXPECT_EQ(sd.decode('e'), 0x79);
+    EXPECT_EQ(sd.decode('E'), 0x79);
+    EXPECT_EQ(sd.decode('f'), 0x71);
+    EXPECT_EQ(sd.decode('F'), 0x71);
+    EXPECT_EQ(sd.decode('l'), 0x38);
+    EXPECT_EQ(sd.decode('l'), 0x38);
+    EXPECT_EQ(sd.decode('n'), 0x54);
+    EXPECT_EQ(sd.decode('N'), 0x54);
+    EXPECT_EQ(sd.decode('p'), 0x73);
+    EXPECT_EQ(sd.decode('P'), 0x73);
+    EXPECT_EQ(sd.decode('r'), 0x50);
+    EXPECT_EQ(sd.decode('R'), 0x50);
+
+}
