@@ -1,3 +1,4 @@
+#pragma once
 /**
  * @file stackstrategy.hpp
  * @author Seiichi "Suikan" Horie

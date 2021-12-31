@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "console.hpp"
+#include "rpnengine.hpp"
 #include <stdexcept>
 
 using rpn_engine::DisplayMode;

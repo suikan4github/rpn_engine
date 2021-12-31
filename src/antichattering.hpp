@@ -1,6 +1,7 @@
+#pragma once
 /**
  * @file antichattering.hpp
- * @author your name (you@domain.com)
+ * @author Seiichi "Suikan" Horie
  * @brief Automaton to kill the chattering of the switch.
  * @version 0.1
  * @date 2021-11-29
