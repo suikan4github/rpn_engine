@@ -13,23 +13,25 @@ rpn_engine::SegmentDecoder::SegmentDecoder(uint8_t seg_a, uint8_t seg_b, uint8_t
 {
     uint8_t mask;
     // consistency check.
-    // None of the bit masks can be overwrapped. The coverage must be full.
-    assert(seg_a_ | seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_f_ | seg_g_ | seg_period_ == 0xFF);
+    // All 8btis must be covered by given bit masks.
+    assert((seg_a_ | seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_f_ | seg_g_ | seg_period_ )== 0xFF);
 
+    // Consistency check.
+    // No bit masks can be owverwrapped. 
     mask = seg_a_;
-    assert(mask & seg_b_);
+    assert((mask & seg_b_)==0);
     mask |= seg_b_;
-    assert(mask & seg_c_);
+    assert((mask & seg_c_)==0);
     mask |= seg_c_;
-    assert(mask & seg_d_);
+    assert((mask & seg_d_)==0);
     mask |= seg_d_;
-    assert(mask & seg_e_);
+    assert((mask & seg_e_)==0);
     mask |= seg_e_;
-    assert(mask & seg_f_);
+    assert((mask & seg_f_)==0);
     mask |= seg_f_;
-    assert(mask & seg_g_);
+    assert((mask & seg_g_)==0);
     mask |= seg_g_;
-    assert(mask & seg_period_);
+    assert((mask & seg_period_)==0);
 }
 
 uint8_t rpn_engine::SegmentDecoder::decode(char c)
