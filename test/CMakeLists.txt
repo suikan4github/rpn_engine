@@ -4,21 +4,20 @@
 # Get the MY_LIBRARY_NAME from the library source directory.
 include("${CMAKE_CURRENT_SOURCE_DIR}/../src/parameters.cmake")
 
+# GCOV settings
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage") 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage") 
+
 # List up all source files including main.cpp
 set(MAIN_FILE_PATTERN ".*/main.cpp$")
 file(GLOB LIB_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp")
 list(FILTER LIB_SRC EXCLUDE REGEX ${MAIN_FILE_PATTERN})    # Filter out the main file
 
-
-# GCOV settings
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage") # 追加
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage") # 追加
+# List all test file in this directory
+file(GLOB TEST_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 # Test executable and library name
 set(TEST_EXECUTABLE_NAME test_${MY_LIBRARY_NAME})
-
-# List all source file in this directory
-file(GLOB TEST_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 # Add the executable for the testcase which is using googletest
 add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SRC} ${LIB_SRC})
