@@ -83,5 +83,6 @@ TEST(SegmentDecoder, DecodeSegments)
     EXPECT_EQ(sd.decode('P'), 0x73);
     EXPECT_EQ(sd.decode('r'), 0x50);
     EXPECT_EQ(sd.decode('R'), 0x50);
+    EXPECT_EQ(sd.decode('.'), 0x80);
 
 }
