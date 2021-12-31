@@ -1,7 +1,7 @@
 // Test cases for the basic math operation of the rpn_engine::StackStrategy class
 
 #include "gtest/gtest.h"
-#include "stackstrategy.hpp"
+#include "rpnengine.hpp"
 #include <stdexcept>
 
 typedef rpn_engine::StackStrategy<int> IntStack;

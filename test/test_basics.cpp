@@ -1,7 +1,7 @@
 // Test cases for the basic stack operation of the rpn_engine::StackStrategy class
 
 #include "gtest/gtest.h"
-#include "stackstrategy.hpp"
+#include "rpnengine.hpp"
 #include <stdexcept>
 
 using rpn_engine::Op;

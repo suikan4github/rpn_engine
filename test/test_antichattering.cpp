@@ -1,7 +1,7 @@
 // Test cases for the antichattering class
 
 #include "gtest/gtest.h"
-#include "antichattering.hpp"
+#include "rpnengine.hpp"
 #include <stdexcept>
 
 namespace rpn_engine
