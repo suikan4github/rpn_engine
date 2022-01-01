@@ -114,7 +114,7 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
         break;
 
     default:
-        assert(false); // unknown character code
+        retval = 0; // unknown character code
     }
     return ret_val;
 }
