@@ -72,8 +72,8 @@ TEST(DoubleComplexTest, Exp)
     s->Operation(rpn_engine::Op::exp);
 
     auto x = s->Get(0);
-    EXPECT_DOUBLE_EQ(x.real(), ::cos(M_PI / 4)); // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), ::sin(M_PI / 4)); // check imaginary part of top.
+    EXPECT_DOUBLE_EQ(x.real(), ::cos(rpn_engine::pi / 4)); // check real part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), ::sin(rpn_engine::pi / 4)); // check imaginary part of top.
     delete s;
 }
 
@@ -89,7 +89,7 @@ TEST(DoubleComplexTest, Log)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), 0);      // check real part of top.
-    EXPECT_DOUBLE_EQ(x.imag(), M_PI_2); // check imaginary part of top.
+    EXPECT_DOUBLE_EQ(x.imag(), rpn_engine::pi/2); // check imaginary part of top.
     delete s;
 }
 
@@ -115,7 +115,7 @@ TEST(DoubleComplexTest, Power)
     s = new DoubleComplexStack(4);
 
     s->Push(3.0);
-    s->Push(M_PI);
+    s->Push(rpn_engine::pi);
     s->Push(std::complex<double>(0, 1));
     s->Operation(rpn_engine::Op::power);
 
@@ -212,7 +212,7 @@ TEST(DoubleComplexTest, ToPorlar)
 
     auto x = s->Get(0);
     EXPECT_DOUBLE_EQ(x.real(), sqrt((double)2.0)); // Abs of 1+i is 1.41421356...
-    EXPECT_DOUBLE_EQ(x.imag(), M_PI_4);            // Angular of 1+i is pi/4
+    EXPECT_DOUBLE_EQ(x.imag(), rpn_engine::pi/4);            // Angular of 1+i is pi/4
     delete s;
 }
 
@@ -221,7 +221,7 @@ TEST(DoubleComplexTest, ToCartesian)
     DoubleComplexStack *s;
     s = new DoubleComplexStack(4);
 
-    s->Push(std::complex<double>(sqrt((double)2.0), M_PI_4)); // 1.414 + i(3.1415/4)
+    s->Push(std::complex<double>(sqrt((double)2.0), rpn_engine::pi/4)); // 1.414 + i(3.1415/4)
     s->Operation(rpn_engine::Op::to_cartesian);
 
     // must be converted to 1+i;

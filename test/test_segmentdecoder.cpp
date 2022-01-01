@@ -9,7 +9,7 @@ TEST(SegmentDecoderDeathTest, completeness)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(SegmentDecoder sd(1, 2, 4, 8, 16, 32, 64, 120), "seg_a_ | seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_f_ | seg_g_ | seg_period_ == 0xFF");
+    ASSERT_DEATH(SegmentDecoder sd(1, 2, 4, 8, 16, 32, 64, 120), "seg_a_ \\| seg_b_ \\| seg_c_ \\| seg_d_ \\| seg_e_ \\| seg_f_ \\| seg_g_ \\| seg_period_");
 #endif
 }
 

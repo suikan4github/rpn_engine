@@ -25,6 +25,12 @@
  */
 namespace rpn_engine
 {
+    /**
+     * @brief Define pi here to keep closs platform compatibility.
+     * 
+     */
+    constexpr double pi = 3.141592653589793238462643383279502884L;
+
 
     /**
      * @brief enum class to specify the operation on stack
@@ -1017,7 +1023,7 @@ void rpn_engine::StackStrategy<Element>::Pi()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // do the operation
-    Push(M_PI);
+    Push(rpn_engine::pi);
 }
 
 template <class Element>

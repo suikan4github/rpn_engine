@@ -17,7 +17,7 @@ TEST(BasicStackDeathTest, StackSizeLimit)
         {
             s = new IntStack(0); // must not be non zero
         },
-        "Assertion `stack_size_ >= 2' failed");
+        "stack_size_ >= 2");
 #endif
 }
 
@@ -296,7 +296,7 @@ TEST(BasicStackDeathTest, GetPositionExceedStackLimit)
             s = new IntStack(4);
             s->Get(4); // Accessing the position exeeds the Stack size.
         },
-        "Assertion `stack_size_ > postion' failed");
+        "stack_size_ > postion");
 #endif
 }
 
