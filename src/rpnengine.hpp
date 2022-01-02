@@ -14,3 +14,4 @@
 #include "console.hpp"
 #include "segmentdecoder.hpp"
 #include "antichattering.hpp"
+#include "encodekey.hpp"
