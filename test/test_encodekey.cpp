@@ -34,42 +34,66 @@ using rpn_engine::Op;
 
 TEST(EncodeKey, undefined_A)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, false), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_B)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, false), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_C)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, true), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_D)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, true), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_E)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, false), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_F)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, false), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_G)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, true), "false");
+#endif
 }
 
 TEST(EncodeKey, undefined_H)
 {
+#ifndef NDEBUG
+    // We test only when assert() works.
     ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, true), "false");
+#endif
 }
 
 TEST(EncodeKey, DEC_NORMAL)
