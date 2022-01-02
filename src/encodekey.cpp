@@ -13,7 +13,7 @@ namespace rpn_engine
 
         // create easy to handle key code.
         unsigned int key_code = (row << 8) | col;
-        Op ret_val;
+        Op ret_val = Op::nop;
 
         if (is_hex_mode)
         {

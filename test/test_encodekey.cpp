@@ -96,7 +96,7 @@ TEST(EncodeKey, undefined_H)
 #endif
 }
 
-TEST(EncodeKey, DEC_NORMAL)
+TEST(EncodeKey, dec_normal)
 {
     EXPECT_EQ(rpn_engine::EncodeKey(XTOM, false, false), Op::swap);
     EXPECT_EQ(rpn_engine::EncodeKey(CM, false, false), Op::complex);
@@ -127,4 +127,37 @@ TEST(EncodeKey, DEC_NORMAL)
     EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, false, false), Op::chs);
     EXPECT_EQ(rpn_engine::EncodeKey(PLUS, false, false), Op::add);
     EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, false, false), Op::enter);
+}
+
+TEST(EncodeKey, dec_func)
+{
+    EXPECT_EQ(rpn_engine::EncodeKey(XTOM, true, false), Op::swap_re_im);
+    EXPECT_EQ(rpn_engine::EncodeKey(CM, true, false), Op::decomplex);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, false), Op::rotate_push);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, true, false), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, true, false), Op::func);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM7, true, false), Op::exp);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM8, true, false), Op::power10);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM9, true, false), Op::conjugate);
+    EXPECT_EQ(rpn_engine::EncodeKey(DIV, true, false), Op::inv);
+    EXPECT_EQ(rpn_engine::EncodeKey(C, true, false), Op::clx);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM4, true, false), Op::log);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM5, true, false), Op::log10);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM6, true, false), Op::hex);
+    EXPECT_EQ(rpn_engine::EncodeKey(MUL, true, false), Op::power);
+    EXPECT_EQ(rpn_engine::EncodeKey(CE, true, false), Op::pi);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM1, true, false), Op::sin);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM2, true, false), Op::cos);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM3, true, false), Op::tan);
+    EXPECT_EQ(rpn_engine::EncodeKey(MINUS, true, false), Op::to_cartesian);
+    EXPECT_EQ(rpn_engine::EncodeKey(SQRT, true, false), Op::square);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM0, true, false), Op::asin);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, true, false), Op::acos);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, true, false), Op::atan);
+    EXPECT_EQ(rpn_engine::EncodeKey(PLUS, true, false), Op::to_polar);
+    EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, true, false), Op::undo);
 }

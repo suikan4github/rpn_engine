@@ -86,6 +86,7 @@ namespace rpn_engine
         hex,                 ///< Change to hex mode.
         dec,                 ///< Change to dec mode.
         func,                ///< Pressing F key.
+        nop,                ///< Do nothing
                              // Editing op code.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.

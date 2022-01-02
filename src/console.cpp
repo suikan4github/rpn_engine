@@ -344,7 +344,9 @@ void rpn_engine::Console::Input(Op opcode)
 {
     if (Op::func == opcode)                          // F key pressed
         SetIsFuncKeyPressed(!GetIsFuncKeyPressed()); // invert the state
-    else
+    else if (Op::nop == opcode)                      // is the opcode nop?
+        ;                                            // do nothing
+    else                                             // neither nop nor f key
     {
         if ((Op::num_0 > opcode) && (opcode >= Op::duplicate))
             HandleNonEditingOp(opcode);
