@@ -10,9 +10,9 @@ TEST(Console, IsFuncKeyPressed)
     rpn_engine::Console c;
 
     EXPECT_FALSE(c.GetIsFuncKeyPressed());
-    c.SetIsFuncKeyPressed(true);
+    c.Input(Op::func);
     EXPECT_TRUE(c.GetIsFuncKeyPressed());
-    c.SetIsFuncKeyPressed(false);
+    c.Input(Op::func);
     EXPECT_FALSE(c.GetIsFuncKeyPressed());
 }
 
@@ -391,16 +391,16 @@ TEST(Console, HexMode)
 
     EXPECT_FALSE(c.GetIsHexMode());
 
-    c.SetIsHexMode(false);
+    c.Input(Op::dec);
     EXPECT_FALSE(c.GetIsHexMode());
 
-    c.SetIsHexMode(true);
+    c.Input(Op::hex);
     EXPECT_TRUE(c.GetIsHexMode());
 
-    c.SetIsHexMode(true);
+    c.Input(Op::hex);
     EXPECT_TRUE(c.GetIsHexMode());
 
-    c.SetIsHexMode(false);
+    c.Input(Op::dec);
     EXPECT_FALSE(c.GetIsHexMode());
 
     c.Input(Op::hex);

@@ -97,29 +97,12 @@ namespace rpn_engine
         bool GetIsFuncKeyPressed();
 
         /**
-         * @brief Set the IsFuncKeyPressed state
-         *
-         * @param state new state of the key pressed state
-         * @details
-         * Change the internal state of "key perssed" information. THe change informaiton can be
-         * ready by the @ref GetIsFuncKeyPressed() member function.
-         */
-        void SetIsFuncKeyPressed(bool state);
-
-        /**
          * @brief Get the is_hex_mode_ state
          *
          * @return true Hex mode
          * @return false Decimal mode
          */
         bool GetIsHexMode();
-
-        /**
-         * @brief Set the is_hex_mode_ state
-         *
-         * @param state New state of the hex mode.
-         */
-        void SetIsHexMode(bool state);
 
         /**
          * @brief Input from pad.
@@ -183,6 +166,23 @@ namespace rpn_engine
         char mantissa_buffer_[kNumberOfDigits + 1];
         // store the exponent text during editing.
         char exponent_buffer_[kNumberOfDigits + 1];
+
+        /**
+         * @brief Set the IsFuncKeyPressed state
+         *
+         * @param state new state of the key pressed state
+         * @details
+         * Change the internal state of "key perssed" information. THe change informaiton can be
+         * ready by the @ref GetIsFuncKeyPressed() member function.
+         */
+        void SetIsFuncKeyPressed(bool state);
+
+        /**
+         * @brief Set the is_hex_mode_ state
+         *
+         * @param state New state of the hex mode.
+         */
+        void SetIsHexMode(bool state);
 
         /**
          * @brief Preparing non-editing opecode execution.

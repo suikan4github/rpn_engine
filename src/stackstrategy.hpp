@@ -27,10 +27,9 @@ namespace rpn_engine
 {
     /**
      * @brief Define pi here to keep closs platform compatibility.
-     * 
+     *
      */
     constexpr double pi = 3.141592653589793238462643383279502884L;
-
 
     /**
      * @brief enum class to specify the operation on stack
@@ -86,6 +85,7 @@ namespace rpn_engine
         undo,                ///< Undo the previous operation. Do not feed to Stack engine.
         hex,                 ///< Change to hex mode.
         dec,                 ///< Change to dec mode.
+        func,                ///< Pressing F key.
                              // Editing op code.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.

@@ -760,3 +760,29 @@ TEST(ConsoleEditing, DuplicateEex)
     EXPECT_STREQ(display_text, " 314   04"); // must not change
     EXPECT_EQ(decimal_point, 7);
 }
+
+// F key should not effect to editing
+TEST(ConsoleEditing, FuncDuringEditing)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::func);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123     "); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+    c.Input(Op::num_4);
+    EXPECT_FALSE(c.GetIsFuncKeyPressed()); // any input except f-key clear the state.
+    c.Input(Op::num_5);
+    c.Input(Op::period); // 5digits with decimal point
+    c.Input(Op::eex);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345 00"); // must in floating input
+    EXPECT_EQ(decimal_point, 3);
+}

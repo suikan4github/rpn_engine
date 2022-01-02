@@ -133,6 +133,7 @@ void rpn_engine::Console::PostExecutionProcess()
 
 void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
 {
+
     PreExecutionProcess();
 
     switch (opcode)
@@ -341,10 +342,16 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
 
 void rpn_engine::Console::Input(Op opcode)
 {
-    if ((Op::num_0 > opcode) && (opcode >= Op::duplicate))
-        HandleNonEditingOp(opcode);
+    if (Op::func == opcode)                          // F key pressed
+        SetIsFuncKeyPressed(!GetIsFuncKeyPressed()); // invert the state
     else
-        HandleEditingOp(opcode);
+    {
+        if ((Op::num_0 > opcode) && (opcode >= Op::duplicate))
+            HandleNonEditingOp(opcode);
+        else
+            HandleEditingOp(opcode);
+        SetIsFuncKeyPressed(false); // any key except f-key set the state clear.
+    }
 }
 
 void rpn_engine::Console::RenderFixedMode()
