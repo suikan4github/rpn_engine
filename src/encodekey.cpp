@@ -66,7 +66,7 @@ namespace rpn_engine
                     ret_val = Op::num_c;
                     break;
                 case 0x0401: // RM
-                    ret_val = Op::rotate_pop;
+                    ret_val = Op::rotate_push;
                     break;
                 case 0x0400: // +
                     ret_val = Op::bit_or;

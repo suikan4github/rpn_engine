@@ -26,7 +26,7 @@
 namespace rpn_engine
 {
     /**
-     * @brief Define pi here to keep closs platform compatibility.
+     * @brief Define pi here to keep cross platform compatibility.
      *
      */
     constexpr double pi = 3.141592653589793238462643383279502884L;
@@ -86,7 +86,7 @@ namespace rpn_engine
         hex,                 ///< Change to hex mode.
         dec,                 ///< Change to dec mode.
         func,                ///< Pressing F key.
-        nop,                ///< Do nothing
+        nop,                 ///< Do nothing
                              // Editing op code.
         num_0,               ///< Constant for key input. Do not feed to Stack engine.
         num_1,               ///< Constant for key input. Do not feed to Stack engine.

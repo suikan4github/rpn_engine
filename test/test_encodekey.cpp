@@ -161,3 +161,69 @@ TEST(EncodeKey, dec_func)
     EXPECT_EQ(rpn_engine::EncodeKey(PLUS, true, false), Op::to_polar);
     EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, true, false), Op::undo);
 }
+
+TEST(EncodeKey, hex_normal)
+{
+    EXPECT_EQ(rpn_engine::EncodeKey(XTOM, false, true), Op::swap);
+    EXPECT_EQ(rpn_engine::EncodeKey(CM, false, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, false, true), Op::rotate_pop);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, false, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, false, true), Op::func);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM7, false, true), Op::num_7);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM8, false, true), Op::num_8);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM9, false, true), Op::num_9);
+    EXPECT_EQ(rpn_engine::EncodeKey(DIV, false, true), Op::bit_div);
+    EXPECT_EQ(rpn_engine::EncodeKey(C, false, true), Op::del);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM4, false, true), Op::num_4);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM5, false, true), Op::num_5);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM6, false, true), Op::num_6);
+    EXPECT_EQ(rpn_engine::EncodeKey(MUL, false, true), Op::bit_mul);
+    EXPECT_EQ(rpn_engine::EncodeKey(CE, false, true), Op::nop);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM1, false, true), Op::num_1);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM2, false, true), Op::num_2);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM3, false, true), Op::num_3);
+    EXPECT_EQ(rpn_engine::EncodeKey(MINUS, false, true), Op::bit_sub);
+    EXPECT_EQ(rpn_engine::EncodeKey(SQRT, false, true), Op::nop);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM0, false, true), Op::num_0);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, false, true), Op::period);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, false, true), Op::bit_neg);
+    EXPECT_EQ(rpn_engine::EncodeKey(PLUS, false, true), Op::bit_add);
+    EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, false, true), Op::enter);
+}
+
+TEST(EncodeKey, hex_func)
+{
+    EXPECT_EQ(rpn_engine::EncodeKey(XTOM, true, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(CM, true, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, true), Op::rotate_push);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, true, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, true, true), Op::func);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM7, true, true), Op::logical_shift_left);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM8, true, true), Op::logical_shift_right);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM9, true, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(DIV, true, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(C, true, true), Op::clx);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM4, true, true), Op::num_e);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM5, true, true), Op::num_f);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM6, true, true), Op::dec);
+    EXPECT_EQ(rpn_engine::EncodeKey(MUL, true, true), Op::bit_and);
+    EXPECT_EQ(rpn_engine::EncodeKey(CE, true, true), Op::nop);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM1, true, true), Op::num_b);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM2, true, true), Op::num_c);
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM3, true, true), Op::num_d);
+    EXPECT_EQ(rpn_engine::EncodeKey(MINUS, true, true), Op::bit_xor);
+    EXPECT_EQ(rpn_engine::EncodeKey(SQRT, true, true), Op::nop);
+
+    EXPECT_EQ(rpn_engine::EncodeKey(NUM0, true, true), Op::num_a);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, true, true), Op::period);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, true, true), Op::bit_not);
+    EXPECT_EQ(rpn_engine::EncodeKey(PLUS, true, true), Op::bit_or);
+    EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, true, true), Op::undo);
+}
