@@ -761,10 +761,10 @@ rpn_engine::StackStrategy<Element>::StackStrategy(unsigned int stack_size) : sta
     assert(stack_ != nullptr);
 
     // initialize stack
-    for (int i = 0; i < stack_size_; i++)
+    for (unsigned int i = 0; i < stack_size_; i++)
         stack_[i] = 0;
     // initialize undo buffer
-    for (int i = 0; i < stack_size_; i++)
+    for (unsigned int i = 0; i < stack_size_; i++)
         undo_buffer_[i] = 0;
 }
 
@@ -879,7 +879,7 @@ void rpn_engine::StackStrategy<Element>::SaveToUndoBuffer()
     if (undo_saving_enabled_)
     {
         // Store Stack state to the undo buffer.
-        for (int i = 0; i < stack_size_; i++)
+        for (unsigned int i = 0; i < stack_size_; i++)
             undo_buffer_[i] = stack_[i];
     }
 }
