@@ -827,3 +827,49 @@ TEST(ConsoleEditing, ClxDelNum)
     EXPECT_STREQ(display_text, " 1       "); // must in floating input
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
+
+// bit Negate
+TEST(ConsoleEditing, BitNegate)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::hex);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 000000FF"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::bit_neg);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " FFFFFF01"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// bit Negate
+TEST(ConsoleEditing, BitNot)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::hex);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 000000FF"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::bit_not);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " FFFFFF00"); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
