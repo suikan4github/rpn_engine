@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cctype>
 #include <type_traits>
 
 using rpn_engine::Op;
@@ -64,8 +65,25 @@ void rpn_engine::Console::PreExecutionProcess()
     {
         if (is_hex_mode_)
         {
-            uint32_t hexvalue;
-            std::sscanf(mantissa_buffer_, "%X", &hexvalue); // Convert nominal literal to int32_t.
+            // The &X speficire has compatiblity issue for certain system.
+            // For example, ARM compiler's sscanf convert "FFFFFFFF" to "7FFFFFFF" even
+            // the variable is unsigned int. To avoid the problem, we convert by ourselves.
+            uint32_t hexvalue = 0;
+            for (int i = 1; i < 9; i++) // Hex digit exist from char 1 to char 8
+            {
+                char c = mantissa_buffer_[i];
+
+                if ('9' >= c && c >= '0')
+                {
+                    hexvalue <<= 4;
+                    hexvalue += c - '0';
+                }
+                else if ('F' >= std::toupper(c) && std::toupper(c) >= 'A')
+                {
+                    hexvalue <<= 4;
+                    hexvalue += std::toupper(c) - 'A' + 10;
+                }
+            }
             value = hexvalue;
         }
         else
@@ -110,25 +128,38 @@ void rpn_engine::Console::PreExecutionProcess()
 
 void rpn_engine::Console::PostExecutionProcess()
 {
-    if (is_hex_mode_) // if hex mode
-        RenderHexMode();
-    else // decimal mode
+    if (std::isnan(engine_.Get(0).real())) // NaN?
     {
-        switch (display_mode_)
+        std::strcpy(text_buffer_, "      NaN");
+        decimal_point_position_ = kDecimalPointNotDisplayed;
+    }
+    else if (std::isinf(engine_.Get(0).real())) // Inf?
+    {
+        std::strcpy(text_buffer_, "      INF");
+        decimal_point_position_ = kDecimalPointNotDisplayed;
+    }
+    else // Neither NaN nor Inf
+    {
+        if (is_hex_mode_) // if hex mode
+            RenderHexMode();
+        else // decimal mode
         {
-        case rpn_engine::DisplayMode::fixed:
-            RenderFixedMode();
-            break;
-        case rpn_engine::DisplayMode::scientific:
-            RenderScientificMode(false);
-            break;
-        case rpn_engine::DisplayMode::engineering:
-            RenderScientificMode(true);
-            break;
-        default:
-            assert(false); // program logic error
-        }
-    } // hex / decimal mode
+            switch (display_mode_)
+            {
+            case rpn_engine::DisplayMode::fixed:
+                RenderFixedMode();
+                break;
+            case rpn_engine::DisplayMode::scientific:
+                RenderScientificMode(false);
+                break;
+            case rpn_engine::DisplayMode::engineering:
+                RenderScientificMode(true);
+                break;
+            default:
+                assert(false); // program logic error
+            }
+        } // hex / decimal mode
+    }
 }
 
 void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)

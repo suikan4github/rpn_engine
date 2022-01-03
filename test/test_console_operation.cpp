@@ -65,3 +65,55 @@ TEST(Console, CosOp)
     EXPECT_STREQ(display_text, "-23205-08");
     EXPECT_EQ(decimal_point, 7);
 }
+
+TEST(Console, Inf)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_3);
+    c.Input(Op::enter);
+    c.Input(Op::num_0);
+    c.Input(Op::inv);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "      INF");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+TEST(Console, MinusInf)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_3);
+    c.Input(Op::chs);
+    c.Input(Op::enter);
+    c.Input(Op::num_0);
+    c.Input(Op::inv);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "      INF");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+TEST(Console, NaN)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_3);
+    c.Input(Op::chs);
+    c.Input(Op::enter);
+    c.Input(Op::num_0);
+    c.Input(Op::inv);
+    c.Input(Op::enter);
+    c.Input(Op::sub);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "      NaN");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
