@@ -84,6 +84,9 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
     case '.':
         ret_val = seg_period_;
         break;
+    case '_':
+        ret_val = seg_d_;
+        break;
     case 'a':
     case 'A':
         ret_val = seg_a_ | seg_b_ | seg_c_ | seg_e_ | seg_f_ | seg_g_;
