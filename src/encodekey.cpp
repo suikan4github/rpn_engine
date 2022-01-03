@@ -228,7 +228,7 @@ namespace rpn_engine
                     ret_val = Op::swap_re_im;
                     break;
                 case 0x0000: // CE
-                    // do nothing
+                    ret_val = Op::pi;
                     break;
                     // Row 1
                 case 0x0102: // 4
