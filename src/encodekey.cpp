@@ -228,7 +228,7 @@ namespace rpn_engine
                     ret_val = Op::swap_re_im;
                     break;
                 case 0x0000: // CE
-                    ret_val = Op::pi;
+                    // do nothing
                     break;
                     // Row 1
                 case 0x0102: // 4
@@ -288,7 +288,7 @@ namespace rpn_engine
                     // do nothing
                     break;
                 case 0x0600: // /
-                    ret_val = Op::inv;
+                    // do nothing
                     break;
                     // Row 7
                 case 0x0702: // 3
@@ -302,7 +302,7 @@ namespace rpn_engine
                     break;
                     // Row 8
                 case 0x0802: // sqrt
-                    ret_val = Op::square;
+                    // do nothing
                     break;
                 case 0x0801: // M+
                     ret_val = Op::func;

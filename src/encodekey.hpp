@@ -61,9 +61,9 @@ namespace rpn_engine
      * col1               |    col2            | col3        | col4    | col5
      * :-----------------:|:------------------:|:-----------:|:-------:|:----:
      * N.A.               | N.A.               | rotate push | N.A.    | F
-     * logical shift left | logical sift right |  N.A.       | 1/x     | clx
-     * e                  | f                  | dec mode    | bit and | eex
-     * b                  | c                  | d           | bit xor | sqrt
+     * logical shift left | logical sift right |  N.A.       | N.A.    | clx
+     * e                  | f                  | dec mode    | bit and | N.A.
+     * b                  | c                  | d           | bit xor | N.A.
      * a                  | N.A.               | not         | bit or  | undo
 
      */
