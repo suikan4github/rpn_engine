@@ -68,7 +68,7 @@ TEST(ComplexBitwiseTest, BitDivide)
     delete s;
 }
 
-TEST(ComplexBitwiseTest, BitNagate)
+TEST(ComplexBitwiseTest, BitNegate)
 {
     DoubleComplexStack *s;
     s = new DoubleComplexStack(4);

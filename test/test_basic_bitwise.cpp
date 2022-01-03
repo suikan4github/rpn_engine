@@ -144,7 +144,7 @@ TEST(BasicBitwiseTest, BitDivide)
     delete s;
 }
 
-TEST(BasicBitwiseTest, BitNagate)
+TEST(BasicBitwiseTest, BitNegate)
 {
     DoubleStack *s;
     s = new DoubleStack(4);

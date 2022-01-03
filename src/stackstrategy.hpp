@@ -310,7 +310,7 @@ namespace rpn_engine
          * @brief Pop X and then push -X
          *
          */
-        void Nagate();
+        void Negate();
 
         /**
          * @brief Pop X and then push 1/X
@@ -646,7 +646,7 @@ namespace rpn_engine
          *
          * Undo buffer is affected.
          */
-        void BitNagate();
+        void BitNegate();
 
         /**
          * @brief Pop X,Y and then Y bitwise OR X  as 32bit integer. Then push it.
@@ -965,7 +965,7 @@ void rpn_engine::StackStrategy<Element>::Divide()
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::Nagate()
+void rpn_engine::StackStrategy<Element>::Negate()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
@@ -1242,7 +1242,7 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::BitNagate()
+void rpn_engine::StackStrategy<Element>::BitNegate()
 {
     // Save stack state before mathematical operation
     SaveToUndoBuffer();
@@ -1382,7 +1382,7 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         Divide();
         break;
     case Op::neg:
-        Nagate();
+        Negate();
         break;
     case Op::inv:
         Inverse();
@@ -1460,7 +1460,7 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         BitDivide();
         break;
     case Op::bit_neg:
-        BitNagate();
+        BitNegate();
         break;
     case Op::bit_or:
         BitOr();
