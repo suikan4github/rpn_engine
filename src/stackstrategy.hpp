@@ -704,7 +704,7 @@ namespace rpn_engine
         void BitNot();
 
         /**
-         * @fn int32_t To32bitValue(Element x)
+         * @fn int32_t To64bitValue(Element x)
          * @brief Convert parameter to int32_t
          *
          * @param x Value to convert.
@@ -720,7 +720,7 @@ namespace rpn_engine
         template <class E = Element,
                   typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
         // Implementation when the template is specialized by std::complex<> type.
-        int32_t To32bitValue(Element x)
+        int64_t To64bitValue(Element x)
         {
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
@@ -731,7 +731,7 @@ namespace rpn_engine
         template <class E = Element,
                   typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
         // Implementation when the template is specialized by scarlar type.
-        int32_t To32bitValue(Element x)
+        int64_t To64bitValue(Element x)
         {
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
@@ -1185,8 +1185,8 @@ void rpn_engine::StackStrategy<Element>::BitAdd()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = x + y;
@@ -1201,8 +1201,8 @@ void rpn_engine::StackStrategy<Element>::BitSubtract()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y - x;
@@ -1217,8 +1217,8 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y * x;
@@ -1233,8 +1233,8 @@ void rpn_engine::StackStrategy<Element>::BitDivide()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y / x;
@@ -1249,7 +1249,7 @@ void rpn_engine::StackStrategy<Element>::BitNagate()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = -x;
@@ -1264,8 +1264,8 @@ void rpn_engine::StackStrategy<Element>::BitOr()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y | x;
@@ -1280,8 +1280,8 @@ void rpn_engine::StackStrategy<Element>::BitExor()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y ^ x;
@@ -1296,8 +1296,8 @@ void rpn_engine::StackStrategy<Element>::BitAnd()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
-    auto y = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y & x;
@@ -1312,8 +1312,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
-    uint32_t y = static_cast<uint32_t>(To32bitValue(Pop()));
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y >> x;
@@ -1328,8 +1328,8 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    uint32_t x = static_cast<uint32_t>(To32bitValue(Pop()));
-    uint32_t y = static_cast<uint32_t>(To32bitValue(Pop()));
+    auto x = To64bitValue(Pop());
+    auto y = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = y << x;
@@ -1344,7 +1344,7 @@ void rpn_engine::StackStrategy<Element>::BitNot()
     DisableUndoSaving disable_undo(this); // Disabling by RAII
 
     // Get parameters
-    auto x = To32bitValue(Pop());
+    auto x = To64bitValue(Pop());
 
     // do the operation
     uint32_t r = ~x;

@@ -15,17 +15,15 @@ namespace rpn_engine
         s = new DoubleStack(4);
 
         // truncation from integer is "round to zero" according to the C++ standard.
-        EXPECT_EQ(s->To32bitValue(1.414), 1);   // truncation test.
-        EXPECT_EQ(s->To32bitValue(1.8), 1);     // truncation test.
-        EXPECT_EQ(s->To32bitValue(-1.414), -1); // truncation test.
-        EXPECT_EQ(s->To32bitValue(-1.8), -1);   // truncation test.
+        EXPECT_EQ(s->To64bitValue(1.414), 1);   // truncation test.
+        EXPECT_EQ(s->To64bitValue(1.8), 1);     // truncation test.
+        EXPECT_EQ(s->To64bitValue(-1.414), -1); // truncation test.
+        EXPECT_EQ(s->To64bitValue(-1.8), -1);   // truncation test.
 
         // Large number extraction.
         EXPECT_GT((1LL << 40), INT32_MAX);                       // compiler check.
-        EXPECT_EQ(s->To32bitValue(INT32_MAX - 1.0), 0x7ffffffe); // extracted data must be INT32_MAX-1.
-        EXPECT_EQ(s->To32bitValue(INT32_MAX + 1.0), 0x80000000); // extracted data must be overflown
-        EXPECT_EQ(s->To32bitValue(INT32_MIN + 1.0), 0x80000001); // extracted data must be zero.
-        EXPECT_EQ(s->To32bitValue(INT32_MIN - 1.0), 0x7fffffff); // extracted data must be INT32_MIN+1.
+        EXPECT_EQ(s->To64bitValue(INT32_MAX - 1.0), 0x7ffffffe); // extracted data must be INT32_MAX-1.
+        EXPECT_EQ(s->To64bitValue(INT32_MAX + 1.0), 0x80000000); // extracted data must be overflown
         delete s;
     }
 
@@ -245,7 +243,7 @@ TEST(BasicBitwiseTest, LogicalShiftRight)
     s = new DoubleStack(4);
 
     s->Push(7.1);
-    s->Push(INT32_MAX);
+    s->Push(0x7FFFFFFF);
     s->Push(1);
     s->Operation(rpn_engine::Op::logical_shift_right);
     EXPECT_EQ(s->Get(0), 0x3FFFFFFF);
@@ -256,7 +254,7 @@ TEST(BasicBitwiseTest, LogicalShiftRight)
     EXPECT_EQ(s->Get(0), 1);
 
     // zero padding at MSB check
-    s->Push(INT32_MIN);
+    s->Push(0x80000000);
     s->Push(1);
     s->Operation(rpn_engine::Op::logical_shift_right);
     EXPECT_EQ(s->Get(0), 0x40000000);
