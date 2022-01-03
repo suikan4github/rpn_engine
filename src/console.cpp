@@ -533,7 +533,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
 void rpn_engine::Console::RenderHexMode()
 {
     // get the stack top, take real part and round.
-    uint32_t value = std::round(engine_.Get(0).real());
+    unsigned int value = std::round(engine_.Get(0).real());
 
     std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
     decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point
