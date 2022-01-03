@@ -88,6 +88,18 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
     case 'A':
         ret_val = seg_a_ | seg_b_ | seg_c_ | seg_e_ | seg_f_ | seg_g_;
         break;
+    case 'b':
+    case 'B':
+        ret_val = seg_c_ | seg_d_ | seg_e_ | seg_f_ | seg_g_;
+        break;
+    case 'c':
+    case 'C':
+        ret_val = seg_a_ | seg_d_ | seg_e_ | seg_f_;
+        break;
+    case 'd':
+    case 'D':
+        ret_val = seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_g_;
+        break;
     case 'e':
     case 'E':
         ret_val = seg_a_ | seg_d_ | seg_e_ | seg_f_ | seg_g_;

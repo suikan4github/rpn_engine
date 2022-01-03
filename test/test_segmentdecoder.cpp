@@ -95,6 +95,12 @@ TEST(SegmentDecoder, DecodeSegments)
     EXPECT_EQ(sd.decode('9'), 0x6f);
     EXPECT_EQ(sd.decode('a'), 0x77);
     EXPECT_EQ(sd.decode('A'), 0x77);
+    EXPECT_EQ(sd.decode('b'), 0x7C);
+    EXPECT_EQ(sd.decode('B'), 0x7C);
+    EXPECT_EQ(sd.decode('c'), 0x39);
+    EXPECT_EQ(sd.decode('C'), 0x39);
+    EXPECT_EQ(sd.decode('d'), 0x5E);
+    EXPECT_EQ(sd.decode('D'), 0x5E);
     EXPECT_EQ(sd.decode('e'), 0x79);
     EXPECT_EQ(sd.decode('E'), 0x79);
     EXPECT_EQ(sd.decode('f'), 0x71);
