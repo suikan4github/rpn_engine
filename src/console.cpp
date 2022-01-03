@@ -534,8 +534,10 @@ void rpn_engine::Console::RenderHexMode()
 {
     // get the stack top, take real part and round.
     // Some implementation makes negative value to zero. To refuge it,
-    // do the bit masking.
-    unsigned int value = (unsigned int)std::round(engine_.Get(0).real());
+    // convet the double float to 64bit signed integer, then convert it
+    // to 32bit signed integer.
+    // We can get LSB 32bit precisely (hope so).
+    int32_t value = (int64_t)std::round(engine_.Get(0).real());
 
     std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
     decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point
