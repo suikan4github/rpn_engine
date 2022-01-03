@@ -180,3 +180,33 @@ TEST(ConsoleEditing, HexNeg)
     EXPECT_STREQ(display_text, " FFFFFFFF"); //
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
+
+// FFFFFFFF
+TEST(ConsoleEditing, HugeHex)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::hex);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " FFFFFFFF"); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::enter);
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " FFFFFFFF"); //
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}

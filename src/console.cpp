@@ -64,7 +64,7 @@ void rpn_engine::Console::PreExecutionProcess()
     {
         if (is_hex_mode_)
         {
-            int32_t hexvalue;
+            uint32_t hexvalue;
             std::sscanf(mantissa_buffer_, "%X", &hexvalue); // Convert nominal literal to int32_t.
             value = hexvalue;
         }
@@ -502,7 +502,7 @@ void rpn_engine::Console::RenderScientificMode(bool engineering_mode)
 void rpn_engine::Console::RenderHexMode()
 {
     // get the stack top, take real part and round.
-    int32_t value = std::round(engine_.Get(0).real());
+    uint32_t value = std::round(engine_.Get(0).real());
 
     std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
     decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point
