@@ -786,3 +786,44 @@ TEST(ConsoleEditing, FuncDuringEditing)
     EXPECT_STREQ(display_text, " 12345 00"); // must in floating input
     EXPECT_EQ(decimal_point, 3);
 }
+
+// Edit then del
+TEST(ConsoleEditing, EditNumDel)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // must in floating input
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12      "); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+    c.Input(Op::del);
+    c.Input(Op::del);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // must in floating input
+    EXPECT_EQ(decimal_point, 7);
+}
+
+// Clx, del then, number
+TEST(ConsoleEditing, ClxDelNum)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::clx);
+    c.Input(Op::del);
+    c.Input(Op::num_1);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1       "); // must in floating input
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}

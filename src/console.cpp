@@ -338,7 +338,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             }
             else // not float
             {
-                if (mantissa_cursor_ == 2) // if deleting right most digit
+                if ((mantissa_cursor_ == 2) || (mantissa_cursor_ == 1)) // if deleting right most digit
                 {
                     HandleNonEditingOp(Op::clx); // delete X. And then, set is_editing = false implicitly.
                     return;                      // HandleNonEditingOp() render the text_buffer_. So ,we can leave now.
