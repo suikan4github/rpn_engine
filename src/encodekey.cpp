@@ -103,7 +103,7 @@ namespace rpn_engine
                     break;
                     // Row 8
                 case 0x0802: // sqrt
-                    // do nothing
+                    ;        // do nothing
                     break;
                 case 0x0801: // M+
                     ret_val = Op::func;
@@ -302,7 +302,7 @@ namespace rpn_engine
                     break;
                     // Row 8
                 case 0x0802: // sqrt
-                    // do nothing
+                    ret_val = Op::square;
                     break;
                 case 0x0801: // M+
                     ret_val = Op::func;

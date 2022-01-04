@@ -153,7 +153,7 @@ TEST(EncodeKey, dec_func)
     EXPECT_EQ(rpn_engine::EncodeKey(NUM2, true, false), Op::cos);
     EXPECT_EQ(rpn_engine::EncodeKey(NUM3, true, false), Op::tan);
     EXPECT_EQ(rpn_engine::EncodeKey(MINUS, true, false), Op::to_cartesian);
-    EXPECT_EQ(rpn_engine::EncodeKey(SQRT, true, false), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(SQRT, true, false), Op::square);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM0, true, false), Op::asin);
     EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, true, false), Op::acos);
