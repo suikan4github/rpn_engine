@@ -550,6 +550,8 @@ void rpn_engine::Console::RenderHexMode()
     // We can get LSB 32bit precisely (hope so).
     int32_t value = (int64_t)std::round(engine_.Get(0).real());
 
-    std::sprintf(text_buffer_, " %08X", value);          // display by 8 digit hex with leading zero
-    decimal_point_position_ = kDecimalPointNotDisplayed; // no decimal point
+    unsigned int uivalue = value;                        // Copy the uint32_t data to unsigned integer.
+                                                         // This is required by "%X" format specifier
+    std::sprintf(text_buffer_, " %08X", uivalue);        // Display by 8 digit hex with leading zero
+    decimal_point_position_ = kDecimalPointNotDisplayed; // No decimal point
 }
