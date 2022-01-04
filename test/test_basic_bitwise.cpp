@@ -21,9 +21,9 @@ namespace rpn_engine
         EXPECT_EQ(s->To64bitValue(-1.8), -1);   // truncation test.
 
         // Large number extraction.
-        EXPECT_GT((1LL << 40), INT32_MAX);                       // compiler check.
-        EXPECT_EQ(s->To64bitValue(INT32_MAX - 1.0), 0x7ffffffe); // extracted data must be INT32_MAX-1.
-        EXPECT_EQ(s->To64bitValue(INT32_MAX + 1.0), 0x80000000); // extracted data must be overflown
+        EXPECT_GT((1LL << 40), INT32_MAX);                                 // compiler check.
+        EXPECT_EQ(s->To64bitValue(INT32_MAX - 1.0), 0x000000007ffffffell); // extracted data must be INT32_MAX-1.
+        EXPECT_EQ(s->To64bitValue(INT32_MAX + 1.0), 0xFFFFFFFF80000000ll); // extracted data must be overflown
         delete s;
     }
 

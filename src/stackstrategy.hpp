@@ -710,8 +710,10 @@ namespace rpn_engine
          * @param x Value to convert.
          * @return int32_t Converted value.
          * @details
-         * Truncate given value to signed 64bit integer. Then, extract lower 32bit value.
-         * The truncation is round to zero
+         * Truncate given value to signed 64bit integer. The upper 32bit is
+         * sign extended.
+         * Then, extract lower 32bit value
+         * The truncation is round to zero.
          *
          * Note that in case the given X exceed the range of the 64bit signed integer,
          * The result is unpredictable.
@@ -725,6 +727,11 @@ namespace rpn_engine
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
             int64_t intermediate_value = x.real();
+            // extend sign
+            if ((intermediate_value & 0x80000000) == 0)     // is it positive number?
+                intermediate_value &= 0x00000000FFFFFFFFll; // force upper bits zero
+            else                                            // negative number
+                intermediate_value |= 0xFFFFFFFF00000000ll; // force upper bits one.
             return intermediate_value;
         }
 
@@ -736,6 +743,11 @@ namespace rpn_engine
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
             int64_t intermediate_value = x;
+            // extend sign
+            if ((intermediate_value & 0x80000000) == 0)     // is it positive number?
+                intermediate_value &= 0x00000000FFFFFFFFll; // force upper bits zero
+            else                                            // negative number
+                intermediate_value |= 0xFFFFFFFF00000000ll; // force upper bits one.
             return intermediate_value;
         }
 
@@ -1221,7 +1233,19 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
     auto y = To64bitValue(Pop());
 
     // do the operation
-    uint32_t r = y * x;
+    int32_t r = y * x;
+
+    if ((y & 0x80000000) == (x & 0x80000000)) // Is result must positive?
+    {
+        if (r < 0)         // if the sign is minus.
+            r = INT32_MAX; // make it positive max
+    }
+    else // The result must be negative
+    {
+        if (r >= 0)        // if the sign is positive.
+            r = INT32_MIN; // make it negative min
+    }
+
     Push(ToElementValue(r));
 }
 
@@ -1316,7 +1340,7 @@ void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
     auto y = To64bitValue(Pop());
 
     // do the operation
-    uint32_t r = y >> x;
+    uint32_t r = (uint32_t)y >> (int32_t)x;
     Push(ToElementValue(r));
 }
 
