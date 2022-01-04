@@ -77,9 +77,10 @@ namespace rpn_engine
         const int kDecimalPointNotDisplayed = 256;
         /**
          * @brief Construct a new Console object
+         * @param inital_string A  string displayed at first. Ignored if nullptr.
          *
          */
-        Console();
+        Console(const char *initial_string = nullptr);
 
         virtual ~Console();
         /**

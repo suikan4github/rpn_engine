@@ -433,3 +433,25 @@ TEST(Console, HexModeRenering)
     EXPECT_STREQ(display_text, " 10000000");
     EXPECT_EQ(decimal_point, 6);
 }
+
+TEST(Console, InitialString)
+{
+    rpn_engine::Console c(" HELLO   ");
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " HELLO   ");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_0);
+
+    c.Input(Op::hex);
+    EXPECT_TRUE(c.GetIsHexMode());
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 0000000A");
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}

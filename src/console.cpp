@@ -11,16 +11,23 @@ using rpn_engine::Op;
 static const int kFullMantissa = 9;
 static const int kUpperMostDigit = 7;
 
-rpn_engine::Console::Console() : engine_(StackStrategy<std::complex<double>>(kDepthOfStack)),
-                                 is_func_key_pressed_(false),
-                                 display_mode_(DisplayMode::fixed),
-                                 is_editing_(false),
-                                 is_pushable_(false),
-                                 mantissa_cursor_(1),
-                                 is_editing_float_(false),
-                                 is_hex_mode_(false)
+rpn_engine::Console::Console(const char *initial_string) : engine_(StackStrategy<std::complex<double>>(kDepthOfStack)),
+                                                           is_func_key_pressed_(false),
+                                                           display_mode_(DisplayMode::fixed),
+                                                           is_editing_(false),
+                                                           is_pushable_(false),
+                                                           mantissa_cursor_(1),
+                                                           is_editing_float_(false),
+                                                           is_hex_mode_(false)
 {
-    PostExecutionProcess();
+    if (initial_string == nullptr)                                   // if the initial_string is null
+        PostExecutionProcess();                                      // display 0.0000000 as initial string
+    else                                                             // if not
+    {                                                                // display initial string
+        std::strncpy(text_buffer_, initial_string, kNumberOfDigits); // fill up by initial string.
+        text_buffer_[kNumberOfDigits] = '\0';                        // null terminate
+        decimal_point_position_ = kDecimalPointNotDisplayed;         // do not show period
+    }
 }
 
 rpn_engine::Console::~Console()
