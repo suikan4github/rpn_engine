@@ -455,3 +455,19 @@ TEST(Console, InitialString)
     EXPECT_STREQ(display_text, " 0000000A");
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
+
+TEST(Console, PiUndo)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_2);
+    c.Input(Op::pi);
+    c.Input(Op::undo);
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 20000000");
+    EXPECT_EQ(decimal_point, 7);
+}

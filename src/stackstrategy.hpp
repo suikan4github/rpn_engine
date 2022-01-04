@@ -1504,6 +1504,9 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
     case Op::bit_not:
         BitNot();
         break;
+    case Op::undo:
+        Undo();
+        break;
     case Op::clx:
         assert(false);
         break;

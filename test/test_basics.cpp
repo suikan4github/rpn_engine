@@ -250,18 +250,6 @@ TEST(BasicStackDeathTest, del)
 }
 
 // Testing the restriction of the stack size and get() member function.
-TEST(BasicStackDeathTest, undo)
-{
-    IntStack *s;
-    s = new IntStack(4);
-
-#ifndef NDEBUG
-    // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::undo), "false");
-#endif
-}
-
-// Testing the restriction of the stack size and get() member function.
 TEST(BasicStackDeathTest, change_display)
 {
     IntStack *s;
