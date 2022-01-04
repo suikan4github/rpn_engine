@@ -757,7 +757,7 @@ TEST(ConsoleEditing, DuplicateEex)
 
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 314   04"); // must not change
+    EXPECT_STREQ(display_text, " 314   04"); // 2nd eex has no effect
     EXPECT_EQ(decimal_point, 7);
 }
 
@@ -774,7 +774,7 @@ TEST(ConsoleEditing, FuncDuringEditing)
     c.Input(Op::func);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 123     "); // must in floating input
+    EXPECT_STREQ(display_text, " 123     "); // func key doesn't change
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
     c.Input(Op::num_4);
     EXPECT_FALSE(c.GetIsFuncKeyPressed()); // any input except f-key clear the state.
@@ -796,19 +796,19 @@ TEST(ConsoleEditing, EditNumDel)
 
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 00000000"); // must in floating input
+    EXPECT_STREQ(display_text, " 00000000"); // Initial
     EXPECT_EQ(decimal_point, 7);
     c.Input(Op::num_1);
     c.Input(Op::num_2);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 12      "); // must in floating input
+    EXPECT_STREQ(display_text, " 12      "); // intermediate
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
     c.Input(Op::del);
     c.Input(Op::del);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 00000000"); // must in floating input
+    EXPECT_STREQ(display_text, " 00000000"); // 2nd del works as clx
     EXPECT_EQ(decimal_point, 7);
 }
 
@@ -824,7 +824,7 @@ TEST(ConsoleEditing, ClxDelNum)
     c.Input(Op::num_1);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 1       "); // must in floating input
+    EXPECT_STREQ(display_text, " 1       "); // after clx, must input correct
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
 
@@ -841,13 +841,13 @@ TEST(ConsoleEditing, BitNegate)
     c.Input(Op::enter);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 000000FF"); // must in floating input
+    EXPECT_STREQ(display_text, " 000000FF"); // Before bit neg
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 
     c.Input(Op::bit_neg);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " FFFFFF01"); // must in floating input
+    EXPECT_STREQ(display_text, " FFFFFF01"); // must bit not + 1
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
 
@@ -864,12 +864,278 @@ TEST(ConsoleEditing, BitNot)
     c.Input(Op::enter);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " 000000FF"); // must in floating input
+    EXPECT_STREQ(display_text, " 000000FF"); // before operation
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 
     c.Input(Op::bit_not);
     c.GetText(display_text);
     decimal_point = c.GetDecimalPointPosition();
-    EXPECT_STREQ(display_text, " FFFFFF00"); // must in floating input
+    EXPECT_STREQ(display_text, " FFFFFF00"); // bit not
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Edit with period
+TEST(ConsoleEditing, EditWithPeriod)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12      "); // first 2 digit
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+    c.Input(Op::period);
+    c.Input(Op::num_3);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 123     "); // 3 digit and period
+    EXPECT_EQ(decimal_point, 6);             // now, "12.3"
+
+    c.Input(Op::del); // now, "12."
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12      "); // just before deleting period
+    EXPECT_EQ(decimal_point, 6);
+
+    c.Input(Op::del); // now, "12"
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12      "); // period is deleted
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del); // now, "1"
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1       "); // and delete digit
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Input period immediately
+TEST(ConsoleEditing, ImmediatePeriod)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::period);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 0       "); // must 0.0000000
+    EXPECT_EQ(decimal_point, 7);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer1)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 10000000"); // 1 digit
+    EXPECT_EQ(decimal_point, 7);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer2)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12000000"); // 2 digit
+    EXPECT_EQ(decimal_point, 6);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer3)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12300000"); // 3 digit
+    EXPECT_EQ(decimal_point, 5);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer4)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12340000"); // 4 digit
+    EXPECT_EQ(decimal_point, 4);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer5)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345000"); // 5 digit
+    EXPECT_EQ(decimal_point, 3);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer6)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::num_6);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345600"); // 6 digit
+    EXPECT_EQ(decimal_point, 2);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer7)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::num_6);
+    c.Input(Op::num_7);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345670"); // 7 digit
+    EXPECT_EQ(decimal_point, 1);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, Integer8)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::num_4);
+    c.Input(Op::num_5);
+    c.Input(Op::num_6);
+    c.Input(Op::num_7);
+    c.Input(Op::num_8);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12345678"); // 8 digit
+    EXPECT_EQ(decimal_point, 0);
+}
+
+// Comprehensive test for integer input
+TEST(ConsoleEditing, RenderBiggerNumber)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_1);
+    c.Input(Op::period);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::eex);
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+12300+12"); // must in scientific display
+    EXPECT_EQ(decimal_point, 7);
 }
