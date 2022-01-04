@@ -128,12 +128,12 @@ void rpn_engine::Console::PreExecutionProcess()
 
 void rpn_engine::Console::PostExecutionProcess()
 {
-    if (std::isnan(engine_.Get(0).real())) // NaN?
+    if (std::isnan(engine_.Get(0).real()) || std::isnan(engine_.Get(0).imag())) // NaN?
     {
         std::strcpy(text_buffer_, "      NaN");
         decimal_point_position_ = kDecimalPointNotDisplayed;
     }
-    else if (std::isinf(engine_.Get(0).real())) // Inf?
+    else if (std::isinf(engine_.Get(0).real()) || std::isinf(engine_.Get(0).imag())) // Inf?
     {
         std::strcpy(text_buffer_, "      INF");
         decimal_point_position_ = kDecimalPointNotDisplayed;
