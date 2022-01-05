@@ -140,7 +140,7 @@ TEST(EncodeKey, dec_func)
     EXPECT_EQ(rpn_engine::EncodeKey(NUM7, true, false), Op::exp);
     EXPECT_EQ(rpn_engine::EncodeKey(NUM8, true, false), Op::power10);
     EXPECT_EQ(rpn_engine::EncodeKey(NUM9, true, false), Op::conjugate);
-    EXPECT_EQ(rpn_engine::EncodeKey(DIV, true, false), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(DIV, true, false), Op::inv);
     EXPECT_EQ(rpn_engine::EncodeKey(C, true, false), Op::clx);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM4, true, false), Op::log);

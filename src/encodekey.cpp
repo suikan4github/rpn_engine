@@ -19,7 +19,7 @@ namespace rpn_engine
         {
             if (is_func_key_pressed)
             {
-                switch (key_code)
+                switch (key_code) // Hex + Func
                 {
                     // Row 0
                 case 0x0002: // 0
@@ -117,7 +117,7 @@ namespace rpn_engine
             }
             else // not func key pressed
             {
-                switch (key_code)
+                switch (key_code) // Hex
                 {
                     // Row 0
                 case 0x0002: // 0
@@ -216,7 +216,7 @@ namespace rpn_engine
         }
         else // not hex mode
         {
-            if (is_func_key_pressed)
+            if (is_func_key_pressed) // Dec + Func
             {
                 switch (key_code)
                 {
@@ -288,7 +288,7 @@ namespace rpn_engine
                     // do nothing
                     break;
                 case 0x0600: // /
-                    // do nothing
+                    ret_val = Op::inv;
                     break;
                     // Row 7
                 case 0x0702: // 3
@@ -316,7 +316,7 @@ namespace rpn_engine
             }
             else // not func key pressed
             {
-                switch (key_code)
+                switch (key_code) // Dec
                 {
                     // Row 0
                 case 0x0002: // 0
