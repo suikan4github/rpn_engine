@@ -133,3 +133,70 @@ TEST(Console, NaN3)
     EXPECT_STREQ(display_text, "      NaN");
     EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
 }
+
+// Check whether overflown is trapped.
+TEST(Console, BitMulOverflow)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::hex);
+    c.Input(Op::num_8);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0);
+    c.Input(Op::num_0); // INT32_MIN
+    c.Input(Op::enter);
+    c.Input(Op::num_2);
+    c.Input(Op::bit_mul); // cause overflow
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 80000000"); // must be saturated
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_7);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f);
+    c.Input(Op::num_f); // INT32_MAX
+    c.Input(Op::enter);
+    c.Input(Op::num_2);
+    c.Input(Op::bit_mul); // cause overflow
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 7FFFFFFF"); // must be saturated
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}
+
+// Display 99999999.5. This must be showed as scientific mode
+TEST(Console, ScientifcDisplayBOverflow)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9); // mux fixed mode number
+    c.Input(Op::enter);
+    c.Input(Op::num_0);
+    c.Input(Op::period);
+    c.Input(Op::num_5);
+    c.Input(Op::add); // cause overflow from the fixed mode display because of rounding
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+10000+08"); // must be saturated
+    EXPECT_EQ(decimal_point, 7);
+}

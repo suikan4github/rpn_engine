@@ -152,9 +152,9 @@ namespace rpn_engine
         /********************************** BASIC OPERATION *****************************/
         /**
          * @brief Single interface for the operation.
-         * @param opecode Opecode of the operation to do.
+         * @param opcode Opecode of the operation to do.
          */
-        void Operation(Op opecode);
+        void Operation(Op opcode);
 
         /**
          * @brief Get the value of stack at specified position
@@ -1376,10 +1376,15 @@ void rpn_engine::StackStrategy<Element>::BitNot()
 }
 
 template <class Element>
-void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
+void rpn_engine::StackStrategy<Element>::Operation(Op opcode)
 {
 
-    switch (opecode)
+    assert(opcode != Op::clx);
+    assert(opcode != Op::enter);
+    assert(opcode != Op::change_display);
+    assert(Op::num_0 > opcode);
+
+    switch (opcode)
     {
     case Op::duplicate:
         Duplicate();
@@ -1506,15 +1511,6 @@ void rpn_engine::StackStrategy<Element>::Operation(Op opecode)
         break;
     case Op::undo:
         Undo();
-        break;
-    case Op::clx:
-        assert(false);
-        break;
-    case Op::enter:
-        assert(false);
-        break;
-    case Op::change_display:
-        assert(false);
         break;
     default: // in case of wrong op code.
         assert(false);

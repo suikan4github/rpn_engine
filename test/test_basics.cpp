@@ -21,7 +21,7 @@ TEST(BasicStackDeathTest, StackSizeLimit)
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_0)
 {
     IntStack *s;
@@ -29,11 +29,11 @@ TEST(BasicStackDeathTest, num_0)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_0), "false");
+    ASSERT_DEATH(s->Operation(Op::num_0), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_1)
 {
     IntStack *s;
@@ -41,11 +41,11 @@ TEST(BasicStackDeathTest, num_1)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_1), "false");
+    ASSERT_DEATH(s->Operation(Op::num_1), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_2)
 {
     IntStack *s;
@@ -53,11 +53,11 @@ TEST(BasicStackDeathTest, num_2)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_2), "false");
+    ASSERT_DEATH(s->Operation(Op::num_2), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_3)
 {
     IntStack *s;
@@ -65,11 +65,11 @@ TEST(BasicStackDeathTest, num_3)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_3), "false");
+    ASSERT_DEATH(s->Operation(Op::num_3), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_4)
 {
     IntStack *s;
@@ -77,11 +77,11 @@ TEST(BasicStackDeathTest, num_4)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_4), "false");
+    ASSERT_DEATH(s->Operation(Op::num_4), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_5)
 {
     IntStack *s;
@@ -89,11 +89,11 @@ TEST(BasicStackDeathTest, num_5)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_6), "false");
+    ASSERT_DEATH(s->Operation(Op::num_5), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_6)
 {
     IntStack *s;
@@ -101,11 +101,11 @@ TEST(BasicStackDeathTest, num_6)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_6), "false");
+    ASSERT_DEATH(s->Operation(Op::num_6), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_7)
 {
     IntStack *s;
@@ -113,11 +113,11 @@ TEST(BasicStackDeathTest, num_7)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_7), "false");
+    ASSERT_DEATH(s->Operation(Op::num_7), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_8)
 {
     IntStack *s;
@@ -125,11 +125,11 @@ TEST(BasicStackDeathTest, num_8)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_8), "false");
+    ASSERT_DEATH(s->Operation(Op::num_8), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_9)
 {
     IntStack *s;
@@ -137,11 +137,11 @@ TEST(BasicStackDeathTest, num_9)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_9), "false");
+    ASSERT_DEATH(s->Operation(Op::num_9), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_a)
 {
     IntStack *s;
@@ -149,11 +149,11 @@ TEST(BasicStackDeathTest, num_a)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_a), "false");
+    ASSERT_DEATH(s->Operation(Op::num_a), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_b)
 {
     IntStack *s;
@@ -161,11 +161,11 @@ TEST(BasicStackDeathTest, num_b)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_b), "false");
+    ASSERT_DEATH(s->Operation(Op::num_b), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_c)
 {
     IntStack *s;
@@ -173,11 +173,11 @@ TEST(BasicStackDeathTest, num_c)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_c), "false");
+    ASSERT_DEATH(s->Operation(Op::num_c), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_d)
 {
     IntStack *s;
@@ -185,11 +185,11 @@ TEST(BasicStackDeathTest, num_d)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_d), "false");
+    ASSERT_DEATH(s->Operation(Op::num_d), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_e)
 {
     IntStack *s;
@@ -197,11 +197,11 @@ TEST(BasicStackDeathTest, num_e)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_e), "false");
+    ASSERT_DEATH(s->Operation(Op::num_e), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, num_f)
 {
     IntStack *s;
@@ -209,11 +209,11 @@ TEST(BasicStackDeathTest, num_f)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::num_f), "false");
+    ASSERT_DEATH(s->Operation(Op::num_f), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, period)
 {
     IntStack *s;
@@ -221,11 +221,11 @@ TEST(BasicStackDeathTest, period)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::period), "false");
+    ASSERT_DEATH(s->Operation(Op::period), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, clx)
 {
     IntStack *s;
@@ -233,11 +233,11 @@ TEST(BasicStackDeathTest, clx)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::clx), "false");
+    ASSERT_DEATH(s->Operation(Op::clx), "opcode != Op::clx");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, del)
 {
     IntStack *s;
@@ -245,11 +245,11 @@ TEST(BasicStackDeathTest, del)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::del), "false");
+    ASSERT_DEATH(s->Operation(Op::del), "Op::num_0 > opcode");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, change_display)
 {
     IntStack *s;
@@ -257,11 +257,23 @@ TEST(BasicStackDeathTest, change_display)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::change_display), "false");
+    ASSERT_DEATH(s->Operation(Op::change_display), "opcode != Op::change_display");
 #endif
 }
 
-// Testing the restriction of the stack size and get() member function.
+// Testing the restriction of opcode
+TEST(BasicStackDeathTest, enter)
+{
+    IntStack *s;
+    s = new IntStack(4);
+
+#ifndef NDEBUG
+    // We test only when assert() works.
+    ASSERT_DEATH(s->Operation(Op::enter), "opcode != Op::enter");
+#endif
+}
+
+// Testing the restriction of the wrong operation
 TEST(BasicStackDeathTest, eex)
 {
     IntStack *s;
@@ -269,7 +281,7 @@ TEST(BasicStackDeathTest, eex)
 
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(s->Operation(Op::eex), "false");
+    ASSERT_DEATH(s->Operation(Op::eex), "Op::num_0 > opcode");
 #endif
 }
 

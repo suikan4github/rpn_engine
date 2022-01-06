@@ -374,7 +374,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             }
             break;
         default:
-            assert(false); // unimplemented error
+            assert(false); // logic error
         }
         std::strcpy(text_buffer_, mantissa_buffer_);
         if (is_editing_float_)
@@ -413,17 +413,15 @@ void rpn_engine::Console::RenderFixedMode()
     if (minus)
         value = -value;
 
-    if (value >= kBoundaryOfScientific)  // if too large,
-        RenderScientificMode(false);     // display in the scientific format
-    else if (5e-8 > value && value != 0) // if too small
-        RenderScientificMode(false);     // display in the scientific format
+    if (value + 0.5 >= kBoundaryOfScientific) // if too large,
+        RenderScientificMode(false);          // display in the scientific format
+    else if (5e-8 > value && value != 0)      // if too small
+        RenderScientificMode(false);          // display in the scientific format
     else
     {
         int int_value = 0;
 
-        if (int(value + 0.5) > kBoundaryOfScientific)
-            RenderScientificMode(false); // display in the scientific format
-        else if (kBoundaryOfScientific > (value * 1e7 + 0.5))
+        if (kBoundaryOfScientific > (value * 1e7 + 0.5))
         {
             exponent = 7;
             int_value = value * 1e7 + 0.5;

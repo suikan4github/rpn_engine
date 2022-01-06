@@ -15,6 +15,9 @@ namespace rpn_engine
         unsigned int key_code = (row << 8) | col;
         Op ret_val = Op::nop;
 
+        assert(!key_code != 0x0100);
+        assert(!key_code != 0x0602);
+
         if (is_hex_mode)
         {
             if (is_func_key_pressed)
@@ -37,9 +40,6 @@ namespace rpn_engine
                     break;
                 case 0x0101: // 7
                     ret_val = Op::logical_shift_left;
-                    break;
-                case 0x0100: // N.A.
-                    assert(false);
                     break;
                     // Row 2
                 case 0x0202: // 1
@@ -82,9 +82,6 @@ namespace rpn_engine
                     ret_val = Op::clx;
                     break;
                     // Row 6
-                case 0x0602: // N.A.
-                    assert(false);
-                    break;
                 case 0x0601: // M-
                     // do nothing
                     break;
@@ -136,9 +133,6 @@ namespace rpn_engine
                 case 0x0101: // 7
                     ret_val = Op::num_7;
                     break;
-                case 0x0100: // N.A.
-                    assert(false);
-                    break;
                     // Row 2
                 case 0x0202: // 1
                     ret_val = Op::num_1;
@@ -180,9 +174,6 @@ namespace rpn_engine
                     ret_val = Op::del;
                     break;
                     // Row 6
-                case 0x0602: // N.A.
-                    assert(false);
-                    break;
                 case 0x0601: // M-
                              // do nothing
                     break;
@@ -237,9 +228,6 @@ namespace rpn_engine
                 case 0x0101: // 7
                     ret_val = Op::exp;
                     break;
-                case 0x0100: // N.A.
-                    assert(false);
-                    break;
                     // Row 2
                 case 0x0202: // 1
                     ret_val = Op::sin;
@@ -281,9 +269,6 @@ namespace rpn_engine
                     ret_val = Op::clx;
                     break;
                     // Row 6
-                case 0x0602: // N.A.
-                    assert(false);
-                    break;
                 case 0x0601: // M-
                     // do nothing
                     break;
@@ -335,9 +320,6 @@ namespace rpn_engine
                 case 0x0101: // 7
                     ret_val = Op::num_7;
                     break;
-                case 0x0100: // N.A.
-                    assert(false);
-                    break;
                     // Row 2
                 case 0x0202: // 1
                     ret_val = Op::num_1;
@@ -379,9 +361,6 @@ namespace rpn_engine
                     ret_val = Op::del;
                     break;
                     // Row 6
-                case 0x0602: // N.A.
-                    assert(false);
-                    break;
                 case 0x0601: // M-
                     ret_val = Op::change_display;
                     break;
