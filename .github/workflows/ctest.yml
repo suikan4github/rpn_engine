@@ -60,7 +60,7 @@ jobs:
       - name: Gcovr
         if:  matrix.os == 'ubuntu-latest'  && matrix.build == 'Debug' 
         run:  |
-          sudo apt install gcovr
+          sudo apt-get install gcovr -y > /dev/null
           gcovr -r . -e build
 
 
