@@ -57,7 +57,7 @@ jobs:
           ctest --rerun-failed --output-on-failure -j 4
 
       # Created report only when Linux and Debug
-      - name: Gcovr
+      - name: Gcovr ( Linux and Debug only )
         if:  matrix.os == 'ubuntu-latest'  && matrix.build == 'Debug' 
         run:  |
           sudo apt-get install gcovr -y > /dev/null

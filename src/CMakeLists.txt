@@ -16,14 +16,14 @@ set(EXECUTABLE_NAME "dev_${MY_LIBRARY_NAME}")
 file(GLOB ALL_SRCS "*.cpp")
 
 # Executable if needed
-add_executable(${EXECUTABLE_NAME} 
-    ${ALL_SRCS})
+# add_executable(${EXECUTABLE_NAME} 
+#    ${ALL_SRCS})
 
 # Add pthread library to support std::thread
 # In the case of MSVC, this is not required.
-if (NOT(MSVC))
-    target_link_libraries(${EXECUTABLE_NAME} "pthread")
-endif(NOT(MSVC))
+# if (NOT(MSVC))
+#    target_link_libraries(${EXECUTABLE_NAME} "pthread")
+# endif(NOT(MSVC))
 
 
 # Remove the "main file" from list to create a library for test
