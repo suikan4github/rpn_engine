@@ -127,7 +127,14 @@ void rpn_engine::Console::PreExecutionProcess()
             value = mantissa * std::pow(10, exponent);  // adjust exponent
 
         } // ? hexmode
-        engine_.Push(value);
+
+        if (is_pushable_)
+            engine_.Push(value);
+        else
+        {
+            engine_.Pop();       // discard current stack top to inhibit the push.
+            engine_.Push(value); // actually. overwrite the stack top.
+        }
         is_editing_ = false; // end of editing
         is_pushable_ = true; // after editing, stack is pushable.
     }                        // ? editing
