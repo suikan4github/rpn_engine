@@ -1233,17 +1233,18 @@ void rpn_engine::StackStrategy<Element>::BitMultiply()
     auto y = To64bitValue(Pop());
 
     // do the operation
-    int32_t r = y * x;
+    int64_t r = y * x;
+    uint64_t sign = r & (0xFFFFFFFF80000000ll); // take sign part. It is upper 32bit and MSB of lower 32bit
 
     if ((y & 0x80000000) == (x & 0x80000000)) // Is result must positive?
     {
-        if (r < 0)         // if the sign is minus.
+        if (sign != 0)     // If sign part is non zero, overflown from signed 32 bit.
             r = INT32_MAX; // make it positive max
     }
     else // The result must be negative
     {
-        if (r >= 0)        // if the sign is positive.
-            r = INT32_MIN; // make it negative min
+        if ((~sign & 0xFFFFFFFF80000000ll) != 0) // if the sign part is not all 1, overflown from signed 32bit.
+            r = INT32_MIN;                       // make it negative min
     }
 
     Push(ToElementValue(r));
