@@ -18,7 +18,6 @@ TEST(BasicStackDeathTest, StackSizeLimit)
             s = new IntStack(0); // must not be non zero
         },
         "stack_size_ >= 2");
-    s->Push(0);
 #endif
 }
 
@@ -524,43 +523,4 @@ TEST(BasicStackTest, RotatePush)
     EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
 
     delete s;
-}
-
-namespace rpn_engine
-{
-    TEST(BasicStackTest, Undo)
-    {
-        IntStack *s;
-        s = new IntStack(4);
-
-        s->Push(1);
-        s->Push(2);
-        s->Push(3);
-        s->Push(4);
-
-        EXPECT_EQ(s->Get(0), 4); // check the stack top
-        EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
-        EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
-        EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
-
-        EXPECT_EQ(s->undo_saving_enabled_, true); // check the enabled state
-        s->SaveToUndoBuffer();
-        // Save stack state before mathematical operation
-        {
-            IntStack::DisableUndoSaving disable(s);
-            EXPECT_EQ(s->undo_saving_enabled_, false); // check the enabled state
-
-            s->Pop();
-            s->Pop();
-            EXPECT_EQ(s->undo_saving_enabled_, false); // check the enabled state
-        }
-        EXPECT_EQ(s->undo_saving_enabled_, true); // check the enabled state
-
-        s->Undo();
-        EXPECT_EQ(s->Get(0), 4); // check the stack top
-        EXPECT_EQ(s->Get(1), 3); // check the stack 2nd.
-        EXPECT_EQ(s->Get(2), 2); // check the stack 3rd.
-        EXPECT_EQ(s->Get(3), 1); // check the stack 4th.
-        delete s;
-    }
 }

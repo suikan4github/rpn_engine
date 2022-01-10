@@ -352,63 +352,6 @@ TEST(ConsoleEditing, DelFixed)
     EXPECT_EQ(decimal_point, 7);
 }
 
-namespace rpn_engine
-{
-    // Test enter key
-    TEST(ConsoleEditing, Enter)
-    {
-        rpn_engine::Console c;
-        char display_text[12];
-        int decimal_point;
-
-        c.Input(Op::num_1);
-        c.Input(Op::num_2);
-        c.Input(Op::num_3);
-        c.GetText(display_text);
-        decimal_point = c.GetDecimalPointPosition();
-        EXPECT_STREQ(display_text, " 123     "); // must delete last digit
-        EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
-
-        // after [Enter], both x and y have to be same value.
-        c.Input(Op::enter);
-        c.GetText(display_text);
-        decimal_point = c.GetDecimalPointPosition();
-        EXPECT_STREQ(display_text, " 12300000"); // must delete last digit
-        EXPECT_EQ(decimal_point, 5);
-
-        StackElement e = c.engine_.Get(0);
-        EXPECT_EQ(e.real(), 123.0);
-        EXPECT_EQ(e.imag(), 0);
-
-        e = c.engine_.Get(1);
-        EXPECT_EQ(e.real(), 123.0);
-        EXPECT_EQ(e.imag(), 0);
-
-        e = c.engine_.Get(2);
-        EXPECT_EQ(e.real(), 0);
-        EXPECT_EQ(e.imag(), 0);
-
-        // after [Enter], both x and y have to be same value.
-        c.Input(Op::enter);
-        c.GetText(display_text);
-        decimal_point = c.GetDecimalPointPosition();
-        EXPECT_STREQ(display_text, " 12300000"); // must delete last digit
-        EXPECT_EQ(decimal_point, 5);
-
-        e = c.engine_.Get(0);
-        EXPECT_EQ(e.real(), 123.0);
-        EXPECT_EQ(e.imag(), 0);
-
-        e = c.engine_.Get(1);
-        EXPECT_EQ(e.real(), 123.0);
-        EXPECT_EQ(e.imag(), 0);
-
-        e = c.engine_.Get(2);
-        EXPECT_EQ(e.real(), 123.0);
-        EXPECT_EQ(e.imag(), 0);
-    }
-}
-
 // Test chs on fixed input
 TEST(ConsoleEditing, ChsFixed)
 {

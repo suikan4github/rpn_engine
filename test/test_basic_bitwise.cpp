@@ -6,41 +6,6 @@
 
 typedef rpn_engine::StackStrategy<double> DoubleStack;
 
-namespace rpn_engine
-{
-
-    TEST(BasicBitwiseTest, To32bitValue)
-    {
-        DoubleStack *s;
-        s = new DoubleStack(4);
-
-        // truncation from integer is "round to zero" according to the C++ standard.
-        EXPECT_EQ(s->To64bitValue(1.414), 1);   // truncation test.
-        EXPECT_EQ(s->To64bitValue(1.8), 1);     // truncation test.
-        EXPECT_EQ(s->To64bitValue(-1.414), -1); // truncation test.
-        EXPECT_EQ(s->To64bitValue(-1.8), -1);   // truncation test.
-
-        // Large number extraction.
-        EXPECT_GT((1LL << 40), INT32_MAX);                                 // compiler check.
-        EXPECT_EQ(s->To64bitValue(INT32_MAX - 1.0), 0x000000007ffffffell); // extracted data must be INT32_MAX-1.
-        EXPECT_EQ(s->To64bitValue(INT32_MAX + 1.0), 0xFFFFFFFF80000000ll); // extracted data must be overflown
-        delete s;
-    }
-
-    TEST(BasicBitwiseTest, ToElementValue)
-    {
-        DoubleStack *s;
-        s = new DoubleStack(4);
-
-        EXPECT_EQ(s->ToElementValue(1), 1.0);
-        EXPECT_EQ(s->ToElementValue(-1), -1.0);
-        EXPECT_EQ(s->ToElementValue(0x7FFFFFFF), INT32_MAX);
-        EXPECT_EQ(s->ToElementValue(0x80000000), INT32_MIN);
-        delete s;
-    }
-
-}
-
 TEST(BasicBitwiseTest, BitAdd)
 {
     DoubleStack *s;

@@ -144,13 +144,6 @@ namespace rpn_engine
         int32_t GetDecimalPointPosition();
 
     private:
-        FRIEND_TEST(Console, Mode);
-        FRIEND_TEST(Console, PrimitivePi);
-        FRIEND_TEST(Console, FixedMode);
-        FRIEND_TEST(Console, ScientificMode);
-        FRIEND_TEST(Console, EngineeringMode);
-        FRIEND_TEST(ConsoleEditing, Enter);
-
         StackStrategy<StackElement> engine_;
         bool is_func_key_pressed_;
         DisplayMode display_mode_;

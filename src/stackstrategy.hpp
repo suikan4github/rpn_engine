@@ -14,11 +14,6 @@
 #include <complex>
 #include <type_traits>
 
-#ifndef FRIEND_TEST
-// FRIEND_TEST is provided by google test. If not provided, just ignore it.
-#define FRIEND_TEST(x, y)
-#endif
-
 /**
  * @brief Engine implementation of RPN stack machine.
  *
@@ -202,9 +197,6 @@ namespace rpn_engine
         void Undo();
 
     private:
-        FRIEND_TEST(BasicStackTest, Undo);
-        FRIEND_TEST(BasicBitwiseTest, To32bitValue);
-        FRIEND_TEST(BasicBitwiseTest, ToElementValue);
         const unsigned int stack_size_;
         /**
          * @brief The entity of stack.
