@@ -36,7 +36,7 @@ TEST(EncodeKey, undefined_A)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, false), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, false), "key_code != 0x0100");
 #endif
 }
 
@@ -44,7 +44,7 @@ TEST(EncodeKey, undefined_B)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, false), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, false), "key_code != 0x0602");
 #endif
 }
 
@@ -52,7 +52,7 @@ TEST(EncodeKey, undefined_C)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, true), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, false, true), "key_code != 0x0100");
 #endif
 }
 
@@ -60,7 +60,7 @@ TEST(EncodeKey, undefined_D)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, true), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, false, true), "key_code != 0x0602");
 #endif
 }
 
@@ -68,7 +68,7 @@ TEST(EncodeKey, undefined_E)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, false), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, false), "key_code != 0x0100");
 #endif
 }
 
@@ -76,7 +76,7 @@ TEST(EncodeKey, undefined_F)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, false), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, false), "key_code != 0x0602");
 #endif
 }
 
@@ -84,7 +84,7 @@ TEST(EncodeKey, undefined_G)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, true), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA1, true, true), "key_code != 0x0100");
 #endif
 }
 
@@ -92,7 +92,7 @@ TEST(EncodeKey, undefined_H)
 {
 #ifndef NDEBUG
     // We test only when assert() works.
-    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, true), "false");
+    ASSERT_DEATH(rpn_engine::EncodeKey(NA2, true, true), "key_code != 0x0602");
 #endif
 }
 

@@ -15,8 +15,8 @@ namespace rpn_engine
         unsigned int key_code = (row << 8) | col;
         Op ret_val = Op::nop;
 
-        assert(!key_code != 0x0100);
-        assert(!key_code != 0x0602);
+        assert(key_code != 0x0100); // NA1
+        assert(key_code != 0x0602); // NA2
 
         if (is_hex_mode)
         {
