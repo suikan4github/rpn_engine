@@ -14,7 +14,7 @@ namespace rpn_engine
         key_pressed = true;
         raw = a;
         col = b;
-    };
+    }
 
     // Checking null pointer triggers assertion
     TEST(AntiChatteringDeathTest, ConstructorWrongPtr)

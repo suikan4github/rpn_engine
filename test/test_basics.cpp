@@ -18,6 +18,7 @@ TEST(BasicStackDeathTest, StackSizeLimit)
             s = new IntStack(0); // must not be non zero
         },
         "stack_size_ >= 2");
+    s->Push(0);
 #endif
 }
 

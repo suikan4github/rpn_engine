@@ -916,7 +916,7 @@ template <class Element>
 void rpn_engine::StackStrategy<Element>::Undo()
 {
     // Retrieve the last stack state
-    for (int i = 0; i < stack_size_; i++)
+    for (unsigned int i = 0; i < stack_size_; i++)
         stack_[i] = undo_buffer_[i];
 }
 
