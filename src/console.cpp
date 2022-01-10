@@ -407,7 +407,6 @@ void rpn_engine::Console::RenderFixedMode()
     StackElement x = engine_.Get(0);
     // We display only real part.
     auto value = x.real();
-    int exponent; // The display value in the text_buffer_[] is integer. So, we need exponent.
 
     // record the sign of value.
     bool minus = value < 0.0;
@@ -420,6 +419,7 @@ void rpn_engine::Console::RenderFixedMode()
         RenderScientificMode(false);          // display in the scientific format
     else
     {
+        int exponent = 7; // The display value in the text_buffer_[] is integer. So, we need exponent.
         int int_value = 0;
 
         if (kBoundaryOfScientific > (value * 1e7 + 0.5))

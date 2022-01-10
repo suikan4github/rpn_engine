@@ -16,6 +16,9 @@ TEST(BasicStackDeathTest, StackSizeLimit)
     ASSERT_DEATH(
         {
             s = new IntStack(0); // must not be non zero
+            if (s == nullptr)    // Dummy code to supress the "unsed" warning.
+            {
+            }
         },
         "stack_size_ >= 2");
 #endif
