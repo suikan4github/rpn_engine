@@ -33,7 +33,7 @@ add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SRC} ${LIB_SRC})
                                 )
 
     if(MSVC)
-        target_compile_options(${TEST_EXECUTABLE_NAME} PRIVATE /W4 /WX)
+        target_compile_options(${TEST_EXECUTABLE_NAME} PRIVATE /W4 )
     else()
         target_compile_options(${TEST_EXECUTABLE_NAME} PRIVATE -Wall -Wextra -pedantic )
     endif()
