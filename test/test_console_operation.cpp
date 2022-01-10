@@ -200,3 +200,149 @@ TEST(Console, ScientifcDisplayBOverflow)
     EXPECT_STREQ(display_text, "+10000+08"); // must be saturated
     EXPECT_EQ(decimal_point, 7);
 }
+
+// display_chante test
+TEST(Console, display_change)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::period);
+    c.Input(Op::num_4);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12340000"); // must be fixed mode
+    EXPECT_EQ(decimal_point, 5);
+
+    c.Input(Op::change_display);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+12340+02"); // must be scientific mode
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::change_display);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+12340+00"); // must be engineering mode
+    EXPECT_EQ(decimal_point, 5);
+
+    c.Input(Op::change_display);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 12340000"); // must be fixed mode
+    EXPECT_EQ(decimal_point, 5);
+}
+
+// Input period during floating input
+TEST(Console, period_float)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::period);
+    c.Input(Op::num_4);
+    c.Input(Op::eex);
+    c.Input(Op::num_5);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  05"); // must be float
+    EXPECT_EQ(decimal_point, 5);
+
+    c.Input(Op::period);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234  05"); // must not be changed
+    EXPECT_EQ(decimal_point, 5);
+}
+
+// Input period during floating input
+TEST(Console, period_double)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::period);
+    c.Input(Op::num_4);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); // must be with one period
+    EXPECT_EQ(decimal_point, 5);
+
+    c.Input(Op::period);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1234    "); // must not be changed
+    EXPECT_EQ(decimal_point, 5);
+}
+
+TEST(Console, display_too_large)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::eex);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "+99999+99"); //
+    EXPECT_EQ(decimal_point, 7);
+}
+
+TEST(Console, display_too_negative)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::chs);
+    c.Input(Op::eex);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::enter);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, "-99999+99"); //
+    EXPECT_EQ(decimal_point, 7);
+}
+
+TEST(Console, display_too_small)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_1);
+    c.Input(Op::num_2);
+    c.Input(Op::num_3);
+    c.Input(Op::chs);
+    c.Input(Op::eex);
+    c.Input(Op::num_9);
+    c.Input(Op::num_9);
+    c.Input(Op::inv);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); //
+    EXPECT_EQ(decimal_point, 7);
+}

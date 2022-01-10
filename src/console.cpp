@@ -322,11 +322,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                 ; // do nothing
             else  // if not hex mode.
             {
-                if (is_editing_float_)
-                    ;                                                          // do nothing
-                else if (decimal_point_position_ != kDecimalPointNotDisplayed) // if decimal point already exist
-                    ;                                                          // do nothing
-                else
+                if (!is_editing_float_ && (decimal_point_position_ == kDecimalPointNotDisplayed)) // if not in the float input and decimal point is not displayed yet
                 {
                     if (mantissa_cursor_ == 1)                                          // if the cursor is left most digits
                         decimal_point_position_ = kUpperMostDigit;                      // place decimal point to its right
@@ -369,9 +365,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             }
             break;
         case Op::chs:
-            if (is_hex_mode_)
-                ; // do nothing
-            else  // if not hex mode.
+            if (!is_hex_mode_) // not hex mode
             {
 
                 if (is_editing_float_)                                              // If floating input mode
