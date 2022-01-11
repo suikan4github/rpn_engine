@@ -16,10 +16,10 @@ namespace rpn_engine
      * @brief Key signal level for  AntiChattering class.
      *
      */
-    enum KeyLevel
+    enum class KeyLevel
     {
-        kklLow, ///< Key signal is Low.
-        kklHigh ///< Key signal is high.
+        low, ///< Key signal is Low.
+        high ///< Key signal is high.
     };
 
     /**
@@ -65,7 +65,7 @@ namespace rpn_engine
         /**
          * @brief Input to the state machine
          *
-         * @param key_level kklHigh or kksLow
+         * @param key_level KeyLevel::high or kksLow
          * @details
          * Drives internal state machine. This member function have to be called
          * periodically.

@@ -29,9 +29,9 @@ void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
     {
         // In the LL state, needs continuous lh_threshold_ "H" to transit to HH state.
     case ksLL: // Bottom state
-        if (key_level == kklLow)
+        if (key_level == KeyLevel::low)
             count_ = 0; // Clear the continuous "H" count
-        else            // kklHigh
+        else            // KeyLevel::high
         {
             count_++; // count how many continuous "H" came
             if (count_ >= lh_threashold_)
@@ -45,7 +45,7 @@ void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
         break;
         // In the HH state, needs continuous hl_threshold_ "L" to transit to LL state.
     case ksHH: // Top state
-        if (key_level == kklLow)
+        if (key_level == KeyLevel::low)
         {
             count_++; // count how many continuous "L" came
             if (count_ >= hl_threashold_)
@@ -54,7 +54,7 @@ void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
                 count_ = 0;    // clear count;
             }
         }
-        else // kklHigh
+        else // KeyLevel::high
         {
             count_ = 0; // Clear the continuous "L" count
         }

@@ -59,12 +59,12 @@ namespace rpn_engine
             3); // col
 
         // 5 continuous H makes transition to H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
         EXPECT_EQ(key_pressed, false);
-        ac.Input(rpn_engine::kklHigh);
+        ac.Input(rpn_engine::KeyLevel::high);
         EXPECT_EQ(key_pressed, true);
         // Check the call back parameters are OK
         EXPECT_EQ(raw, 9);
@@ -83,12 +83,12 @@ namespace rpn_engine
             3); // col
 
         // 5 discontinued H doesn't make transition to H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow);  // Chattering
-        ac.Input(rpn_engine::kklHigh); // It must be still L state.
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low);  // Chattering
+        ac.Input(rpn_engine::KeyLevel::high); // It must be still L state.
         EXPECT_EQ(key_pressed, false);
     }
 
@@ -104,18 +104,18 @@ namespace rpn_engine
             3); // col
 
         // During H, short strobe of L doesn't make transition.
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // Transit to H by fifth High input
         EXPECT_EQ(key_pressed, true);
         key_pressed = false;
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // The fifth High input doesn't make key_pressed event.
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // The fifth High input doesn't make key_pressed event.
         EXPECT_EQ(key_pressed, false);
     }
     // Checking short L strobe is killed
@@ -130,25 +130,25 @@ namespace rpn_engine
             3); // col
 
         // During H, short strobe of L doesn't make transition.
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // Transit to H by fifth High input
         EXPECT_EQ(key_pressed, true);
         key_pressed = false;
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // The fifth High input doesn't make key_pressed event.
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // The fifth High input doesn't make key_pressed event.
         EXPECT_EQ(key_pressed, false);
     }
 
@@ -164,27 +164,27 @@ namespace rpn_engine
             3); // col
 
         // During H, short strobe of L doesn't make transition.
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // Transit to H by fifth High input
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // Transit to H by fifth High input
         EXPECT_EQ(key_pressed, true);
         key_pressed = false;
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklLow); // Still level is H
-        ac.Input(rpn_engine::kklLow); // Now level is L
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh);
-        ac.Input(rpn_engine::kklHigh); // Not yeat transit to H
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::low); // Still level is H
+        ac.Input(rpn_engine::KeyLevel::low); // Now level is L
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high);
+        ac.Input(rpn_engine::KeyLevel::high); // Not yeat transit to H
         EXPECT_EQ(key_pressed, false);
-        ac.Input(rpn_engine::kklHigh); // The fifth High input  makes key_pressed event.
+        ac.Input(rpn_engine::KeyLevel::high); // The fifth High input  makes key_pressed event.
         EXPECT_EQ(key_pressed, true);
     }
 }
