@@ -4,7 +4,7 @@ rpn_engine::AntiChattering::AntiChattering(unsigned int hl_threashold,
                                            unsigned int lh_threashold,
                                            KeyPerssedCallBackFunction *func,
                                            unsigned int raw,
-                                           unsigned int col) : state_(ksLL),
+                                           unsigned int col) : state_(State::L),
                                                                count_(0),
                                                                key_pressed_call_back_(func),
                                                                raw_(raw),
@@ -28,7 +28,7 @@ void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
     switch (state_)
     {
         // In the LL state, needs continuous lh_threshold_ "H" to transit to HH state.
-    case ksLL: // Bottom state
+    case State::L: // Bottom state
         if (key_level == KeyLevel::low)
             count_ = 0; // Clear the continuous "H" count
         else            // KeyLevel::high
@@ -36,22 +36,22 @@ void rpn_engine::AntiChattering::Input(KeyLevel const key_level)
             count_++; // count how many continuous "H" came
             if (count_ >= lh_threashold_)
             {
-                state_ = ksHH; // Transit to HH state
-                count_ = 0;    // clear count;
+                state_ = State::H; // Transit to HH state
+                count_ = 0;        // clear count;
                 // Notify the key is H after anti chattering process.
                 key_pressed_call_back_(raw_, col_);
             }
         }
         break;
         // In the HH state, needs continuous hl_threshold_ "L" to transit to LL state.
-    case ksHH: // Top state
+    case State::H: // Top state
         if (key_level == KeyLevel::low)
         {
             count_++; // count how many continuous "L" came
             if (count_ >= hl_threashold_)
             {
-                state_ = ksLL; // Transit to LL state
-                count_ = 0;    // clear count;
+                state_ = State::L; // Transit to LL state
+                count_ = 0;        // clear count;
             }
         }
         else // KeyLevel::high

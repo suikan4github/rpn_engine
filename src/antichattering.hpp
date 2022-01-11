@@ -76,10 +76,10 @@ namespace rpn_engine
         void Input(KeyLevel const key_level);
 
     private:
-        enum State
+        enum class State
         {
-            ksLL, ///< Low state.
-            ksHH  ///< High state
+            L, ///< Low state.
+            H  ///< High state
         };
 
         State state_;        // Internal state machine
@@ -88,7 +88,7 @@ namespace rpn_engine
         KeyPerssedCallBackFunction *key_pressed_call_back_;
         unsigned int const raw_; // raw in the key matrix
         unsigned int const col_; // col in the key matrix
-                                 // Invoked when state transit to ksHH
+                                 // Invoked when state transit to State::H
 
         unsigned int const hl_threashold_; // How many continuous L is needed to transit from H to L
         unsigned int const lh_threashold_; // How many continuous L is needed to transit from L to H
