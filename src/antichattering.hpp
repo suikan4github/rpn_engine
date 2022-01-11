@@ -13,7 +13,7 @@
 namespace rpn_engine
 {
     /**
-     * @brief Key signal level for @ref AntiChattering class.
+     * @brief Key signal level for  AntiChattering class.
      *
      */
     enum KeyLevel
@@ -23,7 +23,7 @@ namespace rpn_engine
     };
 
     /**
-     * @brief Call back function for @ref AntiChattering
+     * @brief Call back function for  AntiChattering
      *
      * @param raw Raw postion of key matrix
      * @param col Col postion of key matrix
@@ -36,7 +36,7 @@ namespace rpn_engine
      * @details
      * This class clean up the chattering singal from switch / key.
      *
-     * The @ref Input() member function assumes it is invoked periodically with
+     * The  Input() member function assumes it is invoked periodically with
      * the level of key input. For each time invoked, the internal state
      * machine changes its state by the input key. And then, when the
      * internal state machine recognizes the "Key pressed", this class

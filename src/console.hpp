@@ -52,9 +52,9 @@ namespace rpn_engine
      * @details
      * User interface class of the RPN calculator.
      *
-     * This class receives input key by @ref Input() function and calculate
+     * This class receives input key by  Input() function and calculate
      * by its internal stack machine. The result is obtained by the
-     * @ref GetText() function and @ref GetDecimalPointPosition() function.
+     *  GetText() function and  GetDecimalPointPosition() function.
      *
      * There are 3 display mode .
      * @li Fixed mode : The number is displayed as SNNN.NNNNN where S and N are sign and number, respectively
@@ -77,7 +77,7 @@ namespace rpn_engine
         const int kDecimalPointNotDisplayed = 256;
         /**
          * @brief Construct a new Console object
-         * @param inital_string A  string displayed at first. Ignored if nullptr.
+         * @param initial_string A  string displayed at first. Ignored if nullptr.
          *
          */
         Console(const char *initial_string = nullptr);
@@ -113,7 +113,7 @@ namespace rpn_engine
          * The opcode must be logical key. That mean, it is free from the key matrix design and
          * chattering.
          *
-         * Any value from @ref rpn_engine::Op type are allowed.
+         * Any value from  rpn_engine::Op type are allowed.
          */
         void Input(rpn_engine::Op opcode);
 
@@ -130,7 +130,7 @@ namespace rpn_engine
          * @li ' '
          * @li '-'
          *
-         * The display_text will not contain the decimal point. It is given by @ref GetDecimalPointPosition().
+         * The display_text will not contain the decimal point. It is given by  GetDecimalPointPosition().
          *
          * Note display_text[0] and display_text[8] are left most and right most digit, respectively.
          */
@@ -167,7 +167,7 @@ namespace rpn_engine
          * @param state new state of the key pressed state
          * @details
          * Change the internal state of "key perssed" information. THe change informaiton can be
-         * ready by the @ref GetIsFuncKeyPressed() member function.
+         * ready by the  GetIsFuncKeyPressed() member function.
          */
         void SetIsFuncKeyPressed(bool state);
 
