@@ -28,19 +28,19 @@ namespace rpn_engine
      *
      * The logical key map in decimal mode is as following :
      *
-     * col1 | col2    | col3       | col4    | col5
-     * :---:|:-------:|:----------:|:-------:|:----:
-     * swap | complex | rotate pop | display | F
-     * 7    |  8      |  9         | /       | del
-     * 4    | 5       | 6          | *       | eex
-     * 1    | 2       | 3          | -       | sqrt
-     * 0    | .       | chs        | +       | enter
+     * col1 | col2    | col3       | col4       | col5
+     * :---:|:-------:|:----------:|:----------:|:----:
+     * swap | complex | rcl        | rotate pop | F
+     * 7    |  8      |  9         | /          | del
+     * 4    | 5       | 6          | *          | eex
+     * 1    | 2       | 3          | -          | sqrt
+     * 0    | .       | chs        | +          | enter
      *
      * The logical key map in decimal mode with F key is as following :
      *
      * col1       |    col2    | col3        | col4      | col5
      * :---------:|:----------:|:-----------:|:---------:|:----:
-     * swap re im | de-complex | rotate push |  N.A.     | F
+     * swap re im | de-complex | sto         | display   | F
      * exp        | 10^x       | conjgate    | 1/x       | clx
      * log        | log10      | hex mode    | y^x       | pi
      * sin        | cos        | tan         | cartesian | x^2

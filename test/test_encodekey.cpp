@@ -100,8 +100,8 @@ TEST(EncodeKey, dec_normal)
 {
     EXPECT_EQ(rpn_engine::EncodeKey(XTOM, false, false), Op::swap);
     EXPECT_EQ(rpn_engine::EncodeKey(CM, false, false), Op::complex);
-    EXPECT_EQ(rpn_engine::EncodeKey(RM, false, false), Op::rotate_pop);
-    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, false, false), Op::change_display);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, false, false), Op::rcl);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, false, false), Op::rotate_pop);
     EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, false, false), Op::func);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM7, false, false), Op::num_7);
@@ -133,8 +133,8 @@ TEST(EncodeKey, dec_func)
 {
     EXPECT_EQ(rpn_engine::EncodeKey(XTOM, true, false), Op::swap_re_im);
     EXPECT_EQ(rpn_engine::EncodeKey(CM, true, false), Op::decomplex);
-    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, false), Op::rotate_push);
-    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, true, false), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, false), Op::sto);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, true, false), Op::change_display);
     EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, true, false), Op::func);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM7, true, false), Op::exp);

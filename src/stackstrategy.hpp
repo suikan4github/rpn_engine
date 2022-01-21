@@ -29,6 +29,10 @@ namespace rpn_engine
     /**
      * @brief enum class to specify the operation on stack
      *
+     * @details
+     * From duplicate to nop : command for operation
+     * Other : command for edit.
+     *
      */
     enum class Op : unsigned int
     {
@@ -80,6 +84,8 @@ namespace rpn_engine
         undo,                ///< Undo the previous operation. Do not feed to Stack engine.
         hex,                 ///< Change to hex mode.
         dec,                 ///< Change to dec mode.
+        sto,                 ///< Store to a variable
+        rcl,                 ///< Recall from a variable
         func,                ///< Pressing F key.
         nop,                 ///< Do nothing
                              // Editing op code.

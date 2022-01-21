@@ -160,6 +160,8 @@ namespace rpn_engine
         char mantissa_buffer_[kNumberOfDigits + 1];
         // store the exponent text during editing.
         char exponent_buffer_[kNumberOfDigits + 1];
+        // User variable to store the data .
+        StackElement user_variable_;
 
         /**
          * @brief Set the IsFuncKeyPressed state

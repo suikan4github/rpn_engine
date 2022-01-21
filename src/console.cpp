@@ -18,7 +18,8 @@ rpn_engine::Console::Console(const char *initial_string) : engine_(StackStrategy
                                                            is_pushable_(false),
                                                            mantissa_cursor_(1),
                                                            is_editing_float_(false),
-                                                           is_hex_mode_(false)
+                                                           is_hex_mode_(false),
+                                                           user_variable_(0)
 {
     if (initial_string == nullptr)                                   // if the initial_string is null
         PostExecutionProcess();                                      // display 0.0000000 as initial string
@@ -214,6 +215,13 @@ void rpn_engine::Console::HandleNonEditingOp(rpn_engine::Op opcode)
         break;
     case Op::dec: // change to decimal mode
         SetIsHexMode(false);
+        is_pushable_ = true;
+        break;
+    case Op::sto:                        // Store the stack top value to the user variable.
+        user_variable_ = engine_.Get(0); // store stack top;
+        break;                           // do not change the pushable state
+    case Op::rcl:                        // Recall the user variable and push it.
+        engine_.Push(user_variable_);    // store stack top;
         is_pushable_ = true;
         break;
     default: // all other opcode should be passed through to the engine.

@@ -18,101 +18,196 @@ namespace rpn_engine
         assert(key_code != 0x0100); // NA1
         assert(key_code != 0x0602); // NA2
 
-        if (is_hex_mode)
+        if (!is_hex_mode) // Dec mode
         {
-            if (is_func_key_pressed)
+            if (!is_func_key_pressed) // Dec
             {
-                switch (key_code) // Hex + Func
+                switch (key_code) // Dec
                 {
                     // Row 0
                 case 0x0002: // 0
-                    ret_val = Op::num_a;
+                    ret_val = Op::num_0;
                     break;
                 case 0x0001: // X->M
-                    // do nothing
+                    ret_val = Op::swap;
                     break;
                 case 0x0000: // CE
-                    // do nothing
+                    ret_val = Op::eex;
                     break;
                     // Row 1
                 case 0x0102: // 4
-                    ret_val = Op::num_e;
+                    ret_val = Op::num_4;
                     break;
                 case 0x0101: // 7
-                    ret_val = Op::logical_shift_left;
+                    ret_val = Op::num_7;
                     break;
                     // Row 2
                 case 0x0202: // 1
-                    ret_val = Op::num_b;
+                    ret_val = Op::num_1;
                     break;
                 case 0x0201: // 8
-                    ret_val = Op::logical_shift_right;
+                    ret_val = Op::num_8;
                     break;
                 case 0x0200: // CM
-                    // do nothing
+                    ret_val = Op::complex;
                     break;
                     // Row 3
                 case 0x0302: // %
-                    ret_val = Op::bit_not;
+                    ret_val = Op::chs;
                     break;
                 case 0x0301: // 5
-                    ret_val = Op::num_f;
+                    ret_val = Op::num_5;
                     break;
                 case 0x0300: // .
                     ret_val = Op::period;
                     break;
                     // Row 4
                 case 0x0402: // 2
-                    ret_val = Op::num_c;
+                    ret_val = Op::num_2;
                     break;
                 case 0x0401: // RM
-                    ret_val = Op::rotate_push;
+                    ret_val = Op::rcl;
                     break;
                 case 0x0400: // +
-                    ret_val = Op::bit_or;
+                    ret_val = Op::add;
+                    break;
+                    // Row 5
+                case 0x0502: // =
+                    ret_val = Op::enter;
+                    break;
+                case 0x0501: // 9
+                    ret_val = Op::num_9;
+                    break;
+                case 0x0500: // C
+                    ret_val = Op::del;
+                    break;
+                    // Row 6
+                case 0x0601: // M-
+                    ret_val = Op::rotate_pop;
+                    break;
+                case 0x0600: // /
+                    ret_val = Op::div;
+                    break;
+                    // Row 7
+                case 0x0702: // 3
+                    ret_val = Op::num_3;
+                    break;
+                case 0x0701: // 6
+                    ret_val = Op::num_6;
+                    break;
+                case 0x0700: // *
+                    ret_val = Op::mul;
+                    break;
+                    // Row 8
+                case 0x0802: // sqrt
+                    ret_val = Op::sqrt;
+                    break;
+                case 0x0801: // M+
+                    ret_val = Op::func;
+                    break;
+                case 0x0800: // -
+                    ret_val = Op::sub;
+                    break;
+                default:
+                    assert(false); // logic error. Must not come here
+                }
+            }
+            else // Dec + Func
+            {
+                switch (key_code)
+                {
+                    // Row 0
+                case 0x0002: // 0
+                    ret_val = Op::asin;
+                    break;
+                case 0x0001: // X->M
+                    ret_val = Op::swap_re_im;
+                    break;
+                case 0x0000: // CE
+                    ret_val = Op::pi;
+                    break;
+                    // Row 1
+                case 0x0102: // 4
+                    ret_val = Op::log;
+                    break;
+                case 0x0101: // 7
+                    ret_val = Op::exp;
+                    break;
+                    // Row 2
+                case 0x0202: // 1
+                    ret_val = Op::sin;
+                    break;
+                case 0x0201: // 8
+                    ret_val = Op::power10;
+                    break;
+                case 0x0200: // CM
+                    ret_val = Op::decomplex;
+                    break;
+                    // Row 3
+                case 0x0302: // %
+                    ret_val = Op::atan;
+                    break;
+                case 0x0301: // 5
+                    ret_val = Op::log10;
+                    break;
+                case 0x0300: // .
+                    ret_val = Op::acos;
+                    break;
+                    // Row 4
+                case 0x0402: // 2
+                    ret_val = Op::cos;
+                    break;
+                case 0x0401: // RM
+                    ret_val = Op::sto;
+                    break;
+                case 0x0400: // +
+                    ret_val = Op::to_polar;
                     break;
                     // Row 5
                 case 0x0502: // =
                     ret_val = Op::undo;
                     break;
                 case 0x0501: // 9
-                    // do nothing
+                    ret_val = Op::conjugate;
                     break;
                 case 0x0500: // C
                     ret_val = Op::clx;
                     break;
                     // Row 6
                 case 0x0601: // M-
-                    // do nothing
+                    ret_val = Op::change_display;
                     break;
                 case 0x0600: // /
-                    // do nothing
+                    ret_val = Op::inv;
                     break;
                     // Row 7
                 case 0x0702: // 3
-                    ret_val = Op::num_d;
+                    ret_val = Op::tan;
                     break;
                 case 0x0701: // 6
-                    ret_val = Op::dec;
+                    ret_val = Op::hex;
                     break;
                 case 0x0700: // *
-                    ret_val = Op::bit_and;
+                    ret_val = Op::power;
                     break;
                     // Row 8
                 case 0x0802: // sqrt
-                    ;        // do nothing
+                    ret_val = Op::square;
                     break;
                 case 0x0801: // M+
                     ret_val = Op::func;
                     break;
                 case 0x0800: // -
-                    ret_val = Op::bit_xor;
+                    ret_val = Op::to_cartesian;
                     break;
                 default:
                     assert(false); // logic error. Must not come here
                 }
             }
-            else // not func key pressed
+        }
+        else // Hex mode
+        {
+            if (!is_func_key_pressed)
             {
                 switch (key_code) // Hex
                 {
@@ -204,66 +299,63 @@ namespace rpn_engine
                     assert(false); // logic error. Must not come here
                 }
             }
-        }
-        else // not hex mode
-        {
-            if (is_func_key_pressed) // Dec + Func
+            else // not func key pressed
             {
-                switch (key_code)
+                switch (key_code) // Hex + Func
                 {
                     // Row 0
                 case 0x0002: // 0
-                    ret_val = Op::asin;
+                    ret_val = Op::num_a;
                     break;
                 case 0x0001: // X->M
-                    ret_val = Op::swap_re_im;
+                    // do nothing
                     break;
                 case 0x0000: // CE
-                    ret_val = Op::pi;
+                    // do nothing
                     break;
                     // Row 1
                 case 0x0102: // 4
-                    ret_val = Op::log;
+                    ret_val = Op::num_e;
                     break;
                 case 0x0101: // 7
-                    ret_val = Op::exp;
+                    ret_val = Op::logical_shift_left;
                     break;
                     // Row 2
                 case 0x0202: // 1
-                    ret_val = Op::sin;
+                    ret_val = Op::num_b;
                     break;
                 case 0x0201: // 8
-                    ret_val = Op::power10;
+                    ret_val = Op::logical_shift_right;
                     break;
                 case 0x0200: // CM
-                    ret_val = Op::decomplex;
+                    // do nothing
                     break;
                     // Row 3
                 case 0x0302: // %
-                    ret_val = Op::atan;
+                    ret_val = Op::bit_not;
                     break;
                 case 0x0301: // 5
-                    ret_val = Op::log10;
+                    ret_val = Op::num_f;
                     break;
                 case 0x0300: // .
-                    ret_val = Op::acos;
+                    ret_val = Op::period;
                     break;
                     // Row 4
                 case 0x0402: // 2
-                    ret_val = Op::cos;
+                    ret_val = Op::num_c;
                     break;
                 case 0x0401: // RM
                     ret_val = Op::rotate_push;
                     break;
                 case 0x0400: // +
-                    ret_val = Op::to_polar;
+                    ret_val = Op::bit_or;
                     break;
                     // Row 5
                 case 0x0502: // =
                     ret_val = Op::undo;
                     break;
                 case 0x0501: // 9
-                    ret_val = Op::conjugate;
+                    // do nothing
                     break;
                 case 0x0500: // C
                     ret_val = Op::clx;
@@ -273,119 +365,27 @@ namespace rpn_engine
                     // do nothing
                     break;
                 case 0x0600: // /
-                    ret_val = Op::inv;
+                    // do nothing
                     break;
                     // Row 7
                 case 0x0702: // 3
-                    ret_val = Op::tan;
+                    ret_val = Op::num_d;
                     break;
                 case 0x0701: // 6
-                    ret_val = Op::hex;
+                    ret_val = Op::dec;
                     break;
                 case 0x0700: // *
-                    ret_val = Op::power;
+                    ret_val = Op::bit_and;
                     break;
                     // Row 8
                 case 0x0802: // sqrt
-                    ret_val = Op::square;
+                    ;        // do nothing
                     break;
                 case 0x0801: // M+
                     ret_val = Op::func;
                     break;
                 case 0x0800: // -
-                    ret_val = Op::to_cartesian;
-                    break;
-                default:
-                    assert(false); // logic error. Must not come here
-                }
-            }
-            else // not func key pressed
-            {
-                switch (key_code) // Dec
-                {
-                    // Row 0
-                case 0x0002: // 0
-                    ret_val = Op::num_0;
-                    break;
-                case 0x0001: // X->M
-                    ret_val = Op::swap;
-                    break;
-                case 0x0000: // CE
-                    ret_val = Op::eex;
-                    break;
-                    // Row 1
-                case 0x0102: // 4
-                    ret_val = Op::num_4;
-                    break;
-                case 0x0101: // 7
-                    ret_val = Op::num_7;
-                    break;
-                    // Row 2
-                case 0x0202: // 1
-                    ret_val = Op::num_1;
-                    break;
-                case 0x0201: // 8
-                    ret_val = Op::num_8;
-                    break;
-                case 0x0200: // CM
-                    ret_val = Op::complex;
-                    break;
-                    // Row 3
-                case 0x0302: // %
-                    ret_val = Op::chs;
-                    break;
-                case 0x0301: // 5
-                    ret_val = Op::num_5;
-                    break;
-                case 0x0300: // .
-                    ret_val = Op::period;
-                    break;
-                    // Row 4
-                case 0x0402: // 2
-                    ret_val = Op::num_2;
-                    break;
-                case 0x0401: // RM
-                    ret_val = Op::rotate_pop;
-                    break;
-                case 0x0400: // +
-                    ret_val = Op::add;
-                    break;
-                    // Row 5
-                case 0x0502: // =
-                    ret_val = Op::enter;
-                    break;
-                case 0x0501: // 9
-                    ret_val = Op::num_9;
-                    break;
-                case 0x0500: // C
-                    ret_val = Op::del;
-                    break;
-                    // Row 6
-                case 0x0601: // M-
-                    ret_val = Op::change_display;
-                    break;
-                case 0x0600: // /
-                    ret_val = Op::div;
-                    break;
-                    // Row 7
-                case 0x0702: // 3
-                    ret_val = Op::num_3;
-                    break;
-                case 0x0701: // 6
-                    ret_val = Op::num_6;
-                    break;
-                case 0x0700: // *
-                    ret_val = Op::mul;
-                    break;
-                    // Row 8
-                case 0x0802: // sqrt
-                    ret_val = Op::sqrt;
-                    break;
-                case 0x0801: // M+
-                    ret_val = Op::func;
-                    break;
-                case 0x0800: // -
-                    ret_val = Op::sub;
+                    ret_val = Op::bit_xor;
                     break;
                 default:
                     assert(false); // logic error. Must not come here

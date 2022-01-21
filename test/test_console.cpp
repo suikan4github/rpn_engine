@@ -131,3 +131,43 @@ TEST(Console, PiUndo)
     EXPECT_STREQ(display_text, " 20000000");
     EXPECT_EQ(decimal_point, 7);
 }
+
+TEST(Console, StoRcl)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::num_2);
+    c.Input(Op::rcl); // must be zero at first
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::num_2);
+    c.Input(Op::sto); // store 2.0
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 20000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::num_3);
+    c.Input(Op::rcl); // must be 2.0
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 20000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::rotate_pop);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 30000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::rcl);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 20000000");
+    EXPECT_EQ(decimal_point, 7);
+}
