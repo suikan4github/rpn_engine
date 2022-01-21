@@ -243,6 +243,10 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
         else
             HandleNonEditingOp(Op ::neg); // is translated as negate operation
     }
+    else if (opcode == Op::del && !is_editing_) // The del during non editing mode
+    {
+        HandleNonEditingOp(Op ::clx); // is translated as clx
+    }
     else
     {
 

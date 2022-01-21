@@ -171,3 +171,53 @@ TEST(Console, StoRcl)
     EXPECT_STREQ(display_text, " 20000000");
     EXPECT_EQ(decimal_point, 7);
 }
+
+TEST(Console, ClxSwap)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::pi);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 31415927");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::clx); // must clear the stack top
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::swap); // must zero
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");
+    EXPECT_EQ(decimal_point, 7);
+}
+
+TEST(Console, DelSwap)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.Input(Op::pi);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 31415927");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::del); // must clear the stack top
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");
+    EXPECT_EQ(decimal_point, 7);
+
+    c.Input(Op::swap); // must zero
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");
+    EXPECT_EQ(decimal_point, 7);
+}
