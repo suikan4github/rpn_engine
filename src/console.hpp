@@ -56,6 +56,10 @@ namespace rpn_engine
      * by its internal stack machine. The result is obtained by the
      *  GetText() function and  GetDecimalPointPosition() function.
      *
+     * There is one internal user variable which user can store / recall.
+     * The stack top is stored to the user variable when Op::sto command is given.
+     * The user variable value is pushed to stack when the Op::rcl command is given.
+     *
      * There are 3 display mode .
      * @li Fixed mode : The number is displayed as SNNN.NNNNN where S and N are sign and number, respectively
      * @li Scientific mode. The number is displayed as SM.MMMMSEE where S,M and E are sign, mantissa and exponent, respectively.
@@ -114,6 +118,82 @@ namespace rpn_engine
          * chattering.
          *
          * Any value from  rpn_engine::Op type are allowed.
+         *
+         * IN the following description, X and Y are Stack top and Stack second, respectively.
+         * Stack operation Op code :
+         * @li duplicate            : Not allowed.
+         * @li swap                 : Swap X and Y
+         * @li rotate_pop           : Rotate stack pop-ward
+         * @li rotate_push          : Rotate stack push-ward
+         * @li add                  : Pop X and Y, do Y+X, then push the result.
+         * @li sub                  : Pop X and Y, do Y-X, then push the result.
+         * @li mul                  : Pop X and Y, do Y*X, then push the result.
+         * @li div                  : Pop X and Y, do Y/X, then push the result.
+         * @li neg                  : Pop X, do -X, then push the result.
+         * @li inv                  : Pop X, do 1/X, then push the result.
+         * @li sqrt                 : Pop X, do sqrt(X), then push the result.
+         * @li square               : Pop X, do X^X, then push the result.
+         * @li pi                   : push Pi.
+         * @li exp                  : Pop X, do exp^X, then push the result.
+         * @li log                  : Pop X, do ln(X), then push the result.
+         * @li power10              : Pop X, do 10^X, then push the result.
+         * @li log10                : Pop X, do log(X), then push the result.
+         * @li power                : Pop X and Y, do Y^X, then push the result.
+         * @li sin                  : Pop X, do sin(X), then push the result.
+         * @li cos                  : Pop X, do cos(X), then push the result.
+         * @li tan                  : Pop X, do tan(X), then push the result.
+         * @li asin                 : Pop X, do asin(X), then push the result.
+         * @li acos                 : Pop X, do acos(X), then push the result.
+         * @li atan                 : Pop X, do atan(X), then push the result.
+         * @li complex              : Pop X and Y, do Y+Xi, then push the result.
+         * @li decomplex            : Pop X, push re(X) and then push im(X).
+         * @li conjugate            : Pop X, conjugate(X) and then push the result.
+         * @li to_polar             : Pop X, convert that complex number to polar cordinatin, then push the result.
+         * @li to_cartesian         : Pop X, convert that complex number to cartesian cordinatin, then push the result.
+         * @li swap_re_im :         : Pop X, do im(X)+re(X)i, then push the result.
+         * @li bit_add              : Pop X and Y, convert them to integer, do Y+X, then push the result.
+         * @li bit_sub              : Pop X and Y, convert them to integer, do Y-X, then push the result.
+         * @li bit_mul              : Pop X and Y, convert them to integer, do Y*X, then push the result.
+         * @li bit_div              : Pop X and Y, convert them to integer, do Y/X, then push the result.
+         * @li bit_neg              : Pop X, convert it to integer, do -X, then push the result.
+         * @li bit_or               : Pop X and Y, convert them to integer, do Y or X for all bits, then push the result.
+         * @li bit_xor              : Pop X and Y, convert them to integer, do Y xor X for all bits, then push the result.
+         * @li bit_and              : Pop X and Y, convert them to integer, do Y and X for all bits, then push the result.
+         * @li logical_shift_right  : Pop X and Y, convert them to integer, do Y << X, then push the result.
+         * @li logical_shift_left   : Pop X and Y, convert them to integer, do Y >> X, then push the result.
+         * @li bit_not              : Pop X, convert it to integer, invert 1/0 for all bits, then push the result.
+         * @li change_display       : Change the display mode. Fixed -> Scientific -> Engineering -> Fixed.
+         * @li enter                : In the editing mode, terminate it and push the value. And then, set pushable mode.
+         * @li clx                  : Clear the X. And set it non-pushable mode.
+         * @li undo                 : Retrive the previous stack state
+         * @li hex                  : Get into Hex mode.
+         * @li dec                  : Leave Hex mode
+         * @li sto                  : Store current X to the user variable.
+         * @li rcl                  : Recall the user variable and push it.
+         * @li func                 : Toggle Func mode.
+         * @li nop                  : Do nothing
+         *
+         * Editing op code :
+         * @li num_0                : In the editing mode, place "0". Outside editing mode, get into the editing mode then place.
+         * @li num_1                : In the editing mode, place "1". Outside editing mode, get into the editing mode then place.
+         * @li num_2                : In the editing mode, place "2". Outside editing mode, get into the editing mode then place.
+         * @li num_3                : In the editing mode, place "3". Outside editing mode, get into the editing mode then place.
+         * @li num_4                : In the editing mode, place "4". Outside editing mode, get into the editing mode then place.
+         * @li num_5                : In the editing mode, place "5". Outside editing mode, get into the editing mode then place.
+         * @li num_6                : In the editing mode, place "6". Outside editing mode, get into the editing mode then place.
+         * @li num_7                : In the editing mode, place "7". Outside editing mode, get into the editing mode then place.
+         * @li num_8                : In the editing mode, place "8". Outside editing mode, get into the editing mode then place.
+         * @li num_9                : In the editing mode, place "9". Outside editing mode, get into the editing mode then place.
+         * @li num_a                : Hex mode only. In the editing mode, place "A". Outside editing mode, get into the editing mode then place.
+         * @li num_b                : Hex mode only. In the editing mode, place "B". Outside editing mode, get into the editing mode then place.
+         * @li num_c                : Hex mode only. In the editing mode, place "C". Outside editing mode, get into the editing mode then place.
+         * @li num_d                : Hex mode only. In the editing mode, place "D". Outside editing mode, get into the editing mode then place.
+         * @li num_e                : Hex mode only. In the editing mode, place "E". Outside editing mode, get into the editing mode then place.
+         * @li num_f                : Hex mode only. In the editing mode, place "F". Outside editing mode, get into the editing mode then place.
+         * @li period               : In the editing mode, place decimal point.
+         * @li eex                  : In the editing mode, get into the exponent input mode.
+         * @li del                  : In the editing mode, delete 1 char. Outside the editing mode, work as clx op code.
+         * @li chs                  : In the editing mode, toggle the sign. Outside the editing mode, work as neg op code.
          */
         void Input(rpn_engine::Op opcode);
 
