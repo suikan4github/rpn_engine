@@ -15,12 +15,18 @@ doxygen Doxyfile
 ```
 
 The document is generated in the html sub-directory.
+## Structure
+This library contains several classes and a function. Each component has its own functionality and behavior. Thus, their usage is fixed from the first. The Following figure depict the signal flow of an electronic calculator based on this library. 
+
+![](image/rpn_engine.drawio.png)
 
 ## Environment
 This library is tested by following environment 
 - Ubuntu 20.04 LTS
-- GitHub Actions ubuntu-latest ( GCC )
-- GitHub Actions windows-latest ( MSVC )
+- GitHub Actions ubuntu-latest ( GCC 9 )
+- GitHub Actions windows-latest ( MSVC 2022 )
+- GCov ( with GCC )
+- Doxygen
 
 ## Install
 Run following command :
