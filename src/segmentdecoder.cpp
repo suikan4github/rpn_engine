@@ -44,11 +44,13 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
         ret_val = 0;
         break;
     case '0':
+    case 'o':
+    case 'O':
         ret_val = seg_a_ | seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_f_;
         break;
+    case '1':
     case 'i':
     case 'I':
-    case '1':
         ret_val = seg_b_ | seg_c_;
         break;
     case '2':
@@ -60,6 +62,8 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
     case '4':
         ret_val = seg_b_ | seg_c_ | seg_f_ | seg_g_;
         break;
+    case 's':
+    case 'S':
     case '5':
         ret_val = seg_a_ | seg_c_ | seg_d_ | seg_f_ | seg_g_;
         break;
@@ -111,6 +115,18 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
     case 'F':
         ret_val = seg_a_ | seg_e_ | seg_f_ | seg_g_;
         break;
+    case 'g':
+    case 'G':
+        ret_val = seg_a_ | seg_c_ | seg_d_ | seg_e_ | seg_f_;
+        break;
+    case 'h':
+    case 'H':
+        ret_val = seg_b_ | seg_c_ | seg_e_ | seg_f_ | seg_g_;
+        break;
+    case 'j':
+    case 'J':
+        ret_val = seg_b_ | seg_c_ | seg_d_;
+        break;
     case 'l':
     case 'L':
         ret_val = seg_d_ | seg_e_ | seg_f_;
@@ -123,11 +139,26 @@ uint8_t rpn_engine::SegmentDecoder::decode(char c)
     case 'P':
         ret_val = seg_a_ | seg_b_ | seg_e_ | seg_f_ | seg_g_;
         break;
+    case 'q':
+    case 'Q':
+        ret_val = seg_a_ | seg_b_ | seg_c_ | seg_f_ | seg_g_;
+        break;
     case 'r':
     case 'R':
         ret_val = seg_e_ | seg_g_;
         break;
-
+    case 't':
+    case 'T':
+        ret_val = seg_d_ | seg_e_ | seg_f_ | seg_g_;
+        break;
+    case 'u':
+    case 'U':
+        ret_val = seg_b_ | seg_c_ | seg_d_ | seg_e_ | seg_f_;
+        break;
+    case 'y':
+    case 'Y':
+        ret_val = seg_b_ | seg_c_ | seg_d_ | seg_f_ | seg_g_;
+        break;
     default:
         ret_val = 0; // unknown character code
     }
