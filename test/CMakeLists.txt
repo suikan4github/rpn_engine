@@ -26,7 +26,7 @@ add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SRC} ${LIB_SRC})
     add_custom_command(
         TARGET ${TEST_EXECUTABLE_NAME} PRE_LINK
         COMMAND find . -name "*.gcda" -delete
-        COMMENT "Deleting *.gcda files in ${CMAKE_BINARY_DIR}"
+        COMMENT "Deleting *.gcda files under ${CMAKE_BINARY_DIR}"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         VERBATIM)
 
