@@ -27,6 +27,8 @@ namespace rpn_engine
      *
      * @param raw Raw postion of key matrix
      * @param col Col postion of key matrix
+     * @details
+     * AntiCattering object passes its raw and col position to this function.
      *
      */
     typedef void KeyPerssedCallBackFunction(unsigned raw, unsigned col);
