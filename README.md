@@ -8,6 +8,12 @@ A collection of the Classes/Functions for an RPN Calculator. Following classes/f
 - SegmentDecoder class : Convert the digit character to the segment pattern. 
 - StackStrategy class : Stack machine template. 
 
+This is targeting the SHARP EL-21x pocket calculator. Thus, follows restriction exists : 
+- The Console class assume 9digits display. 
+- The EncodeKey function assumes the key matrix of the EL-21x.
+
+The [rpn2026](https://github.com/suikan4github/rpn2026) project is a client of this library. 
+
 To obtain the reference manual, run doxygen :
 ```shell
 cd doc
