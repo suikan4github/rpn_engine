@@ -166,8 +166,8 @@ TEST(EncodeKey, hex_normal)
 {
     EXPECT_EQ(rpn_engine::EncodeKey(XTOM, false, true), Op::swap);
     EXPECT_EQ(rpn_engine::EncodeKey(CM, false, true), Op::nop);
-    EXPECT_EQ(rpn_engine::EncodeKey(RM, false, true), Op::rotate_pop);
-    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, false, true), Op::nop);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, false, true), Op::rcl);
+    EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, false, true), Op::rotate_pop);
     EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, false, true), Op::func);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM7, false, true), Op::num_7);
@@ -189,7 +189,7 @@ TEST(EncodeKey, hex_normal)
     EXPECT_EQ(rpn_engine::EncodeKey(SQRT, false, true), Op::nop);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM0, false, true), Op::num_0);
-    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, false, true), Op::period);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, false, true), Op::nop);
     EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, false, true), Op::bit_neg);
     EXPECT_EQ(rpn_engine::EncodeKey(PLUS, false, true), Op::bit_add);
     EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, false, true), Op::enter);
@@ -199,7 +199,7 @@ TEST(EncodeKey, hex_func)
 {
     EXPECT_EQ(rpn_engine::EncodeKey(XTOM, true, true), Op::nop);
     EXPECT_EQ(rpn_engine::EncodeKey(CM, true, true), Op::nop);
-    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, true), Op::rotate_push);
+    EXPECT_EQ(rpn_engine::EncodeKey(RM, true, true), Op::sto);
     EXPECT_EQ(rpn_engine::EncodeKey(MMINUS, true, true), Op::nop);
     EXPECT_EQ(rpn_engine::EncodeKey(MPLUS, true, true), Op::func);
 
@@ -222,7 +222,7 @@ TEST(EncodeKey, hex_func)
     EXPECT_EQ(rpn_engine::EncodeKey(SQRT, true, true), Op::nop);
 
     EXPECT_EQ(rpn_engine::EncodeKey(NUM0, true, true), Op::num_a);
-    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, true, true), Op::period);
+    EXPECT_EQ(rpn_engine::EncodeKey(PERIOD, true, true), Op::nop);
     EXPECT_EQ(rpn_engine::EncodeKey(PERCENT, true, true), Op::bit_not);
     EXPECT_EQ(rpn_engine::EncodeKey(PLUS, true, true), Op::bit_or);
     EXPECT_EQ(rpn_engine::EncodeKey(EQUAL, true, true), Op::undo);

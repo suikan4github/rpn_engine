@@ -246,14 +246,14 @@ namespace rpn_engine
                     ret_val = Op::num_5;
                     break;
                 case 0x0300: // .
-                    ret_val = Op::period;
+                    ret_val = Op::nop;
                     break;
                     // Row 4
                 case 0x0402: // 2
                     ret_val = Op::num_2;
                     break;
                 case 0x0401: // RM
-                    ret_val = Op::rotate_pop;
+                    ret_val = Op::rcl;
                     break;
                 case 0x0400: // +
                     ret_val = Op::bit_add;
@@ -270,7 +270,7 @@ namespace rpn_engine
                     break;
                     // Row 6
                 case 0x0601: // M-
-                             // do nothing
+                    ret_val = Op::rotate_pop;
                     break;
                 case 0x0600: // /
                     ret_val = Op::bit_div;
@@ -338,14 +338,14 @@ namespace rpn_engine
                     ret_val = Op::num_f;
                     break;
                 case 0x0300: // .
-                    ret_val = Op::period;
+                    ret_val = Op::nop;
                     break;
                     // Row 4
                 case 0x0402: // 2
                     ret_val = Op::num_c;
                     break;
                 case 0x0401: // RM
-                    ret_val = Op::rotate_push;
+                    ret_val = Op::sto;
                     break;
                 case 0x0400: // +
                     ret_val = Op::bit_or;
