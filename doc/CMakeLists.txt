@@ -7,7 +7,7 @@ if(${DOXYGEN_FOUND})
     # Declaration of doxygen command execution
     add_custom_target(documents ALL
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile 
+        COMMAND ${DOXYGEN_EXECUTABLE} -u ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
         )
 
 else(${DOXYGEN_FOUND}) 
