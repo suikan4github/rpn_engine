@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Ignore automatic created directories.
+build/
+html/
