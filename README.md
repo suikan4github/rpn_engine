@@ -28,7 +28,7 @@ This library contains several classes and a function. Each component has its own
 
 ## Environment
 This library is tested by following environment 
-- Ubuntu 20.04 LTS
+- Ubuntu 22.04 LTS
 - GitHub Actions ubuntu-latest ( GCC 9 )
 - GitHub Actions windows-latest ( MSVC 2022 )
 - GCov ( with GCC )
