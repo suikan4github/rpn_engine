@@ -114,7 +114,7 @@ namespace rpn_engine
     /**
      * @brief A generic stack.
      *
-     * @tparam Element A type name as element of stack
+     * @tparam std::complex<double> A type name as element of stack
      * @details
      * A generic stack for the RPN machine. This stack works based of the specialized machine.
      * Give a type parameter to customize it.
@@ -135,7 +135,7 @@ namespace rpn_engine
      * @li ToCartesian
      * @li SwapReIm
      */
-    template <class Element>
+    
     class StackStrategy
     {
     public:
@@ -162,17 +162,17 @@ namespace rpn_engine
          *
          * @param position The distance from the stack top. 0 means the stack top.
          * 1 means the 1 depth from the stack top. If the value exceeds the stack size, assertion fails.
-         * @return Element at the specified position.
+         * @return std::complex<double> at the specified position.
          * @details
          * The contents of the stack is not affected.
          */
-        Element Get(unsigned int position);
+        std::complex<double> Get(unsigned int position);
 
         /**
          * @brief Overwrite stack top
          * @param e Value to overwrite the stack top
          */
-        void SetX(const Element &e);
+        void SetX(const std::complex<double> &e);
 
         /**
          * @brief Push a given value to the stack
@@ -182,19 +182,19 @@ namespace rpn_engine
          * All contents of the stack are pushed down to the depth direction.
          * Then, e is copied to the stack top. The vale in the stack bottom will be lost.
          */
-        void Push(const Element &e);
+        void Push(const std::complex<double> &e);
 
         /**
          * @brief Pop a value from the stack top.
          *
-         * @return Element The value of the stack top.
+         * @return std::complex<double> The value of the stack top.
          * @details
          * The value of the stack top is returned.
          *
          * The contents of the stack are shifted to the shallow direction.
          * The stack bottom value is duplicated.
          */
-        Element Pop();
+        std::complex<double> Pop();
 
         /**
          * @brief Retrieve previous stack state.
@@ -209,8 +209,8 @@ namespace rpn_engine
          * @details
          * The stack_[0] is the stack top. Index is allowed from 0 to stack_size_-1.
          */
-        Element *const stack_;
-        Element *const undo_buffer_;
+        std::complex<double> *const stack_;
+        std::complex<double> *const undo_buffer_;
         bool undo_saving_enabled_;
 
         /**
@@ -231,7 +231,7 @@ namespace rpn_engine
              * @details
              * Save the current enable / disable state and disable the state.
              */
-            DisableUndoSaving(StackStrategy<Element> *paraent);
+            DisableUndoSaving(StackStrategy *paraent);
             /**
              * @brief Destroy the Disable Undo Saving object
              * @details
@@ -240,7 +240,7 @@ namespace rpn_engine
             virtual ~DisableUndoSaving();
 
         private:
-            StackStrategy<Element> *parent_;
+            StackStrategy *parent_;
             bool last_state_;
         };
 
@@ -445,8 +445,8 @@ namespace rpn_engine
             auto x = this->Pop();
 
             // push real, push imag
-            this->Push(Element(x.real()));
-            this->Push(Element(x.imag()));
+            this->Push(std::complex<double>(x.real()));
+            this->Push(std::complex<double>(x.imag()));
         }
 
         /**
@@ -492,7 +492,7 @@ namespace rpn_engine
             auto x = this->Pop();
 
             // push in polar notation
-            this->Push(Element(std::abs(x), std::arg(x)));
+            this->Push(std::complex<double>(std::abs(x), std::arg(x)));
         }
 
         /**
@@ -514,7 +514,7 @@ namespace rpn_engine
             auto x = this->Pop();
 
             // push in cartesian nortation : abs * exp( i * arg )
-            this->Push(x.real() * std::exp(Element(0, 1) * x.imag()));
+            this->Push(x.real() * std::exp(std::complex<double>(0, 1) * x.imag()));
         }
 
 
@@ -533,7 +533,7 @@ namespace rpn_engine
             auto x = this->Pop();
 
             // push in cartesian nortation : abs * exp( i * arg )
-            this->Push(Element(x.imag(), x.real()));
+            this->Push(std::complex<double>(x.imag(), x.real()));
         }
 
 
@@ -640,7 +640,7 @@ namespace rpn_engine
         void BitNot();
 
         /**
-         * @fn int32_t To64bitValue(Element x)
+         * @fn int32_t To64bitValue(std::complex<double> x)
          * @brief Convert parameter to int32_t
          *
          * @param x Value to convert.
@@ -655,7 +655,7 @@ namespace rpn_engine
          * The result is unpredictable.
          */
 
-        int64_t To64bitValue(Element x)
+        int64_t To64bitValue(std::complex<double> x)
         {
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
@@ -669,768 +669,12 @@ namespace rpn_engine
         }
 
         /**
-         * @brief Convert parameter to Element
+         * @brief Convert parameter to std::complex<double>
          *
          * @param x
-         * @return Element
+         * @return std::complex<double>
          */
-        Element ToElementValue(int32_t x);
+        std::complex<double> ToElementValue(int32_t x);
     };
 } // rpn_engine
 
-// constructor
-template <class Element>
-rpn_engine::StackStrategy<Element>::StackStrategy(unsigned int stack_size) : stack_size_(stack_size),
-                                                                             stack_(new Element[stack_size_]),
-                                                                             undo_buffer_(new Element[stack_size_]),
-                                                                             undo_saving_enabled_(true)
-{
-    assert(stack_size_ >= 2);
-    // allocate stack
-    assert(stack_ != nullptr);
-
-    // initialize stack
-    for (unsigned int i = 0; i < stack_size_; i++)
-        stack_[i] = 0;
-    // initialize undo buffer
-    for (unsigned int i = 0; i < stack_size_; i++)
-        undo_buffer_[i] = 0;
-}
-
-template <class Element>
-rpn_engine::StackStrategy<Element>::~StackStrategy()
-{
-    if (stack_ != nullptr)
-        delete[] stack_;
-    if (undo_buffer_ != nullptr)
-        delete[] undo_buffer_;
-}
-
-template <class Element>
-Element rpn_engine::StackStrategy<Element>::Get(unsigned int postion)
-{
-    assert(stack_size_ > postion);
-    return stack_[postion];
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::SetX(const Element &e)
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    stack_[0] = e;
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Push(const Element &e)
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // copy stack[0..stack_size-2] to stack[1..stack_size_-1]
-    for (unsigned int i = stack_size_ - 1; i > 0; i--)
-        stack_[i] = stack_[i - 1];
-
-    // Then store e to the stack top.
-    stack_[0] = e;
-}
-
-template <class Element>
-Element rpn_engine::StackStrategy<Element>::Pop()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // preserve the last top value.
-    Element last_top = stack_[0];
-
-    // copy stack[1..stack_size-1] to stack[0..stack_size_-2]
-    // stop bottom is duplicated
-    for (unsigned int i = 0; i < stack_size_ - 1; i++)
-        stack_[i] = stack_[i + 1];
-
-    // return the preserved value.
-    return last_top;
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Duplicate()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // To duplicate, pop the stack and push it twice.
-    Element x = Pop();
-    Push(x);
-    Push(x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Swap()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // To swap x and y, pop the stack, stack second and push them reverse.
-    Element x = Pop();
-    Element y = Pop();
-    Push(x);
-    Push(y);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::RotatePop()
-{
-    // Rotate the stack contents to the pop wise. To make it happen,
-    // Pop the top at first. Then, copy it to the bottom.
-    Element x = Pop();
-    stack_[stack_size_ - 1] = x;
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::RotatePush()
-{
-    // Rotate the stack contents to the push wise. To make it happen,
-    // Get the bottom value and push it
-    Element x = Get(stack_size_ - 1);
-    Push(x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::SaveToUndoBuffer()
-{
-    if (undo_saving_enabled_)
-    {
-        // Store Stack state to the undo buffer.
-        for (unsigned int i = 0; i < stack_size_; i++)
-            undo_buffer_[i] = stack_[i];
-    }
-}
-
-template <class Element>
-rpn_engine::StackStrategy<Element>::DisableUndoSaving::DisableUndoSaving(rpn_engine::StackStrategy<Element> *parent) : parent_(parent),
-                                                                                                                       last_state_(parent->undo_saving_enabled_)
-{
-
-    // disable the undo.
-    parent_->undo_saving_enabled_ = false;
-}
-
-template <class Element>
-rpn_engine::StackStrategy<Element>::DisableUndoSaving::~DisableUndoSaving()
-{
-    // restore previous state
-    parent_->undo_saving_enabled_ = last_state_;
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Undo()
-{
-    // Retrieve the last stack state
-    for (unsigned int i = 0; i < stack_size_; i++)
-        stack_[i] = undo_buffer_[i];
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Add()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    Element y = Pop();
-    // do the operation
-    Push(y + x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Subtract()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    Element y = Pop();
-    // do the operation
-    Push(y - x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Multiply()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    Element y = Pop();
-    // do the operation
-    Push(y * x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Divide()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    Element y = Pop();
-    // do the operation
-    Push(y / x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Negate()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(-x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Inverse()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(1.0 / x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Sqrt()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::sqrt(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Square()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(x * x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Pi()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // do the operation
-    Push(rpn_engine::pi);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Exp()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::exp(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Log()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::log(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Log10()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::log10(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Power10()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::pow(10, x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Power()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    Element y = Pop();
-    // do the operation
-    Push(std::pow(y, x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Sin()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::sin(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Cos()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::cos(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Tan()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::tan(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Asin()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::asin(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Acos()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::acos(x));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Atan()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    Element x = Pop();
-    // do the operation
-    Push(std::atan(x));
-}
-
-template <class Element>
-Element rpn_engine::StackStrategy<Element>::ToElementValue(int32_t x)
-{
-    return static_cast<Element>(x);
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitAdd()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = x + y;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitSubtract()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y - x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitMultiply()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    int64_t r = y * x;
-    uint64_t sign = r & (0xFFFFFFFF80000000ll); // take sign part. It is upper 32bit and MSB of lower 32bit
-
-    if ((y & 0x80000000) == (x & 0x80000000)) // Is result must positive?
-    {
-        if (sign != 0)     // If sign part is non zero, overflown from signed 32 bit.
-            r = INT32_MAX; // make it positive max
-    }
-    else // The result must be negative
-    {
-        if ((~sign & 0xFFFFFFFF80000000ll) != 0) // if the sign part is not all 1, overflown from signed 32bit.
-            r = INT32_MIN;                       // make it negative min
-    }
-
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitDivide()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y / x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitNegate()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = -x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitOr()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y | x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitExor()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y ^ x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitAnd()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y & x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::LogicalShiftRight()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = (uint32_t)y >> (int32_t)x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::LogicalShiftLeft()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-    auto y = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = y << x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::BitNot()
-{
-    // Save stack state before mathematical operation
-    SaveToUndoBuffer();
-    DisableUndoSaving disable_undo(this); // Disabling by RAII
-
-    // Get parameters
-    auto x = To64bitValue(Pop());
-
-    // do the operation
-    uint32_t r = ~x;
-    Push(ToElementValue(r));
-}
-
-template <class Element>
-void rpn_engine::StackStrategy<Element>::Operation(Op opcode)
-{
-
-    assert(opcode != Op::clx);
-    assert(opcode != Op::enter);
-    assert(opcode != Op::change_display);
-    assert(Op::num_0 > opcode);
-
-    switch (opcode)
-    {
-    case Op::duplicate:
-        Duplicate();
-        break;
-    case Op::swap:
-        Swap();
-        break;
-    case Op::rotate_pop:
-        RotatePop();
-        break;
-    case Op::rotate_push:
-        RotatePush();
-        break;
-    case Op::add:
-        Add();
-        break;
-    case Op::sub:
-        Subtract();
-        break;
-    case Op::mul:
-        Multiply();
-        break;
-    case Op::div:
-        Divide();
-        break;
-    case Op::neg:
-        Negate();
-        break;
-    case Op::inv:
-        Inverse();
-        break;
-    case Op::sqrt:
-        Sqrt();
-        break;
-    case Op::square:
-        Square();
-        break;
-    case Op::pi:
-        Pi();
-        break;
-    case Op::exp:
-        Exp();
-        break;
-    case Op::log:
-        Log();
-        break;
-    case Op::log10:
-        Log10();
-        break;
-    case Op::power10:
-        Power10();
-        break;
-    case Op::power:
-        Power();
-        break;
-    case Op::sin:
-        Sin();
-        break;
-    case Op::cos:
-        Cos();
-        break;
-    case Op::tan:
-        Tan();
-        break;
-    case Op::asin:
-        Asin();
-        break;
-    case Op::acos:
-        Acos();
-        break;
-    case Op::atan:
-        Atan();
-        break;
-    case Op::complex:
-        Complex();
-        break;
-    case Op::decomplex:
-        DeComplex();
-        break;
-    case Op::conjugate:
-        Conjugate();
-        break;
-    case Op::to_polar:
-        ToPolar();
-        break;
-    case Op::to_cartesian:
-        ToCartesian();
-        break;
-    case Op::swap_re_im:
-        SwapReIm();
-        break;
-    case Op::bit_add:
-        BitAdd();
-        break;
-    case Op::bit_sub:
-        BitSubtract();
-        break;
-    case Op::bit_mul:
-        BitMultiply();
-        break;
-    case Op::bit_div:
-        BitDivide();
-        break;
-    case Op::bit_neg:
-        BitNegate();
-        break;
-    case Op::bit_or:
-        BitOr();
-        break;
-    case Op::bit_xor:
-        BitExor();
-        break;
-    case Op::bit_and:
-        BitAnd();
-        break;
-    case Op::logical_shift_left:
-        LogicalShiftLeft();
-        break;
-    case Op::logical_shift_right:
-        LogicalShiftRight();
-        break;
-    case Op::bit_not:
-        BitNot();
-        break;
-    case Op::undo:
-        Undo();
-        break;
-    default: // in case of wrong op code.
-        assert(false);
-    }
-}

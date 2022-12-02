@@ -6,7 +6,7 @@
 #include <math.h>
 #include <complex>
 
-typedef rpn_engine::StackStrategy<std::complex<double>> TheStack;
+typedef rpn_engine::StackStrategy TheStack;
 
 TEST(DoubleMathTest, Add)
 {

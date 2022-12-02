@@ -11,7 +11,7 @@ using rpn_engine::Op;
 static const int kFullMantissa = 9;
 static const int kUpperMostDigit = 7;
 
-rpn_engine::Console::Console(const char *initial_string) : engine_(StackStrategy<std::complex<double>>(kDepthOfStack)),
+rpn_engine::Console::Console(const char *initial_string) : engine_(StackStrategy(kDepthOfStack)),
                                                            is_func_key_pressed_(false),
                                                            display_mode_(DisplayMode::fixed),
                                                            is_editing_(false),

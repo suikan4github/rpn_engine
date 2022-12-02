@@ -6,7 +6,7 @@
 #include <complex>
 
 using rpn_engine::Op;
-typedef rpn_engine::StackStrategy<std::complex<double>> TheStack;
+typedef rpn_engine::StackStrategy TheStack;
 
 // Testing the restriction of the stack size .
 TEST(BasicStackDeathTest, StackSizeLimit)

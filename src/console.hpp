@@ -224,7 +224,7 @@ namespace rpn_engine
         int32_t GetDecimalPointPosition();
 
     private:
-        StackStrategy<StackElement> engine_;
+        StackStrategy engine_;
         bool is_func_key_pressed_;
         DisplayMode display_mode_;
         bool is_editing_;
