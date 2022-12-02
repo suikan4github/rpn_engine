@@ -411,9 +411,6 @@ namespace rpn_engine
          * @details
          * If the stack is implemented with scalar element, this function does nothing
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void Complex()
         {
             // Save stack state before mathematical operation
@@ -430,13 +427,6 @@ namespace rpn_engine
             this->Push(y);
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void Complex()
-        {
-            // In the case of scalar, do nothing
-        }
 
         /**
          * @fn void DeComplex()
@@ -445,9 +435,6 @@ namespace rpn_engine
          * If the stack is implemented with scalar element, this function does nothing
          *
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void DeComplex()
         {
             // Save stack state before mathematical operation
@@ -462,14 +449,6 @@ namespace rpn_engine
             this->Push(Element(x.imag()));
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void DeComplex()
-        {
-            // In the case of scalar, do nothing
-        }
-
         /**
          *
          * @fn void Conjugate()
@@ -480,9 +459,6 @@ namespace rpn_engine
          * If the stack is implemented with scalar element, this function does nothing
          *
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void Conjugate()
         {
             // Save stack state before mathematical operation
@@ -496,13 +472,6 @@ namespace rpn_engine
             this->Push(std::conj(x));
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void Conjugate()
-        {
-            // In the case of scalar, do nothing
-        }
 
         /**
          * @fn void ToPolar()
@@ -513,9 +482,6 @@ namespace rpn_engine
          * @li im : Argumentation of the complex value.
          * If the stack is implemented with scalar element, this function does nothing
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void ToPolar()
         {
             // Save stack state before mathematical operation
@@ -529,14 +495,6 @@ namespace rpn_engine
             this->Push(Element(std::abs(x), std::arg(x)));
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void ToPolar()
-        {
-            // In the case of scalar, do nothing
-        }
-
         /**
          * @fn void ToCartesian()
          * @brief Pop X as polar complex and convert it to the cartesian complex. And then push it.
@@ -546,9 +504,6 @@ namespace rpn_engine
          * @li im : Argumentation of the complex value.
          * If the stack is implemented with scalar element, this function does nothing
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void ToCartesian()
         {
             // Save stack state before mathematical operation
@@ -562,21 +517,11 @@ namespace rpn_engine
             this->Push(x.real() * std::exp(Element(0, 1) * x.imag()));
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void ToCartesian()
-        {
-            // In the case of scalar, do nothing
-        }
 
         /**
          * @fn void SwapReIm()
          * @brief Pop X, swat the re, im part and then  push it.
          */
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         void SwapReIm()
         {
 
@@ -591,13 +536,6 @@ namespace rpn_engine
             this->Push(Element(x.imag(), x.real()));
         }
 
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        void SwapReIm()
-        {
-            // In the case of scalar, do nothing
-        }
 
         /********************************** BITWISE OPERATION *****************************/
 
@@ -717,30 +655,11 @@ namespace rpn_engine
          * The result is unpredictable.
          */
 
-        template <class E = Element,
-                  typename std::enable_if<!std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by std::complex<> type.
         int64_t To64bitValue(Element x)
         {
             // The double value is truncated to 64bit integer. Then,
             // 32bit LSB is extracted.
             int64_t intermediate_value = x.real();
-            // extend sign
-            if ((intermediate_value & 0x80000000) == 0)     // is it positive number?
-                intermediate_value &= 0x00000000FFFFFFFFll; // force upper bits zero
-            else                                            // negative number
-                intermediate_value |= 0xFFFFFFFF00000000ll; // force upper bits one.
-            return intermediate_value;
-        }
-
-        template <class E = Element,
-                  typename std::enable_if<std::is_scalar<E>::value, int>::type = 0>
-        // Implementation when the template is specialized by scarlar type.
-        int64_t To64bitValue(Element x)
-        {
-            // The double value is truncated to 64bit integer. Then,
-            // 32bit LSB is extracted.
-            int64_t intermediate_value = x;
             // extend sign
             if ((intermediate_value & 0x80000000) == 0)     // is it positive number?
                 intermediate_value &= 0x00000000FFFFFFFFll; // force upper bits zero
