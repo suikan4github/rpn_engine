@@ -324,6 +324,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                     {
                         std::strcpy(mantissa_buffer_, " 1       ");          // enforce it 1
                         decimal_point_position_ = kDecimalPointNotDisplayed; // do not display "."
+                        mantissa_cursor_ = 2;                                // Next input must be 2nd char. 
                     }
                     is_editing_float_ = true;
                 }
