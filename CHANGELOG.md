@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 ### Fixed
+- [Issue #4](https://github.com/suikan4github/rpn_engine/issues/4) : ".3" is interpreted as "3.0" 
 
 ## [1.0.0] - 2022-11-30
 First release. 
