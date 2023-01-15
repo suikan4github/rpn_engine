@@ -369,7 +369,6 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                 }
                 else if ((mantissa_cursor_ == 2) || (mantissa_cursor_ == 1)) // if deleting right most digit
                 {
-                    is_editing_ = false;         // This is special case. We have to disable explicitly other wise it will push 0.
                     HandleNonEditingOp(Op::clx); // delete X. And then, set is_editing = false implicitly.
                     return;                      // HandleNonEditingOp() render the text_buffer_. So ,we can leave now.
                 }
