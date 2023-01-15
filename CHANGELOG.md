@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 - [Issue #4](https://github.com/suikan4github/rpn_engine/issues/4) : ".3" is interpreted as "3.0" 
+- [Issue #6](https://github.com/suikan4github/rpn_engine/issues/6) :  Wrong mantissa cursor position when pressing EEX after CLX 
+
 
 ## [1.0.0] - 2022-11-30
 First release. 
