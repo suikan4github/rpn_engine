@@ -324,6 +324,7 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
                     {
                         std::strcpy(mantissa_buffer_, " 1       ");          // enforce it 1
                         decimal_point_position_ = kDecimalPointNotDisplayed; // do not display "."
+                        mantissa_cursor_ = 2;                                // Next input must be 2nd char. 
                     }
                     is_editing_float_ = true;
                 }
@@ -336,8 +337,11 @@ void rpn_engine::Console::HandleEditingOp(rpn_engine::Op opcode)
             {
                 if (!is_editing_float_ && (decimal_point_position_ == kDecimalPointNotDisplayed)) // if not in the float input and decimal point is not displayed yet
                 {
-                    if (mantissa_cursor_ == 1)                                          // if the cursor is left most digits
-                        decimal_point_position_ = kUpperMostDigit;                      // place decimal point to its right
+                    if (mantissa_cursor_ == 1)
+                    {                                              // if the cursor is left most digits
+                        decimal_point_position_ = kUpperMostDigit; // place decimal point to its right
+                        mantissa_cursor_++;                        // move cursor forward
+                    }
                     else if (kFullMantissa >= mantissa_cursor_ && mantissa_cursor_ > 1) // if not, place decimal point to its left
                         decimal_point_position_ = kFullMantissa - mantissa_cursor_;     // 2->7, 3->6, ...
                     else

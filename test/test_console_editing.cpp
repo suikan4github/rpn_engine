@@ -1121,3 +1121,59 @@ TEST(ConsoleEditing, EnterCheck)
     EXPECT_STREQ(display_text, " 20000000"); // must in scientific display
     EXPECT_EQ(decimal_point, 7);
 }
+
+// The input ".3" must be interpreted as "0.3"
+// Issue #3
+TEST(ConsoleEditing, InputFromPeriod)
+{
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000"); // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::period);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 0       "); // Leading 0
+    EXPECT_EQ(decimal_point, 7);
+    c.Input(Op::num_3);
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 03      "); // Leading 0
+    EXPECT_EQ(decimal_point, 7);
+}
+
+//  Wrong mantissa cursor position when pressing EEX after CLX 
+// Issue #6
+TEST(ConsoleEditing, EEXafterCLX) {
+    rpn_engine::Console c;
+    char display_text[12];
+    int decimal_point;
+
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 00000000");  // Initial value
+    EXPECT_EQ(decimal_point, 7);
+    
+    c.Input(Op::clx);                         // Clear current X reg.
+    c.Input(Op::eex);                         // Get into floating point mode.
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1     00");  // Default floating point value
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::del);                         // Delete all exponent
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 1       ");  
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+
+    c.Input(Op::num_4);                       // Delete all exponent
+    c.GetText(display_text);
+    decimal_point = c.GetDecimalPointPosition();
+    EXPECT_STREQ(display_text, " 14      ");  // Second pos must be affected
+    EXPECT_EQ(decimal_point, c.kDecimalPointNotDisplayed);
+}

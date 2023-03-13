@@ -34,3 +34,6 @@
 # Ignore automatic created directories.
 build/
 html/
+
+# ignore .vscode settings.
+.vscode/
