@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 ### Fixed
+
+
+## [1.0.1] - 2023-03-14
+### Added
+### Changed
+### Fixed
 - [Issue #4](https://github.com/suikan4github/rpn_engine/issues/4) : ".3" is interpreted as "3.0" 
 - [Issue #6](https://github.com/suikan4github/rpn_engine/issues/6) :  Wrong mantissa cursor position when pressing EEX after CLX 
 
@@ -19,5 +25,6 @@ First release.
 ### Fixed
 
 
-[Unreleased]: https://github.com/suikan4github/rpn_engine/compare/v1.0.0...develop
+[Unreleased]: https://github.com/suikan4github/rpn_engine/compare/v1.0.1...develop
+[1.0.1]: https://github.com/suikan4github/rpn_engine/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/suikan4github/rpn_engine/compare/v0.0.0...v1.0.0
